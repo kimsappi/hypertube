@@ -1,0 +1,50 @@
+/* HEADINGS
+--------------------------------------------------------------------- */
+
+h1, h2, h3, h4, h5 {
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	margin: 0;
+	font-weight: 500;
+}
+
+h1 {font-size: 2.25rem;}
+h2 {font-size: 2rem;}
+h3 {font-size: 1.75rem;}
+h4 {font-size: 1.5rem;}
+h5 {font-size: 1.25rem;}
+
+p {
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+
+/* TEXT STYLES
+--------------------------------------------------------------------- */
+
+.center {
+	text-align: center;
+}
+
+.left {
+	text-align: left;
+}
+
+.right {
+	text-align: right;
+}
+
+.small {
+	font-size: 0.75rem;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.nowrap {
+	white-space: nowrap;
+}

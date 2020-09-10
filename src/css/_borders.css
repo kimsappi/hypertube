@@ -1,0 +1,6 @@
+/* BORDERS
+--------------------------------------------------------------------- */
+.border-light {border: 1px solid var(--light)}
+.border-dark {border: 1px solid var(--dark)}
+.border-white {border: 1px solid var(--white)}
+.border-black {border: 1px solid var(--black)}

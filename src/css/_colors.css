@@ -1,0 +1,80 @@
+/* GLOBAL
+--------------------------------------------------------------------- */
+
+:root {
+	--dark: #333;
+	--black100: #000;
+	--black90: #1a1a1a;
+	--black80: #333;
+	--black70: #4d4d4d;
+	--black60: #666;
+	--black50: #808080;
+	--black40: #999;
+	--black30: #b3b3b3;
+	--black20: #ccc;
+	--black10: #e6e6e6;
+	--light: #ddd;
+	--error: #dc3545;
+	--success: #28a745;
+	--info: #17a2b8;
+	--blue: #007bff;
+	--purple: #6f42c1;
+	--pink: #e83e8c;
+	--orange: #fd7e14;
+	--yellow: #ffc107;
+	--cyan: #17a2b8;
+	--gray: #6c757d;
+}
+
+/* COLORS
+--------------------------------------------------------------------- */
+
+.color-primary {color: var(--primary)}
+.color-secondary {color: var(--secondary)}
+.color-light {color: var(--light)}
+.color-dark {color: var(--dark)}
+.color-error {color: var(--error)}
+.color-success {color: var(--success)}
+.color-info {color: var(--info)}
+
+.color-blue {color: var(--blue)}
+.color-purple {color: var(--purple)}
+.color-pink {color: var(--pink)}
+.color-orange {color: var(--orange)}
+.color-yellow {color: var(--yellow)}
+.color-cyan {color: var(--cyan)}
+.color-gray {color: var(--gray)}
+.color-white {color: #fff}
+
+.color-black100 {color:var(--black100)}
+.color-black90 {color: var(--black90)}
+.color-black80 {color: var(--black80)}
+.color-black70 {color: var(--black70)}
+.color-black60 {color: var(--black60)}
+.color-black50 {color: var(--black50)}
+.color-black40 {color: var(--black40)}
+.color-black30 {color: var(--black30)}
+.color-black20 {color: var(--black20)}
+.color-black10 {color: var(--black10)}
+
+/* BACKGROUND COLORS
+--------------------------------------------------------------------- */
+
+.bg-primary {background: var(--primary)}
+.bg-secondary {background: var(--secondary)}
+.bg-light {background: var(--light)}
+.bg-dark {background: var(--dark)}
+.bg-error {background: var(--error)}	
+.bg-success {background: var(--success)}	
+
+.bg-black100 {background: var(--black100)}
+.bg-black90 {background: var(--black90)}
+.bg-black80 {background: var(--black80)}
+.bg-black70 {background: var(--black70)}
+.bg-black60 {background: var(--black60)}
+.bg-black50 {background: var(--black50)}
+.bg-black40 {background: var(--black40)}
+.bg-black30 {background: var(--black30)}
+.bg-black20 {background: var(--black20)}
+.bg-black10 {background: var(--black10)}
+.bg-white {background: #fff}

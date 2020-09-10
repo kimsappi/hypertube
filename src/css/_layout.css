@@ -1,0 +1,145 @@
+/* GLOBAL
+--------------------------------------------------------------------- */
+
+:root {
+	--pageMax: 1200px;
+}
+
+/* BREAKPOINTS
+--------------------------------------------------------------------- */
+
+/* smaller than or equal to 768 px (smartphones)
+larger than 768 px (small devices, tablets)
+larger than 992 px (medium devices)
+larger than 1200px (large devices) */
+
+/* CONTAINERS
+--------------------------------------------------------------------- */
+
+/* center anything */
+.container {
+	display: grid;
+	place-items: center;
+}
+
+/* GRID LAYOUT
+--------------------------------------------------------------------- */
+/* 100% width layout with a header, left column,
+center column, right column and a footer */
+
+/*
+<div class="grid">
+	<header>Header</header>
+		<div class="grid-left">Left Sidebar</div>
+		<main> Main Content</main>
+		<div class="grid-right">Right Sidebar</div>
+	<footer>Footer</footer>
+</div>
+*/
+
+.grid {
+	display: grid;
+	grid-template: auto 1fr auto / auto 1fr auto;
+}
+
+.grid header {
+	grid-column: 1 / 4;
+	background-color: #fff;
+	padding: 10px;
+}
+
+.grid-left {
+	grid-column: 1 / 2;
+	background-color: #aaa;
+	padding: 10px;
+}
+
+.grid main {
+	grid-column: 2 / 3;
+	background-color: #ddd;
+	padding: 10px;
+}
+
+.grid-right {
+	grid-column: 3 / 4;
+	background-color: #aaa;
+	padding: 10px;
+}
+
+.grid footer {
+	grid-column: 1 / 4;
+	background-color: #666;
+	padding: 10px;
+}
+
+/* RAM LAYOUT (Repeat, Auto, Minmax)
+--------------------------------------------------------------------- */
+/* Columns take equal space horizontally and fill the whole window.
+When reducing the window size until a minimum width of 300px
+is reached, columns are stacked vertically if needed */
+
+/*
+<div class="ram">
+	<div>column 1</div>
+	<div>column 2</div>
+	<div>column 3</div>
+</div>
+*/
+
+.ram-container {
+	max-width: var(--pageMax);
+	margin: 0 auto;
+}
+
+.ram {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 3fr));
+	grid-gap: 0.5rem;
+}
+
+/* FLEX
+--------------------------------------------------------------------- */
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.flex-no-wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.flex-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.flex-space-evenly {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.flex-center {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.flex-left {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.flex-right {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: right;
+}

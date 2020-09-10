@@ -1,0 +1,78 @@
+/* CUSTOM
+--------------------------------------------------------------------- */
+
+:root {
+	--background: #111;
+	--navbar: #111;
+	--button: yellowgreen;
+	--primary: yellowgreen;
+	--secondary: #88B42D;
+}
+
+body {
+	background: url(../components/pages/background.jpg) no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+/* MOVIE ITEM */
+.movie-item {
+	border: 1px solid #666;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	background-color: #000;
+	transition: transform .2s;
+	margin: 0.5rem;
+	box-shadow: 0 0 5px #000;
+	line-height : 0
+	
+}
+.movie-item:hover {
+	transform: scale(1.2);
+	border: 1px solid #fff;
+	box-shadow: 0 0 5px #aaa;
+}
+
+
+/* LOADER */
+.loading {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	border: 3px solid rgba(255,255,255,.3);
+	border-radius: 50%;
+	border-top-color: #fff;
+	animation: spin 1s ease-in-out infinite;
+	-webkit-animation: spin 1s ease-in-out infinite;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+}
+
+@keyframes spin {
+	to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+	to { -webkit-transform: rotate(360deg); }
+}
+
+.movie-image-large {
+	width: 500px;
+	height: 750px;
+}
+
+.movie-details {
+	max-width: 640px;
+	padding: 20px;
+	background-color: rgba(0, 0, 0, .8);
+}
+
+.movie-box {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+	margin: 1rem;
+}

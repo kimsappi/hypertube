@@ -1,0 +1,56 @@
+/* NAVBAR
+--------------------------------------------------------------------- */
+
+.navbar {
+	padding: 0.2rem 1rem;
+	z-index: 1;
+	background-color: var(--navbar);
+	color: #bbb;
+	border-bottom: solid 2px #333;
+}
+
+.navbar-title {
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-size: 2.5rem;
+	margin: 0.4rem 0 0 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.navbar ul {
+	display: flex;
+	align-items: center;
+	list-style-position:inside;
+	margin:0;
+	padding:0;
+}
+
+.navbar li {
+	padding-left: .5rem;
+	margin: .5rem;
+	white-space: nowrap;
+}
+
+.navbar a {
+	color: #fff;
+	text-shadow: 0 0 2px #333;
+	padding-bottom: 0.2rem;
+}
+
+.navbar a:hover {
+	text-shadow: 0 0 5px #fff;
+	text-decoration: none;
+}
+
+.navbar a.active {
+	pointer-events: none;
+	cursor: default;
+	color: #fff;
+}
+
+.navbar .logo {
+	display: inline-block;
+	vertical-align: middle;
+	width: 32px;
+	height: 32px;
+}

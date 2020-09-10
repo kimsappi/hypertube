@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	background-color: var(--background);
+	font-size: 1rem;
+	color: #aaa;
+	margin: 0;
+	font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	font-size: 1em;
+	line-height: 1.6;
+}
+
+small {
+	font-size: 0.75rem;
+}
+
+a {
+	color: var(--primary);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+ul {
+	padding: 0;
+	list-style: none;
+}
+
+hr {
+	height: 1px;
+	background-color: #ddd;
+	border: none;
+	margin: 0;
+}
