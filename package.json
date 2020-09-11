@@ -8,8 +8,8 @@
   },
   "devDependencies": {},
   "scripts": {
-	"test": "echo \"Error: no test specified\" && exit 1",
-	"dev": "concurrently \"cd backend && npm run server\" \"cd frontend && npm start\""
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"cd backend && npm run server\" \"cd frontend && npm start\""
   },
   "repository": {
     "type": "git",
