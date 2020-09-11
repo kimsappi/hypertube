@@ -60,15 +60,16 @@ textarea {
 button {
 	padding: 10px 20px;
 	background-color: var(--button);
-	border: 1px solid #999;
+	border: 3px solid saddlebrown;
 	border-radius: 5px;
-	color: white;
+	color: #000;
 	font-size: inherit;
+	font-weight: bold;
 	white-space: nowrap;
 }
 
 button:hover {
-	filter: brightness(110%);
+	filter: brightness(120%);
 	cursor: pointer;
 }
 
