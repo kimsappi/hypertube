@@ -32,7 +32,6 @@ input, select {
 }
 
 label {
-	font-weight: bold;
 	display: block;
 }
 
@@ -64,7 +63,6 @@ button {
 	border-radius: 5px;
 	color: #000;
 	font-size: inherit;
-	font-weight: bold;
 	white-space: nowrap;
 }
 

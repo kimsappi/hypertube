@@ -20,16 +20,14 @@ const HeaderLoggedOut = () =>
 							</NavLink>
 						</li>
 						<li>
-							<NavLink to='/about' alt='About' title='About'>
-								<i className="fas fa-question-circle color-yellow"></i> Profile
+							<NavLink to='/login' alt='Log In' title='Log In'>
+								<i className="fas fa-key color-yellow"></i> Log In
+							</NavLink></li>
+						<li>
+							<NavLink to='/register' alt='Register' title='Register'>
+								<i className="fas fa-edit color-yellow"></i> Register
 							</NavLink>
 						</li>
-					</ul>
-				</div>
-				<div>
-					<ul>
-						<li><NavLink to='/login' alt='Log In' title='Log In'><i className="fas fa-key color-yellow"></i> Log In</NavLink></li>
-						<li><NavLink to='/register' alt='Register' title='Register'><i className="fas fa-edit color-yellow"></i> Register</NavLink></li>
 					</ul>
 				</div>
 			</div>
