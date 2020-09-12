@@ -2,26 +2,37 @@ import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 
 // components
+import Trailer from "./Trailer";
 import MovieItem from "./MovieItem";
 
 const Home = () =>
 {
-	const [movies, setMovies] = useState("");
-	const [sortBy, setSortBy] = useState("1");
+	const [movies, setMovies] = useState([]);
+	const [firstMovieId, setFirstMovieId] = useState(null);
+	const [searchInput, setSearchInput] = useState("");
+	// const [currentPage, setCurrentPage] = useState(0);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() =>
 	{
+		console.log("useEffect");
+
 		(async () =>
 		{
 			try
 			{
 				// fetch all movies
-				const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=date_added&limit=50");
+				const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=year&query_term=" + searchInput);
 
 				console.log("movies", response.data.data.movies);
-				
-				setMovies(response.data.data.movies);
+
+				// setCurrentPage(currentPage + 1);
+
+				setMovies(response.data.data);
+
+				// pick a random video for trailer
+				setFirstMovieId(response.data.data.movies[Math.floor(Math.random() * 20)].id)
+
 				setLoading(false);
 			}
 			catch (err)
@@ -29,29 +40,36 @@ const Home = () =>
 				console.error(err.message);
 			}
 		})();
-	}, []);
+	}, [searchInput]);
 
-	const handleSort = (event) => setSortBy(event.target.value);
+	const changeSearchInput = (event) =>
+	{
+		setSearchInput(event.target.value)
+	}
 
 	return (
 		<Fragment>
 			{loading && <div className="loading"></div>}
 			{!loading && (
 				<Fragment>
-					<div className="w-50 m-a">
-						<label>Sort by:</label>
-						<select name="sort" id="sort" defaultValue={sortBy} onChange={handleSort}>
-							<option value="1">title (descending)</option>
-							<option value="2">title (ascending)</option>
-						</select>
-					</div>
+					<Trailer id={firstMovieId} />
+					<input
+						className="search-bar"
+						type="text"
+						name="searchinput"
+						placeholder="Enter Movie Title"
+						autoComplete="off"
+						value={searchInput}
+						onChange={changeSearchInput}
+					/>
 					<div className="flex-center m-5">
-						{movies.map (movie => (
+						{movies.movie_count > 0 && movies.movies.map (movie => (
 							<Fragment key={movie.id}>
 								<MovieItem movie={movie}/>
 							</Fragment>
 							)
 						)}
+						{movies.movie_count === 0 && <h2>Oh snap, no results.</h2>}
 					</div>
 				</Fragment>
 			)}

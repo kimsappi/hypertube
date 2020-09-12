@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import config from '../../config';
 
-import image from'./image_register.jpg';
+import image from'../images/image_register.jpg';
 
 const Register = () =>
 {
@@ -222,7 +222,7 @@ const Register = () =>
 								className="mb-1"
 								type="text"
 								name="firstname"
-								placeholder="Enter First Name"
+								placeholder="Enter first name"
 								autoComplete="on"
 								value={firstName}
 								onChange={changeFirstName}
@@ -234,7 +234,7 @@ const Register = () =>
 								className="mb-1"
 								type="text"
 								name="lastname"
-								placeholder="Enter Last Name"
+								placeholder="Enter last name"
 								autoComplete="on"
 								value={lastName}
 								onChange={changeLastName}
@@ -260,7 +260,7 @@ const Register = () =>
 								className="mb-1"
 								type="password"
 								name="password2"
-								placeholder="Confirm Password"
+								placeholder="Confirm password"
 								autoComplete="new-password"
 								value={password2}
 								onChange={changePassword2}
@@ -279,7 +279,7 @@ const Register = () =>
 								<button type="submit"><i className="fas fa-edit color-black"></i> Register</button>
 							</div>
 						</form>
-						<div className="center mt-5">Already have an account? <Link to='/login'>Log In</Link></div>
+						<div className="center mt-4">Already have an account? <Link to='/login'>Log In</Link></div>
 					</div>
 				</div>
 			</main>

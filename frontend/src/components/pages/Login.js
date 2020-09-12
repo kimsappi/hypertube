@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import config from '../../config';
 
-import image from'./image_login.jpg';
+import image from'../images/image_login.jpg';
 
 const Login = () =>
 {
@@ -118,7 +118,7 @@ const Login = () =>
 						<div className="center mt-4">
 							<button type="submit"><i className="fas fa-key color-black100"></i> Log In</button>
 						</div>
-						<div className="center mt-5">Don't have an account? <Link to='/register'>Register</Link></div>
+						<div className="center mt-4">Don't have an account? <Link to='/register'>Register</Link></div>
 					</form>
 				</div>
 			</div>

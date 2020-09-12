@@ -10,7 +10,7 @@
 }
 
 body {
-	background: url(../components/pages/background.jpg) no-repeat center center fixed;
+	background: url(../components/images/background.jpg) no-repeat center center fixed;
 	background-color: var(--background);
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -74,6 +74,7 @@ body {
 	transform: scale(1.2);
 	border: 1px solid #fff;
 	box-shadow: 0 0 5px #aaa;
+	position: sticky;
 }
 
 /* REGISTER / SIGN IN FORM */
@@ -100,4 +101,34 @@ hr {
     background-color: #333;
     border: none;
     margin: 0;
+}
+
+.movie-hover-box {
+	width: 200px;
+	margin: auto;
+	padding: 1rem;
+	background-color: rgba(255, 215, 0, .9);
+	position: relative;
+	bottom: 330px;
+	text-align: center;
+	border: 1px solid #000;
+}
+
+.movie-hover-box a {
+	color: #000;
+}
+
+.movie-title-huge {
+	position: absolute;
+	top: 60px;
+	color: #fff;
+	font-size: 4vmax;
+	text-shadow: 5px 5px 10px #333;
+}
+
+.search-bar {
+	max-width: 500px;
+	width: 50%;
+	margin: 1rem auto;
+	text-align:	center;
 }
