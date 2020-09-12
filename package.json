@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^5.3.0"
+    "backend": "file:backend",
+    "concurrently": "^5.3.0",
+    "frontend": "file:frontend"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "install-all": "npm i && npm i ./backend/ && npm i ./frontend/",
     "dev": "concurrently \"cd backend && npm run server\" \"cd frontend && npm start\""
   },
   "repository": {

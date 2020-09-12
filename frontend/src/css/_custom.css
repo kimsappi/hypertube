@@ -10,7 +10,8 @@
 }
 
 body {
-	background: url(../components/pages/background.jpg) no-repeat center center fixed; 
+	background: url(../components/pages/background.jpg) no-repeat center center fixed;
+	background-color: var(--background);
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -73,4 +74,30 @@ body {
 	transform: scale(1.2);
 	border: 1px solid #fff;
 	box-shadow: 0 0 5px #aaa;
+}
+
+/* REGISTER / SIGN IN FORM */
+.register-container {
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+	align-items: flex-start;
+}
+
+.basic-form {
+	width: clamp(200px, 75%, 400px);
+	padding: 30px;
+	background-color: rgba(22, 22, 22, .9);
+	border-radius: 0.5rem;
+}
+
+.rounded-image {
+	border-radius: 0.5rem;
+}
+
+hr {
+    height: 1px;
+    background-color: #333;
+    border: none;
+    margin: 0;
 }

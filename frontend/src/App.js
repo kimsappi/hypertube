@@ -8,6 +8,7 @@ import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
+import ActivationSent from './components/pages/ActivationSent';
 import Movie from './components/pages/Movie';
 import Cinema from './components/pages/Cinema';
 
@@ -23,6 +24,7 @@ const App = () =>
 				<Route exact path='/about' component={About} />
 				<Route exact path='/login' component={Login} />
 				<Route exact path='/register' component={Register} />
+				<Route exact path='/activationsent' component={ActivationSent} />
 				<Route exact path='/movie/:id' component={Movie} />
 				<Route exact path='/cinema/:magnet' component={Cinema} />
 				<Route path='/' component={Home} />
