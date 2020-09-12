@@ -14,6 +14,8 @@ mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+mongoose.set('useCreateIndex', true);
+
 mongoose.connection.on('error', err => {
   Logger.error('Mongoose connection error:');
   Logger.error(err);
