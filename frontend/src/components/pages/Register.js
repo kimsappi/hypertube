@@ -186,7 +186,7 @@ const Register = () =>
 				<div  className="register-container">
 					<div>
 						<h1 className="center"><i className="fas fa-edit color-white my-4"></i> Register</h1>
-						<img src={image} width="300px" height="400px" alt='image' className='rounded-image'/>
+						<img src={image} width="300px" height="400px" className='rounded-image'/>
 					</div>
 					<div className="basic-form p-5">
 						<form onSubmit={handleSubmit}>

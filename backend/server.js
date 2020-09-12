@@ -47,6 +47,7 @@ app.get('/api/cinema/:magnet',
 				// sort by size and stream only the largest file?
 
 				// add some way of checking if everything has already been downloaded
+				// it's hardcoded here for testing purposes
 				let completelyDownloaded = true;
 
 				// if already downloaded, return url to static file, else return stream

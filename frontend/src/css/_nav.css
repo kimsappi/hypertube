@@ -12,9 +12,9 @@
 .navbar-title {
 	font-family: 'Yanone Kaffeesatz', sans-serif;
 	font-size: 2rem;
-	margin: 0.2rem 0 0 0;
-	padding: 0;
+	padding: 8px 0;
 	white-space: nowrap;
+	line-height: 100%;
 }
 
 .navbar ul {
@@ -34,7 +34,6 @@
 .navbar a {
 	color: #fff;
 	text-shadow: 0 0 2px #333;
-	padding-bottom: 0.2rem;
 }
 
 .navbar a:hover {
@@ -50,7 +49,7 @@
 
 .navbar .logo {
 	display: inline-block;
-	vertical-align: middle;
-	width: 32px;
-	height: 32px;
+	width: 24px;
+	height: 24px;
+	line-height: 100%;
 }

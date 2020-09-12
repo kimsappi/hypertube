@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import logo from'./logo.png';
+
 const HeaderLoggedOut = () =>
 {
 	return (
@@ -9,7 +11,7 @@ const HeaderLoggedOut = () =>
 			<div className="flex" style={{ width: '100%' }}>
 				<div className="navbar-title">
 					<NavLink to='/home' alt='Home' title='Home'>
-						HIVEFLIX
+						<img src={logo} className='logo'/> HIVEFLIX
 					</NavLink>
 				</div>
 				<div>
