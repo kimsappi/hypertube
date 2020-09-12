@@ -17,7 +17,7 @@ const register = async data => {
     username: data.username,
     firstName: data.firstName,
     lastName: data.lastName,
-    password: await(hashPassword(data.password)),
+    password: await hashPassword(data.password),
     email: data.email,
     emailVerification
   });
@@ -31,6 +31,20 @@ const register = async data => {
   };
 };
 
+const login = async data => {
+  const user = await User.findOne({
+    username: data.username
+  }, 'username emailVerification profilePicture password');
+
+  if (!user || !await bcrypt.compare(data.password, user.password))
+    throw 'invalid username or password';
+  else if (user.emailVerification)
+    throw 'email not verified';
+  const {password, emailVerification, ...ret} = user;
+  return ret;
+};
+
 module.exports = {
   register,
+  login
 }

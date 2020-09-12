@@ -2,6 +2,8 @@ import React, { useState, Fragment } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
+import config from '../../config';
+
 import image from'./image_register.jpg';
 
 const Register = () =>
@@ -107,7 +109,7 @@ const Register = () =>
 		{
 			try
 			{
-				const response = await axios.post('http://localhost:5000/api/auth/register', {
+				const response = await axios.post(config.SERVER_URL + '/api/auth/register', {
 					username: username,
 					email: email,
 					firstName: firstName,

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import config from '../../config';
+
 import image from'./image_login.jpg';
 
 const Login = () =>
@@ -33,7 +35,10 @@ const Login = () =>
 			try
 			{
 				// log in and get a token
-				let response = await axios.post('http://localhost:5000/api/account/login/', {username: username, password: password});
+				let response = await axios.post(
+					config.SERVER_URL + '/api/auth/login/',
+					{username: username, password: password}
+				);
 
 
 				// tahan loytyy varmasti parempikin tapa ...
