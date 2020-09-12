@@ -10,7 +10,7 @@ const validAccount = {
   username: 'test123',
   password: 'asdASD123',
   firstName: 'Test',
-  lastName: 'Account',
+  lastName: 'Umlaut-Äccount',
   email: 'test@example.com'
 };
 

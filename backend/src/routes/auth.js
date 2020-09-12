@@ -24,7 +24,7 @@ router.post('/login', async (req, res, next) => {
     return res.status(200).json({
       username: data.username,
       token,
-      profilePicture: data.profilePicture
+      profilePicture: data.profilePicture || null
     });
   } catch(err) {
     Logger.error(err);

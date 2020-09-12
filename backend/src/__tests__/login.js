@@ -23,6 +23,8 @@ describe('Logging in', () => {
       .expect(200);
 
     expect(response.body.token).toBeDefined();
+    expect(response.body.profilePicture).toBeDefined();
+    expect(response.body.profilePicture).toBe(null);
   });
 
   test("Login failure with incorrect username", async () => {
@@ -40,6 +42,19 @@ describe('Logging in', () => {
       .post('/api/auth/login')
       .send(validAccount)
       .send({username: validAccount.username, password: '123'})
+      .expect(400);
+
+    expect(response.body).toBe(false);
+  });
+
+  test("Login failure before email verification", async () => {
+    await User.findOneAndUpdate({username: validAccount.username},
+      {emailVerification: '123'}
+    );
+    const response = await api
+      .post('/api/auth/login')
+      .send(validAccount)
+      .send({username: validAccount.username, password: validAccount.password})
       .expect(400);
 
     expect(response.body).toBe(false);
