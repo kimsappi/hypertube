@@ -3,15 +3,16 @@ const router = express.Router();
 
 const Logger = require('../utils/logger');
 const authService = require('../services/auth');
+const mailService = require('../services/mail');
 
 router.post('/register', async (req, res, next) => {
   try {
-    console.log(req.body);
-    const data = authService.register(req.body);
-    return res.status(201).json('data');
+    const data = await authService.register(req.body);
+    const mailSent = await mailService.registration(data);
+    return res.status(201).json(mailSent);
   } catch(err) {
-    Logger().error(err);
-    return res.status(400).json('registration failure');
+    Logger.error(err);
+    return res.status(400).json(false);
   }
 });
 

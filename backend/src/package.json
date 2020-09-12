@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "jest --verbose --runInBand"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -14,5 +15,9 @@
     "mongoose": "^5.10.5",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2",
+    "supertest": "^4.0.2"
   }
 }

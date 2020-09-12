@@ -1,7 +1,7 @@
-const public = require('../config.public.json');
-const secret = require('../config.secret.json');
+const publicConfig = require('../config.public.json');
+const secretConfig = require('../config.secret.json');
 
 module.exports = {
-  ...public,
-  ...secret
+  ...publicConfig,
+  ...secretConfig
 };

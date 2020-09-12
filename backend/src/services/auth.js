@@ -5,8 +5,8 @@ const { hashPassword } = require('../utils/auth');
 const User = require('../models/User');
 
 const register = async data => {
-  // This will throw an error if the data is invalid
-  validateRegistrationData(data);
+  if (!validateRegistrationData(data))
+    throw 'Invalid data';
 
   const emailVerification = await bcrypt.hash(
     data.username + new Date() + data.email,
@@ -19,10 +19,16 @@ const register = async data => {
     lastName: data.lastName,
     password: await(hashPassword(data.password)),
     email: data.email,
-    emailVerification: emailVerification
+    emailVerification
   });
 
-  const result = user.save();
+  const result = await user.save();
+
+  return {
+    result,
+    email: data.email,
+    emailVerification
+  };
 };
 
 module.exports = {
