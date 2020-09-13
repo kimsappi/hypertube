@@ -48,7 +48,7 @@ app.get('/api/cinema/:magnet',
 
 				// add some way of checking if everything has already been downloaded
 				// it's hardcoded here for testing purposes
-				let completelyDownloaded = true;
+				let completelyDownloaded = false;
 
 				// if already downloaded, return url to static file, else return stream
 				if (completelyDownloaded)
