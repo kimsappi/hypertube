@@ -93,8 +93,7 @@ is reached, columns are stacked vertically if needed */
 
 .ram {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 3fr));
-	grid-gap: 0.5rem;
+	grid-template-columns: repeat(auto-fit, minmax(450px, 3fr));
 }
 
 /* FLEX

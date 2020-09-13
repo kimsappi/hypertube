@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import axios from "axios";
 import ReactPlayer from "react-player";
 
+import image from "../images/profile.jpg";
+
 const Movie = () =>
 {
 	const [movie, setMovie] = useState("");
@@ -22,7 +24,7 @@ const Movie = () =>
 			try
 			{
 				// fetch all movies
-				const response = await axios.get("https://yts.mx/api/v2/movie_details.json?movie_id=" + id);
+				const response = await axios.get("https://yts.mx/api/v2/movie_details.json?with_cast=true&movie_id=" + id);
 
 				console.log("movie.data", response.data.data.movie);
 				
@@ -36,8 +38,6 @@ const Movie = () =>
 		})()
 	}, [id]);
 
-
-
 	return (
 		<Fragment>
 			{loading && <div className="loading"></div>}
@@ -45,17 +45,45 @@ const Movie = () =>
 				<div className="ram-container">
 					<div className="ram">
 						<div className="movie-left-column">
-							<img className="movie-image-large p-4 bg-black100" src={movie.large_cover_image} alt='Profile'/>
-						</div>
-						<div className="movie-center-column">
-							<h1 className="color-white">{movie.title_long}</h1>
-							<div className="small color-black70 my-2">{movie.genres.map(genre => genre.toUpperCase(genre) + " ")}</div>
-							<p>{movie.description_intro}</p>
-							<Link className="center" to={"/cinema/" + magnet}>PLAY MOVIE</Link>
+							<img className="movie-image-large" src={movie.large_cover_image} alt='Profile'/>
+							
 						</div>
 						<div className="movie-right-column">
-							<h3 className="color-white center">Trailer</h3>
-							{movie.yt_trailer_code !== "" ? <ReactPlayer width="100%" url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code} /> : <p className="center color-black70">Oh snap, no trailer found.</p>}
+							{movie.yt_trailer_code !== "" &&
+							<ReactPlayer
+								width="100%"
+								playing={true}
+								loop={true}
+								volume={1}
+								muted={true}
+								controls={false}
+								url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=10"}
+							/>}
+							<div className="p-5">
+								<h1 className="color-white">{movie.title_long}</h1>
+								<div className="small color-black70 my-2">{movie.genres.map(genre => genre.toUpperCase(genre) + " ")}</div>
+								<p>{movie.description_intro}</p>
+								{typeof movie.cast !== "undefined" && (
+									<Fragment>
+										<h3 className="color-white center">Cast</h3>
+										<div className="cast-member-container">
+											{movie.cast.map(cast_member =>
+												<div className="cast-member-item" key={cast_member.name}>
+													<a href={"https://www.imdb.com/name/nm" + cast_member.imdb_code} target="blank">
+														<img
+															className="cast-member-image"
+															src={typeof cast_member.url_small_image !== "undefined" ? cast_member.url_small_image : image}
+															alt={cast_member.name}
+														/>
+													</a>
+													<div className="small center pt-2">{cast_member.name}</div>
+												</div>
+											)}
+										</div>
+									</Fragment>
+								)}
+							</div>
+							<Link className="center" to={"/cinema/" + magnet}>PLAY MOVIE</Link>
 						</div>
 					</div>
 				</div>

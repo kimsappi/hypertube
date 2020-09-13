@@ -11,7 +11,7 @@ const HeaderLoggedOut = () =>
 			<div className="flex" style={{ width: '100%' }}>
 				<div className="navbar-title">
 					<NavLink to='/home' alt='Home' title='Home'>
-						<img src={logo} className='logo'/> HIVEFLIX
+						<img src={logo} className='logo' alt='site logo'/> HIVEFLIX
 					</NavLink>
 				</div>
 				<div>
