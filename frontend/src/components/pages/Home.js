@@ -40,12 +40,37 @@ const Home = () =>
 				console.error(err.message);
 			}
 		})();
-	}, [searchInput]);
+	}, []);
 
-	const changeSearchInput = (event) =>
+	// timer is activated each time the user types something in the search bar
+	// if the user does not type anything for 0.7 seconds, search is performed
+	// this prevents performing a new search each time the users inputs one characters
+	useEffect(() =>
 	{
-		setSearchInput(event.target.value)
-	}
+		let timer = setTimeout(() =>
+		{
+			(async () =>
+			{
+				try
+				{
+					// fetch all movies
+					const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=year&query_term=" + searchInput);
+	
+					setMovies(response.data.data);
+				}
+				catch (err)
+				{
+					console.error(err.message);
+				}
+			})();
+		}, 700);
+
+		return () => clearTimeout(timer);
+
+	  }, [searchInput]);
+
+	// update state when user inputs text in search bar
+	const changeSearchInput = event => setSearchInput(event.target.value);
 
 	return (
 		<Fragment>
@@ -62,7 +87,7 @@ const Home = () =>
 						value={searchInput}
 						onChange={changeSearchInput}
 					/>
-					<div className="flex-center m-5">
+					<div className="flex-center m-4">
 						{movies.movie_count > 0 && movies.movies.map (movie => (
 							<Fragment key={movie.id}>
 								<MovieItem movie={movie}/>

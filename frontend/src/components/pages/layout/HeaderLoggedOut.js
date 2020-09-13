@@ -6,7 +6,7 @@ import logo from'../../images/logo.png';
 const HeaderLoggedOut = () =>
 {
 	return (
-		<header className="mb-2">
+		<header>
 		<nav className='navbar'>
 			<div className="flex" style={{ width: '100%' }}>
 				<div className="navbar-title">
