@@ -58,12 +58,13 @@ app.get('/api/cinema/:magnet',
 				if (completelyDownloaded)
 				{
 					// let data = [];
-					//let requestedRange = req.head.range.split('=')[1].split['-'];
-					let requestedRange = '0-1000000';
+					console.log(req.header('Range'))
+					let requestedRange = req.header('Range').split('=')[1].split('-');
+					console.log(requestedRange)
 					let start = requestedRange[0];
 					let end = requestedRange[1];
 					if (end === '');
-						end = 1000000;
+						end = parseInt(start) + 1000000;
 					let chunksize = end - start + 1;
 
 					engine.files.forEach(file =>
