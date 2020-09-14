@@ -43,6 +43,8 @@ app.get('/api/cinema/:magnet',
 				],
 			});
 
+			//console.log(req.head);
+
 			// emitted when the engine is ready to be used. 
 			engine.on('ready', () =>
 			{
@@ -56,14 +58,37 @@ app.get('/api/cinema/:magnet',
 				if (completelyDownloaded)
 				{
 					// let data = [];
+					//let requestedRange = req.head.range.split('=')[1].split['-'];
+					let requestedRange = '0-1000000';
+					let start = requestedRange[0];
+					let end = requestedRange[1];
+					if (end === '');
+						end = 1000000;
+					let chunksize = end - start + 1;
 
 					engine.files.forEach(file =>
 					{
-						if (file.name.includes(".mp4") || file.name.includes(".mkv"))
-							res.json({
-								isStream: false,
-								videoUrl: config.SERVER_URL + "/" + file.path
-							});	
+						const head = {
+							'Accept-Ranges': 'bytes',
+							'Cache-Control': 'no-cache, no-store',
+							'Content-Range': `bytes ${start}-${end}/${file.length}`,
+							'Content-Length': chunksize + 1,
+							'Content-Type': 'video/mp4'
+						};
+						if (file.name.includes('.mp4') || file.name.includes('.mkv'))
+						{
+							var stream = file.createReadStream();
+							res.writeHead(206, head);
+							console.log('\033[35mstreaming\033[0m')
+							stream.pipe(res);
+							//console.log("res", res);
+						}
+
+						// if (file.name.includes(".mp4") || file.name.includes(".mkv"))
+						// 	res.json({
+						// 		isStream: false,
+						// 		videoUrl: config.SERVER_URL + "/" + file.path
+						// 	});	
 
 						// if (file.name.includes(".mp4") || file.name.includes(".mkv"))
 						// {
