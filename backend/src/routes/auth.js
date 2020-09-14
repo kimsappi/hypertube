@@ -4,7 +4,7 @@ const router = express.Router();
 const Logger = require('../utils/logger');
 const authService = require('../services/auth');
 const mailService = require('../services/mail');
-const { hashPassword, generateJWT } = require('../utils/auth');
+const { generateJWT } = require('../utils/auth');
 
 router.post('/register', async (req, res, next) => {
   try {

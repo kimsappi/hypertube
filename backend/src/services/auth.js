@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const { validateRegistrationData } = require('../utils/validateUserData');
 const { hashPassword } = require('../utils/auth');
