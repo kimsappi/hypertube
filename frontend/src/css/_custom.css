@@ -10,7 +10,7 @@
 }
 
 body {
-	background: url(../components/images/background.jpg) no-repeat center center fixed;
+	background: url(../images/background.jpg) no-repeat center center fixed;
 	background-color: var(--background);
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -18,7 +18,32 @@ body {
 	background-size: cover;
 }
 
-/* LOADER */
+hr {
+	height: 1px;
+	background-color: #333;
+	border: none;
+	margin: 0;
+}
+
+.profile-image {
+	vertical-align: middle;
+	width: 32px;
+	height: 32px;
+	object-fit: cover;
+	border: 2px solid #fff;
+	border-radius: 100%;
+}
+
+.profile-image-large {
+	border: 10px solid #ccc;
+	border-radius: 100%;
+	object-fit: cover;
+	width: 160px;
+	height: 160px;
+}
+
+/* LOADER
+--------------------------------------------------------------------- */
 .loading {
 	display: inline-block;
 	width: 100px;
@@ -39,17 +64,60 @@ body {
 	to { -webkit-transform: rotate(360deg); }
 }
 
-/* MOVIE PAGE */
+/* MOVIE PAGE
+--------------------------------------------------------------------- */
+
 .movie-left-column {
 	line-height: 0;
 }
-.movie-right-column {
+
+.movie-center-column {
 	display: flex;
 	flex-direction: column;
 	background-color: rgba(0, 0, 0, .8);
 }
 
-/* MOVIE ITEM */
+.movie-right-column {
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(0, 0, 0, .8);
+	padding: 2rem;
+}
+
+.cast-member-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+.cast-member-item {
+	width: 80px;
+	text-overflow: ellipsis;
+	margin: 0.5rem;
+}
+
+.cast-member-image {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	border: 2px solid #fff;
+	border-radius: 0.5rem;
+	margin: 0 auto;
+	display: block;
+}
+
+.movie-image-large {
+	border: 1px solid #000;
+}
+
+.comment {
+
+}
+
+/* MOVIE ITEM ON HOME PAGE
+--------------------------------------------------------------------- */
+
 .movie-item {
 	border: 1px solid #333;
 	border-radius: 0.5rem;
@@ -69,11 +137,13 @@ body {
 	position: sticky;
 }
 
-/* REGISTER / SIGN IN FORM */
+/* REGISTER / SIGN IN FORM
+--------------------------------------------------------------------- */
+
 .register-container {
 	display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+	flex-wrap: wrap;
+	justify-content: center;
 	align-items: flex-start;
 }
 
@@ -86,13 +156,6 @@ body {
 
 .rounded-image {
 	border-radius: 0.5rem;
-}
-
-hr {
-    height: 1px;
-    background-color: #333;
-    border: none;
-    margin: 0;
 }
 
 .movie-hover-box {
@@ -123,41 +186,4 @@ hr {
 	width: 50%;
 	margin: 1.5rem auto 0 auto;
 	text-align:	center;
-}
-
-.cast-member-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: flex-start;
-}
-
-.cast-member-item {
-	width: 80px;
-	text-overflow: ellipsis;
-	margin: 0.5rem;
-}
-
-.cast-member-image {
-	width: 60px;
-	height: 60px;
-	object-fit: cover;
-	border: 2px solid #fff;
-	border-radius: 0.5rem;
-	margin: 0 auto;
-	display: block;
-}
-
-.cast-member-text {
-	width: 60px;
-	height: 60px;
-	object-fit: cover;
-	border: 2px solid #fff;
-	border-radius: 0.5rem;
-	margin: 0 auto;
-	display: block;
-}
-
-.movie-image-large {
-	border: 1px solid #000;
 }

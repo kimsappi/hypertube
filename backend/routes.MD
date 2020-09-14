@@ -38,3 +38,18 @@ Get video stream of movie
 POST /api/movie/new
 {magnet: $magnetLink}
 Initiate download of a movie
+
+# Comment routes
+GET /api/comments/:id
+Get comments of movie
+
+POST /api/comments/
+{message: $message}
+Post new comment
+
+PUT /api/comments/:id
+{message: $message}
+Edit existing comment
+
+DELETE /api/comments/:id
+Delete comment

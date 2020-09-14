@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import config from '../../config';
+import config from '../../config/config';
 
-import image from'../images/image_login.jpg';
+import image from '../../images/image_login.jpg';
 
 const Login = () =>
 {
@@ -39,7 +39,6 @@ const Login = () =>
 					config.SERVER_URL + '/api/auth/login/',
 					{username: username, password: password}
 				);
-
 
 				// tahan loytyy varmasti parempikin tapa ...
 				if (response.data.message === "login success")

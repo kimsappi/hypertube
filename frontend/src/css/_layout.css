@@ -75,7 +75,7 @@ center column, right column and a footer */
 /* RAM LAYOUT (Repeat, Auto, Minmax)
 --------------------------------------------------------------------- */
 /* Columns take equal space horizontally and fill the whole window.
-When reducing the window size until a minimum width of 300px
+When reducing the window size until a minimum width of 450px
 is reached, columns are stacked vertically if needed */
 
 /*
@@ -87,7 +87,7 @@ is reached, columns are stacked vertically if needed */
 */
 
 .ram-container {
-	max-width: var(--pageMax);
+	/* max-width: var(--pageMax); */
 	margin: 0 auto;
 }
 

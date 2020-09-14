@@ -2,9 +2,9 @@ import React, { useState, Fragment } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-import config from '../../config';
+import config from '../../config/config';
 
-import image from'../images/image_register.jpg';
+import image from '../../images/image_register.jpg';
 
 const Register = () =>
 {

@@ -13,6 +13,8 @@ app.use(cors());
 // enable access to files in public folder
 app.use(express.static('public'));
 
+const config = require('./config/config');
+
 
 // // fixes image uploading size limit error
 // app.use(express.json({ limit: '2mb' }));
@@ -27,8 +29,8 @@ app.get('/api/cinema/:magnet',
 
 			// start engine
 			const engine = torrentStream("magnet:?" + magnet, {
-				tmp: "/home/taho/hive/hypertube/backend/public",
-				path: "/home/taho/hive/hypertube/backend/public",
+				tmp: "./public",
+				path: "./public",
 				trackers: [
 					"udp://glotorrents.pw:6969/announce",
 					"udp://tracker.opentrackr.org:1337/announce",
@@ -48,7 +50,7 @@ app.get('/api/cinema/:magnet',
 
 				// add some way of checking if everything has already been downloaded
 				// it's hardcoded here for testing purposes
-				let completelyDownloaded = false;
+				let completelyDownloaded = true;
 
 				// if already downloaded, return url to static file, else return stream
 				if (completelyDownloaded)
@@ -60,7 +62,7 @@ app.get('/api/cinema/:magnet',
 						if (file.name.includes(".mp4") || file.name.includes(".mkv"))
 							res.json({
 								isStream: false,
-								videoUrl:"http://localhost:5000/" + file.path
+								videoUrl: config.SERVER_URL + "/" + file.path
 							});	
 
 						// if (file.name.includes(".mp4") || file.name.includes(".mkv"))
@@ -105,6 +107,7 @@ app.get('/api/cinema/:magnet',
 							res.writeHead(206, head);
 							console.log('\033[35mstreaming\033[0m')
 							stream.pipe(res);
+							console.log("res", res);
 						}
 					});
 				}

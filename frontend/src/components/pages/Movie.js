@@ -3,7 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import axios from "axios";
 import ReactPlayer from "react-player";
 
-import image from "../images/profile.jpg";
+import Comments from "./Comments";
+
+import image from "../../images/profile.jpg";
 
 const Movie = () =>
 {
@@ -46,9 +48,8 @@ const Movie = () =>
 					<div className="ram">
 						<div className="movie-left-column">
 							<img className="movie-image-large" src={movie.large_cover_image} alt='Profile'/>
-							
 						</div>
-						<div className="movie-right-column">
+						<div className="movie-center-column">
 							{movie.yt_trailer_code !== "" &&
 							<ReactPlayer
 								width="100%"
@@ -84,6 +85,9 @@ const Movie = () =>
 								)}
 							</div>
 							<Link className="center" to={"/cinema/" + magnet}>PLAY MOVIE</Link>
+						</div>
+						<div className="movie-right-column">
+							<Comments movieId={id}/>
 						</div>
 					</div>
 				</div>

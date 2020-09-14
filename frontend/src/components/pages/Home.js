@@ -4,13 +4,13 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import clone from 'clone';
 
 // components
-import Trailer from "./utilities/Trailer";
+import Trailer from "./Trailer";
 import MovieItem from "./MovieItem";
 
 const Home = () =>
 {
 	const [movies, setMovies] = useState([]);
-	const [firstMovieId, setFirstMovieId] = useState(null);
+	const [trailerMovieId, setTrailerMovieId] = useState(null);
 	const [searchInput, setSearchInput] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [isLoading, setIsLoading] = useState(true);
@@ -31,14 +31,22 @@ const Home = () =>
 
 				console.log("movies", response.data.data);
 
-				setCurrentPage(currentPage + 1);
+				setCurrentPage(2);
 
 				setMovies(response.data.data);
 
 				// pick a random video for trailer
-				setFirstMovieId(response.data.data.movies[Math.floor(Math.random() * 20)].id)
+				while (1)
+				{
+					let randomNumber = Math.floor(Math.random() * 20);
 
-				setIsLoading(false);
+					if (response.data.data.movies[randomNumber].yt_trailer_code !== "")
+					{
+						setTrailerMovieId(response.data.data.movies[randomNumber].id)
+						setIsLoading(false);
+						break;
+					}
+				}
 			}
 			catch (err)
 			{
@@ -89,7 +97,7 @@ const Home = () =>
 	// update state when user inputs text in search bar
 	const changeSearchInput = event => setSearchInput(event.target.value);
 
-	// // load more results for Infinite Scroller
+	// load more results for Infinite Scroller
 	const handleLoadMore = async () =>
 	{
 		let moviesCopy = clone(movies);
@@ -115,13 +123,13 @@ const Home = () =>
 			{!isLoading && (
 				<Fragment>
 					<InfiniteScroll
-						dataLength={movies.movies.length}
+						dataLength={typeof movies.movies !== "undefined" ? movies.movies.length : 0}
 						next={handleLoadMore}
 						// hasMore={true}
 						hasMore={hasMoreItems}
 						loader={<div className="loading"></div>}
 					>
-					<Trailer id={firstMovieId} />
+					<Trailer id={trailerMovieId} />
 					<input
 						className="search-bar"
 						type="text"
@@ -138,7 +146,7 @@ const Home = () =>
 							</Fragment>
 							)
 						)}
-						{movies.movie_count === 0 && <h2>Oh snap, no results.</h2>}
+						{movies.movie_count === 0 && <h4>Oh snap, no results.</h4>}
 					</div>
 					</InfiniteScroll>
 				</Fragment>
