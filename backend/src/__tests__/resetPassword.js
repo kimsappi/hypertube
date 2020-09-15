@@ -39,6 +39,7 @@ describe('Resetting password', () => {
 
     expect (user.password).toBe(null);
     expect (user.emailVerification).not.toBe(null);
+    emailVerification = user.emailVerification;
   });
 
   beforeAll(async done => {
@@ -50,8 +51,37 @@ describe('Resetting password', () => {
       done();
     }
   });
+});
+
+describe('Setting a new password', () => {
+  let userInDB = null;
+
+  test('Can\'t set a new password with invalid code', async () => {
+    const response = await api
+      .patch(`/api/auth/forgotPassword/${userInDB._id}?code=${userInDB.emailVerification}`)
+      .send({password: validAccount.password, confirmPassword: validAccount.password})
+      .expect(400);
+
+    expect(response.body).toBe(null);
+  });
+
+  test('Password is reset when all details are correct', async () => {
+    console.warn(`/api/auth/forgotPassword/${userInDB._id}?code=${userInDB.emailVerification}`);
+    const response = await api
+      .patch(`/api/auth/forgotPassword/${userInDB._id}&code=${userInDB.emailVerification}`)
+      .send({password: validAccount.password, confirmPassword: validAccount.password})
+      .expect(200);
+
+    expect(response.body).toBe(true);
+  });
+
+  beforeAll(async () => {
+    userInDB = await User.findOne({
+      email: validAccount.email
+    });
+  });
 
   afterAll(() => {
     mongoose.connection.close();
-  });
+  })
 });

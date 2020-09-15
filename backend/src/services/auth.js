@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
 
-const { validateRegistrationData } = require('../utils/validateUserData');
+const { validateRegistrationData, validatePassword } = require('../utils/validateUserData');
 const { hashPassword, generateEmailVerification } = require('../utils/auth');
 const User = require('../models/User');
+const { findByIdAndUpdate, findById } = require('../models/User');
 
 const register = async data => {
   if (!validateRegistrationData(data))
@@ -54,8 +55,22 @@ const resetPassword = async email => {
   return {...user, emailVerification};
 };
 
+const setNewPassword = async (id, data) => {
+  if (!validatePassword(data.password))
+    throw 'invalid password';
+  const user = await User.findById(id);
+  if (user.emailVerification !== data.code)
+    throw 'invalid verification code';
+  const updated = await User.findByIdAndUpdate(id, {
+    emailVerification: null,
+    password: await hashPassword(data.password)
+  }, {new: true});
+  return updated;
+};
+
 module.exports = {
   register,
   login,
-  resetPassword
+  resetPassword,
+  setNewPassword
 }

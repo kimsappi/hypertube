@@ -27,8 +27,6 @@ const validateEmail = email =>
     .test(email);
 
 const validateRegistrationData = data => {
-  console.log(data);
-  console.log(validateName(data.firstName))
   if (data.username && data.password && data.firstName && data.lastName && data.email)
     return validateUsername(data.username) &&
       validatePassword(data.password) &&
@@ -40,5 +38,6 @@ const validateRegistrationData = data => {
 };
 
 module.exports = {
-  validateRegistrationData
+  validateRegistrationData,
+  validatePassword
 };

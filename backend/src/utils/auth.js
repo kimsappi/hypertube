@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const config = require('./config');
 
@@ -9,11 +10,11 @@ const hashPassword = async password =>
 const generateJWT = data =>
   jwt.sign(data, config.TOKEN_SECRET);
 
-const generateEmailVerification = async data =>
-  await bcrypt.hash(
-    data.username + new Date() + data.email,
-    2
-  );
+const generateEmailVerification = data => {
+  const hash = crypto.createHash('sha256');
+  hash.update(data);
+  return hash.digest('hex');
+}
 
 module.exports = {
   hashPassword,
