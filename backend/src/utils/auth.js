@@ -12,7 +12,7 @@ const generateJWT = data =>
 
 const generateEmailVerification = data => {
   const hash = crypto.createHash('sha256');
-  hash.update(data);
+  hash.update(JSON.stringify(data));
   return hash.digest('hex');
 }
 
