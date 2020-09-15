@@ -1,6 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import { useParams } from 'react-router-dom';
-import axios from "axios";
 import ReactPlayer from "react-player";
 
 const Cinema = () =>
@@ -9,15 +8,15 @@ const Cinema = () =>
 	const [status, setStatus] = useState("...");
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
-	const [totalDuration, setTotalDuration] = useState(0);
+	const [totalSeconds, setTotalSeconds] = useState(0);
 
-	const onProgress = ({playedSeconds, played, loadedSeconds, loaded}) =>
+	const onProgress = ({ playedSeconds, loadedSeconds }) =>
 	{
 		setSecondsPlayed(playedSeconds);
 		setSecondsLoaded(loadedSeconds);
 	}
 
-	const onDuration = (duration) => setTotalDuration(duration);
+	const onDuration = (duration) => setTotalSeconds(duration);
 
 	// const onReady = () => setStatus("READY");
 	const onStart = () => setStatus("START");
@@ -31,9 +30,10 @@ const Cinema = () =>
 	return (
 		<Fragment>
 			<div className="flex-center p-4 bg-black100">
-				{<ReactPlayer
+				<ReactPlayer
 					playing={true}
 					controls={true}
+					pip={false}
 					// onReady={onReady}
 					onStart={onStart}
 					onPlay={onPlay}
@@ -51,16 +51,17 @@ const Cinema = () =>
 								crossOrigin: 'true'
 							},
 							tracks: [
-							{ kind: 'subtitles', src: 'subs.vtt', srcLang: 'en', default: true }
+							{ kind: 'subtitles', src: '../sample.vtt', srcLang: 'en', default: true }
 							]
+							}
 						}
 					}
-				}/>}
-			</div>
+				/>
+				</div>
 			<div className="flex-column center">
 				<div>{status}</div>
 				<div>played: {Math.round(secondsPlayed)} seconds</div>
-				<div>loaded: {Math.round(secondsLoaded)} / {Math.round(totalDuration)} seconds</div>
+				<div>loaded: {Math.round(secondsLoaded)} / {Math.round(totalSeconds)} seconds</div>
 			</div>
 		</Fragment>
 	)

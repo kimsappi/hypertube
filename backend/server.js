@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 
 const srt2vtt = require('srt-to-vtt')
-const fs = require('fs')
 
 const torrentStream = require('torrent-stream');
 
@@ -15,11 +14,8 @@ app.use(express.static('public'));
 
 const config = require('./config/config');
 
-// // fixes image uploading size limit error
-// app.use(express.json({ limit: '2mb' }));
-
 // play a movie
-app.get('/api/cinema/:magnet',
+app.get('/api/cinema/:magnet/',
 	async (req, res) =>
 	{
 		try
@@ -45,26 +41,30 @@ app.get('/api/cinema/:magnet',
 			// emitted when the engine is ready to be used. 
 			engine.on('ready', () =>
 			{
-				// sort by size and stream only the largest file?
-
 				// STREAM
 				engine.files.forEach(file =>
 				{
-					console.log(file.name);
+					// check video file type and store into a variable
 
-					// This just pipes the read stream to the response object (which goes to the client) 
-					const head = {
-						'Accept-Ranges': 'bytes',
-						'Cache-Control': 'no-cache, no-store',
-						'Content-Range': `bytes 0-${file.length}/${file.length}`,
-						'Content-Length': file.length,
-						'Content-Type': 'video/mp4'
-					};
-					if (file.name.includes('mp4') || file.name.includes('mkv'))
+					if (file.name.includes('mp4'))
 					{
-						console.log('\033[35mstreaming\033[0m')
-						res.writeHead(200, head)
-						file.createReadStream().pipe(res)
+						const range = req.headers.range;
+						const pos = range ? range.replace(/bytes=/, '').split('-') : null;
+						const start = pos ? parseInt(pos[0], 10) : 0;
+						const end = (pos && pos[1]) ? parseInt(pos[1], 10) : file.length - 1;
+
+						res.writeHead(206, {
+							'Accept-Ranges': 'bytes',
+							'Content-Range': `bytes ${start}-${end}/${file.length}`,
+							'Content-Length': end - start + 1,
+							'Content-Type': 'video/mp4'
+						});
+
+						file.createReadStream({
+							start: start,
+							end: end
+						})
+						.pipe(res);
 					}
 				});
 			});
@@ -72,11 +72,14 @@ app.get('/api/cinema/:magnet',
 			// emitted when the metadata has been fetched.
 			engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
 
-			// emitted everytime a piece has been downloaded and verified.
+			// // emitted everytime a piece has been downloaded and verified.
 			engine.on('download', index => console.log("\033[36mpart " + index +  " downloaded and verified\033[0m"));
 
 			// emitted when all selected files have been completely downloaded.
 			engine.on('idle', () => console.log("\033[0;32mall selected files have been completely downloaded\033[0m"));
+
+			// kill the stream somehow?
+
 		}
 		catch (err)
 		{
