@@ -18,21 +18,21 @@ const Cinema = () =>
 		{
 			try
 			{
-				// fetch stream
-				const response = await axios.get("http://localhost:5000/api/cinema/" + magnet);
-				// const response = await axios.get("http://localhost:5000/api/cinema/" + magnet, {
-				// 	headers: {Accept: 'video/mp4'}
-				// });
+				// // fetch stream
+				// const response = await axios.get("http://localhost:5000/api/cinema/" + magnet);
+				// // const response = await axios.get("http://localhost:5000/api/cinema/" + magnet, {
+				// // 	headers: {Accept: 'video/mp4'}
+				// // });
 
-				console.log("response", response.data);
+				// console.log("response", response.data);
 
-				// check if response is stream or url to static file
-				if (response.data.isStream === true)
-					setIsStream(true);
-				else
-					setIsStream(false);
+				// // check if response is stream or url to static file
+				// if (response.data.isStream === true)
+				// 	setIsStream(true);
+				// else
+				// 	setIsStream(false);
 
-				setVideo(response.data);
+				// setVideo(response.data);
 				
 				setIsLoading(false);
 			}
@@ -48,7 +48,7 @@ const Cinema = () =>
 			{isLoading && <div className="loading"></div>}
 			{!isLoading && (
 				<div className="flex-center p-4 bg-black100">
-					{<ReactPlayer playing={true} controls={true} url={isStream ? video : video.videoUrl} config={
+					{<ReactPlayer playing={true} controls={true} url={"http://localhost:5000/api/cinema/" + magnet} config={
 						{ file: {
 							attributes: {
 								crossOrigin: 'true'

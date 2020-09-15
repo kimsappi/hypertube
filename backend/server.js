@@ -15,7 +15,6 @@ app.use(express.static('public'));
 
 const config = require('./config/config');
 
-
 // // fixes image uploading size limit error
 // app.use(express.json({ limit: '2mb' }));
 
@@ -50,21 +49,26 @@ app.get('/api/cinema/:magnet',
 
 				// add some way of checking if everything has already been downloaded
 				// it's hardcoded here for testing purposes
-				let completelyDownloaded = true;
+				let completelyDownloaded = false;
 
-				// if already downloaded, return url to static file, else return stream
+				// if already downloaded, return url to static file
 				if (completelyDownloaded)
 				{
+
+					console.log("completelyDownloaded === true");
 					// let data = [];
 
 					engine.files.forEach(file =>
 					{
+						console.log(file.name);
+
 						if (file.name.includes(".mp4") || file.name.includes(".mkv"))
+						{
 							res.json({
 								isStream: false,
 								videoUrl: config.SERVER_URL + "/" + file.path
 							});	
-
+						}
 						// if (file.name.includes(".mp4") || file.name.includes(".mkv"))
 						// {
 						// 	data.push({
@@ -84,14 +88,13 @@ app.get('/api/cinema/:magnet',
 					});
 					// res.json(data);
 				}
-				else // stream
+				else // STREAM
 				{
+					console.log("completelyDownloaded === false");
+
 					engine.files.forEach(file =>
 					{
-						console.log("----------------------");
-						console.log('filename:', file.name);
-						console.log('path:', file.path);
-						console.log('length:', file.length);
+						console.log(file.name);
 	
 						// This just pipes the read stream to the response object (which goes to the client) 
 						const head = {
@@ -103,11 +106,9 @@ app.get('/api/cinema/:magnet',
 						};
 						if (file.name.includes('mp4') || file.name.includes('mkv'))
 						{
-							var stream = file.createReadStream();
-							res.writeHead(206, head);
 							console.log('\033[35mstreaming\033[0m')
-							stream.pipe(res);
-							console.log("res", res);
+							res.writeHead(200, head)
+							file.createReadStream().pipe(res)
 						}
 					});
 				}
