@@ -1,17 +1,14 @@
 const bcrypt = require('bcryptjs');
 
 const { validateRegistrationData } = require('../utils/validateUserData');
-const { hashPassword } = require('../utils/auth');
+const { hashPassword, generateEmailVerification } = require('../utils/auth');
 const User = require('../models/User');
 
 const register = async data => {
   if (!validateRegistrationData(data))
     throw 'Invalid data';
 
-  const emailVerification = await bcrypt.hash(
-    data.username + new Date() + data.email,
-    2
-  );
+  const emailVerification = await generateEmailVerification(data);
 
   const user = new User({
     username: data.username,
@@ -27,7 +24,8 @@ const register = async data => {
   return {
     result,
     email: data.email,
-    emailVerification
+    emailVerification,
+    username: data.username
   };
 };
 
@@ -44,7 +42,20 @@ const login = async data => {
   return ret;
 };
 
+const resetPassword = async email => {
+  const user = await User.findOne({email: email});
+
+  const emailVerification = await generateEmailVerification(user);
+  await User.findByIdAndUpdate(user._id, {
+    password: null,
+    emailVerification: emailVerification
+  });
+  
+  return {...user, emailVerification};
+};
+
 module.exports = {
   register,
-  login
+  login,
+  resetPassword
 }
