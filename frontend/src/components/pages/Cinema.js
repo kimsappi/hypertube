@@ -6,49 +6,46 @@ import ReactPlayer from "react-player";
 const Cinema = () =>
 {
 	const { magnet } = useParams();
-	const [video, setVideo] = useState(null);
-	const [isStream, setIsStream] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
+	const [status, setStatus] = useState("...");
+	const [secondsPlayed, setSecondsPlayed] = useState(0);
+	const [secondsLoaded, setSecondsLoaded] = useState(0);
+	const [totalDuration, setTotalDuration] = useState(0);
 
-	useEffect(() =>
+	const onProgress = ({playedSeconds, played, loadedSeconds, loaded}) =>
 	{
-		setIsLoading(true);
+		setSecondsPlayed(playedSeconds);
+		setSecondsLoaded(loadedSeconds);
+	}
 
-		(async () =>
-		{
-			try
-			{
-				// // fetch stream
-				// const response = await axios.get("http://localhost:5000/api/cinema/" + magnet);
-				// // const response = await axios.get("http://localhost:5000/api/cinema/" + magnet, {
-				// // 	headers: {Accept: 'video/mp4'}
-				// // });
+	const onDuration = (duration) => setTotalDuration(duration);
 
-				// console.log("response", response.data);
-
-				// // check if response is stream or url to static file
-				// if (response.data.isStream === true)
-				// 	setIsStream(true);
-				// else
-				// 	setIsStream(false);
-
-				// setVideo(response.data);
-				
-				setIsLoading(false);
-			}
-			catch (err)
-			{
-				console.error(err);
-			}
-		})()
-	}, [magnet]);
+	// const onReady = () => setStatus("READY");
+	const onStart = () => setStatus("START");
+	const onPlay = () => setStatus("PLAY");
+	const onPause = () => setStatus("PAUSE");
+	const onBuffer = () => setStatus("BUFFERING");
+	// const onBufferEnd = () => setStatus("BUFFERING END");
+	const onEnded = () => setStatus("VIDEO END");
+	const onError = () => setStatus("ERROR");
 
 	return (
 		<Fragment>
-			{isLoading && <div className="loading"></div>}
-			{!isLoading && (
-				<div className="flex-center p-4 bg-black100">
-					{<ReactPlayer playing={true} controls={true} url={"http://localhost:5000/api/cinema/" + magnet} config={
+			<div className="flex-center p-4 bg-black100">
+				{<ReactPlayer
+					playing={true}
+					controls={true}
+					// onReady={onReady}
+					onStart={onStart}
+					onPlay={onPlay}
+					onProgress={onProgress}
+					onDuration={onDuration}
+					onPause={onPause}
+					onBuffer={onBuffer}
+					// onBufferEnd={onBufferEnd}
+					onEnded={onEnded}
+					onError={onError}
+					url={"http://localhost:5000/api/cinema/" + magnet}
+					config={
 						{ file: {
 							attributes: {
 								crossOrigin: 'true'
@@ -56,10 +53,15 @@ const Cinema = () =>
 							tracks: [
 							{ kind: 'subtitles', src: 'subs.vtt', srcLang: 'en', default: true }
 							]
-						}}
-					}/>}
-				</div>
-			)}
+						}
+					}
+				}/>}
+			</div>
+			<div className="flex-column center">
+				<div>{status}</div>
+				<div>played: {Math.round(secondsPlayed)} seconds</div>
+				<div>loaded: {Math.round(secondsLoaded)} / {Math.round(totalDuration)} seconds</div>
+			</div>
 		</Fragment>
 	)
 }
