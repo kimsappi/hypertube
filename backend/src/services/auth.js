@@ -23,6 +23,7 @@ const register = async data => {
 
   return {
     result,
+    _id: user._id,
     email: data.email,
     emailVerification,
     username: data.username
