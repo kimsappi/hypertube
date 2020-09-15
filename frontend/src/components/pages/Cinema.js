@@ -64,7 +64,7 @@ const Cinema = () =>
 // 	)
 // }
 
-return (<video src={"http://localhost:5000/api/cinema/" + magnet} />);
+return (<video src={"http://localhost:5000/api/cinema/" + magnet} width='200px' height='200px' controls autoPlay muted />);
 }
 
 
