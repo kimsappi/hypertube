@@ -11,6 +11,7 @@ const Comments = ({ movieId }) =>
 	const [commentInput, setCommentInput] = useState("");
 	const [errorCommentInput, setErrorCommentInput] = useState("");
 	const [loading, setLoading] = useState(true);
+	const [render, setRender] = useState(false);
 
 	useEffect(() =>
 	{
@@ -23,6 +24,16 @@ const Comments = ({ movieId }) =>
 				// // fetch all comments of given movie
 				// let response = await axios.get(`${config.SERVER_URL}/api/comments/${movieId}`);
 
+				var response = await axios.get(
+					config.SERVER_URL + `/api/comment/getComments/${movieId}`)
+
+				setComments(response);
+				console.log(response);
+					
+				
+
+
+				
 				// console.log("comments.data", response.data);
 				
 				// setComments(response.data);
@@ -33,7 +44,7 @@ const Comments = ({ movieId }) =>
 				console.error(err.message);
 			}
 		})()
-	}, [movieId]);
+	}, [movieId, render]);
 
 	const changeCommentInput = (event) =>
 	{
@@ -55,8 +66,21 @@ const Comments = ({ movieId }) =>
 		{
 			try
 			{
-				// await axios.post(`${config.SERVER_URL}/api/comments/`, { message: commentInput });
-
+				// Create new comment
+				var token = localStorage.getItem("HiveFlixToken");
+				var response = await axios.post(
+					config.SERVER_URL + '/api/comment/new/',
+					{
+						username: localStorage.getItem("HiveFlixUsername"),
+						movie: movieId,
+						comment: commentInput
+					},
+					{headers: {token}}
+				)
+				console.log("test1")
+				console.log(response);
+				setRender(!render);
+				console.log("test2")
 				console.log("message sent");
 
 				setCommentInput("");
@@ -88,12 +112,13 @@ const Comments = ({ movieId }) =>
 			<hr className="my-2"></hr>
 			<h4 className="mb-2">Comments</h4>
 			{loading && <div className="loading"></div>}
-			{!loading && comments.map (comment => (
+			{!loading && comments.data.comments.map ((comment, index) => (
 				<CommentItem
-					senderId={comment.sender}
-					message={comment.message}
+					sender={comment.username}
+					message={comment.comment}
 					created={comment.created}
 					key={comment.id}
+					index={index}
 				/>
 			))}
 		</Fragment>

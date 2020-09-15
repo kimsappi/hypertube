@@ -3,9 +3,9 @@ import axios from "axios";
 
 import config from '../../config/config';
 
-const CommentItem = ({ senderId, message, created }) =>
+const CommentItem = ({ sender, message, created }) =>
 {
-	const [sender, setSender] = useState([]);
+	const [senderName, setSender] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() =>
@@ -16,13 +16,15 @@ const CommentItem = ({ senderId, message, created }) =>
 		{
 			try
 			{
-				// fetch profile image and username of user who posted the comment
-				let response = await axios.get(`${config.SERVER_URL}/api/users/${senderId}`);
+				// fetch profile image of user who posted the comment
 
-				console.log("user.data", response.data);
+				// Backissa ei ole viela routea talle..
+				//let response = await axios.get(`${config.SERVER_URL}/api/users/${sender}`);
+
+				//console.log("user.data", response.data);
 				
-				setSender(response.data);
-				setLoading(false);
+				//setSender(response.data);
+				//setLoading(false);
 			}
 			catch (err)
 			{
@@ -38,7 +40,7 @@ const CommentItem = ({ senderId, message, created }) =>
 			</div>
 			<div className="comment-data">
 				<div className="comment-username">
-					{sender.username} {created}
+					{sender} {created}
 				</div>
 				<div className="comment-message">
 					{message}

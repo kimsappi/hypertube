@@ -10,6 +10,7 @@ const Logger = require('./utils/logger');
 const config = require('./utils/config');
 
 var authRouter = require('./routes/auth');
+var commentRouter = require('./routes/comment');
 
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
@@ -37,6 +38,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Public routes
 app.use('/api/auth', authRouter);
+
+// Comment routes
+app.use('/api/comment', commentRouter);
 
 // Private routes
 // app.use...
