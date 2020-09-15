@@ -20,15 +20,17 @@ router.post('/register', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
   try {
     const data = await authService.login(req.body);
+    console.log(data);
     const token = generateJWT(data);
     return res.status(200).json({
+      message: 'login success',
       username: data.username,
       token,
       profilePicture: data.profilePicture || null
     });
   } catch(err) {
     Logger.error(err);
-    return res.status(400).json(false);
+    return res.status(200).json({message: err});
   }
 });
 

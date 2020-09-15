@@ -6,6 +6,8 @@ import config from '../../config/config';
 
 import image from '../../images/image_login.jpg';
 
+// username vahintaan 4 merkkia ja salasana pienia JA isoja kirjaimia
+
 const Login = () =>
 {
 	const [username, setUsername] = useState("");
@@ -39,18 +41,21 @@ const Login = () =>
 					config.SERVER_URL + '/api/auth/login/',
 					{username: username, password: password}
 				);
-
+					console.log(response);
 				// tahan loytyy varmasti parempikin tapa ...
 				if (response.data.message === "login success")
 				{
+					console.log("Log in success");
 					localStorage.setItem("HiveFlixToken", response.data.token);
 					localStorage.setItem("HiveFlixUsername", response.data.username);
 					localStorage.setItem("HiveFlixProfileImage", response.data.profile_image);
 				}
-				else if (response.data.message === "account not activated")
+				else if (response.data.message === "email not verified")
 					setErrorPassword("account not activated");
-				else
+				else if (response.data.message === 'invalid username or password')
 					setErrorPassword("invalid username / password combination");
+				else
+					setErrorPassword("This error should not be seen..");
 			}
 			catch (err)
 			{
