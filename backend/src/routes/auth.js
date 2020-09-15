@@ -10,7 +10,10 @@ router.post('/register', async (req, res, next) => {
   try {
     const data = await authService.register(req.body);
     const mailSent = await mailService.registration(data, req);
-    return res.status(201).json(mailSent);
+    if (!mailSent)
+      throw 'email couldn\'t be sent';
+    else
+      return res.status(201).json(true);
   } catch(err) {
     Logger.error(err);
     return res.status(400).json(false);

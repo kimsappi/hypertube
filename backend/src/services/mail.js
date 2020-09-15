@@ -11,7 +11,6 @@ const sendEmail = async (to, subject, content, html) => {
     subject: subject,
     ... html ? {html: content} : {text: content}
   };
-  console.log(email);
 
   return await transporter.sendMail(email);
 }
@@ -28,7 +27,6 @@ const registration = async (data, req) => {
   const subject = 'Registration to Hiveflix'
   const baseUrl = getServerUrl(req);
   const fullUrl = `${baseUrl}/api/auth/confirmEmail/${data._id}?code=${data.emailVerification}`;
-  console.log(fullUrl);
   const content = `
 <h2>Thanks for registering to Hiveflix!</h2>
 <p>To confirm your email, click <a href='${fullUrl}'>here</a>.
