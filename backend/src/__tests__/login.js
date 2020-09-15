@@ -32,9 +32,9 @@ describe('Logging in', () => {
       .post('/api/auth/login')
       .send(validAccount)
       .send({username: 'invalidUsername', password: validAccount.password})
-      .expect(400);
+      .expect(200);
 
-    expect(response.body).toBe(false);
+    expect(response.body).toEqual({message: 'invalid username or password'});
   });
 
   test("Login failure with incorrect password", async () => {
@@ -42,9 +42,9 @@ describe('Logging in', () => {
       .post('/api/auth/login')
       .send(validAccount)
       .send({username: validAccount.username, password: '123'})
-      .expect(400);
+      .expect(200);
 
-    expect(response.body).toBe(false);
+      expect(response.body).toEqual({message: 'invalid username or password'});
   });
 
   test("Login failure before email verification", async () => {
@@ -55,9 +55,9 @@ describe('Logging in', () => {
       .post('/api/auth/login')
       .send(validAccount)
       .send({username: validAccount.username, password: validAccount.password})
-      .expect(400);
+      .expect(200);
 
-    expect(response.body).toBe(false);
+    expect(response.body).toEqual({message: 'email not verified'});
   });
 
   beforeAll(async done => {

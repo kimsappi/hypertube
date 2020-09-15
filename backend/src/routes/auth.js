@@ -9,8 +9,11 @@ const { generateJWT } = require('../utils/auth');
 router.post('/register', async (req, res, next) => {
   try {
     const data = await authService.register(req.body);
-    const mailSent = await mailService.registration(data);
-    return res.status(201).json(mailSent);
+    const mailSent = await mailService.registration(data, req);
+    if (!mailSent)
+      throw 'email couldn\'t be sent';
+    else
+      return res.status(201).json(true);
   } catch(err) {
     Logger.error(err);
     return res.status(400).json(false);
