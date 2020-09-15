@@ -32,4 +32,29 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
+router.post('/forgotPassword', async (req, res, next) => {
+  try {
+    const email = req.body.email;
+    const data = await authService.resetPassword(email);
+    const mailSent = await mailService.forgotPassword(data);
+    return res.status(200).json(mailSent);
+  } catch(err) {
+    Logger.error(err);
+    return res.status(400).json(false);
+  }
+});
+
+router.patch('/forgotPassword/:id', async (req, res, next) => {
+  try {
+    const data = authService.setNewPassword(req.params.id, req.body);
+    if (data)
+      return res.status(200).json(true);
+    else
+      throw 'couldn\'t update';
+  } catch(err) {
+    Logger.error(err);
+    return res.status(400).json(false);
+  }
+});
+
 module.exports = router;
