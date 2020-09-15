@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const { validateRegistrationData, validatePassword } = require('../utils/validateUserData');
 const { hashPassword, generateEmailVerification } = require('../utils/auth');
 const User = require('../models/User');
-const { findByIdAndUpdate, findById } = require('../models/User');
 
 const register = async data => {
   if (!validateRegistrationData(data))

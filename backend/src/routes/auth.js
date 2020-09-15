@@ -9,7 +9,7 @@ const { generateJWT } = require('../utils/auth');
 router.post('/register', async (req, res, next) => {
   try {
     const data = await authService.register(req.body);
-    const mailSent = await mailService.registration(data);
+    const mailSent = await mailService.registration(data, req);
     return res.status(201).json(mailSent);
   } catch(err) {
     Logger.error(err);
