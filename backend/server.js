@@ -47,73 +47,26 @@ app.get('/api/cinema/:magnet',
 			{
 				// sort by size and stream only the largest file?
 
-				// add some way of checking if everything has already been downloaded
-				// it's hardcoded here for testing purposes
-				let completelyDownloaded = false;
-
-				// if already downloaded, return url to static file
-				if (completelyDownloaded)
+				// STREAM
+				engine.files.forEach(file =>
 				{
+					console.log(file.name);
 
-					console.log("completelyDownloaded === true");
-					// let data = [];
-
-					engine.files.forEach(file =>
+					// This just pipes the read stream to the response object (which goes to the client) 
+					const head = {
+						'Accept-Ranges': 'bytes',
+						'Cache-Control': 'no-cache, no-store',
+						'Content-Range': `bytes 0-${file.length}/${file.length}`,
+						'Content-Length': file.length,
+						'Content-Type': 'video/mp4'
+					};
+					if (file.name.includes('mp4') || file.name.includes('mkv'))
 					{
-						console.log(file.name);
-
-						if (file.name.includes(".mp4") || file.name.includes(".mkv"))
-						{
-							res.json({
-								isStream: false,
-								videoUrl: config.SERVER_URL + "/" + file.path
-							});	
-						}
-						// if (file.name.includes(".mp4") || file.name.includes(".mkv"))
-						// {
-						// 	data.push({
-						// 		video: "http://localhost:5000/" + file.path
-						// 	})
-						// }
-						// else if (file.name.includes("[YTS.MX].srt"))
-						// {
-						// 	fs.createReadStream('some-subtitle-file.srt')
-						// 		.pipe(srt2vtt())
-						// 		.pipe(fs.createWriteStream('some-html5-video-subtitle.vtt'))
-
-						// 	data.push({
-						// 		subtitles: "http://localhost:5000/" + file.path
-						// 	})
-						// }	
-					});
-					// res.json(data);
-				}
-				else // STREAM
-				{
-					console.log("completelyDownloaded === false");
-
-					engine.files.forEach(file =>
-					{
-						console.log(file.name);
-	
-						// This just pipes the read stream to the response object (which goes to the client) 
-						const head = {
-							'Accept-Ranges': 'bytes',
-							'Cache-Control': 'no-cache, no-store',
-							'Content-Range': `bytes 0-${file.length}/${file.length}`,
-							'Content-Length': file.length,
-							'Content-Type': 'video/mp4'
-						};
-						if (file.name.includes('mp4') || file.name.includes('mkv'))
-						{
-							console.log('\033[35mstreaming\033[0m')
-							res.writeHead(200, head)
-							file.createReadStream().pipe(res)
-						}
-					});
-				}
-				// res.status(206);
-				//json(engine.files);
+						console.log('\033[35mstreaming\033[0m')
+						res.writeHead(200, head)
+						file.createReadStream().pipe(res)
+					}
+				});
 			});
 
 			// emitted when the metadata has been fetched.
