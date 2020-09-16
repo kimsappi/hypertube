@@ -15,7 +15,8 @@ var commentRouter = require('./routes/comment');
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 mongoose.connection.on('error', err => {

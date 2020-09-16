@@ -68,9 +68,22 @@ const setNewPassword = async (id, data) => {
   return updated;
 };
 
+const confirmEmail = async req => {
+  const id = req.params.id;
+  const code = req.query.code;
+
+  const user = await User.findOneAndUpdate({
+    _id: id,
+    emailVerification: code
+  }, {emailVerification: null});
+
+  return user;
+};
+
 module.exports = {
   register,
   login,
   resetPassword,
-  setNewPassword
+  setNewPassword,
+  confirmEmail
 }
