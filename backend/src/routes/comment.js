@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Comment = require('../models/Comment');
+const { authenticationMiddleware } = require('../utils/auth');
 
-router.post('/new', async (req, res) => {
+
+router.post('/new', authenticationMiddleware, async (req, res) => {
 
     // token tulee headerissa (req.headers.token). Sen tarkistus tahan.
     if (!req.body.username)
@@ -10,7 +12,7 @@ router.post('/new', async (req, res) => {
 
     console.log("COMMENT: ", req.body);
 
-    console.log("HEADERTOKEN: ", req.headers.token);
+    console.log("HEADERTOKEN: ", req.headers.authorization);
 
     const comment = new Comment({
         movieId: req.body.movie,

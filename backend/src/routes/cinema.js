@@ -1,10 +1,11 @@
 const express = require('express');
 const srt2vtt = require('srt-to-vtt')
 const torrentStream = require('torrent-stream');
+const { authenticationMiddleware } = require('../utils/auth');
 
 const router = express.Router();
 
-router.get('/:magnet', async (req, res, next) => {
+router.get('/:magnet', authenticationMiddleware, async (req, res, next) => {
   try {
     const { magnet } = req.params;
 
