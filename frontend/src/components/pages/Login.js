@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+import DispatchContext from '../../context/DispatchContext';
 
 import config from '../../config/config';
 
@@ -10,6 +12,8 @@ import image from '../../images/image_login.jpg';
 
 const Login = () =>
 {
+	const globalDispatch = useContext(DispatchContext);
+
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -42,13 +46,13 @@ const Login = () =>
 					{username: username, password: password}
 				);
 					console.log(response);
-				// tahan loytyy varmasti parempikin tapa ...
+
 				if (response.data.message === "login success")
 				{
-					console.log("Log in success");
-					localStorage.setItem("HiveFlixToken", response.data.token);
-					localStorage.setItem("HiveFlixUsername", response.data.username);
-					localStorage.setItem("HiveFlixProfileImage", response.data.profile_image);
+					localStorage.setItem("HiveflixToken", response.data.token);
+					localStorage.setItem("HiveflixUsername", response.data.username);
+					localStorage.setItem("HiveflixProfilePicture", response.data.profilePicture);
+					globalDispatch({ type: "login" });
 				}
 				else if (response.data.message === "email not verified")
 					setErrorPassword("account not activated");

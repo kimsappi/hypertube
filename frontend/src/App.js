@@ -40,6 +40,7 @@ const App = () =>
 		{
 			case "login":
 				draft.loggedIn = true;
+				console.log("dispatch login");
 				draft.token = localStorage.getItem("HiveflixToken");
 				draft.username = localStorage.getItem("HiveflixUsername");
 				draft.profilePicture = localStorage.getItem("HiveflixProfilePicture");

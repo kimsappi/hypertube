@@ -67,11 +67,11 @@ const Comments = ({ movieId }) =>
 			try
 			{
 				// Create new comment
-				var token = localStorage.getItem("HiveFlixToken");
+				var token = localStorage.getItem("HiveflixToken");
 				var response = await axios.post(
 					config.SERVER_URL + '/api/comment/new/',
 					{
-						username: localStorage.getItem("HiveFlixUsername"),
+						username: localStorage.getItem("HiveflixUsername"),
 						movie: movieId,
 						comment: commentInput
 					},

@@ -70,6 +70,7 @@ const Register = () =>
 	{
 		let foundLetter = false;
 		let foundNumber = false;
+
 		for (let i = 0; event.target.value[i]; i++)
 		{
 			if (Number.isInteger(Number(event.target.value[i])))
@@ -79,12 +80,12 @@ const Register = () =>
 		}
 		if (event.target.value.length > 40)
 			setErrorPassword1("Password cannot be longer than 40 characters");
-		else if (event.target.value.length < 8)
-			setErrorPassword1("Password must be at least 8 characters long");
-		else if (!foundLetter)
-			setErrorPassword1("Password must contain as least one capital letter [A-Z]");
-		else if (!foundNumber)
-			setErrorPassword1("Password must contain as least one number [0-9]");
+		// else if (event.target.value.length < 8)
+		// 	setErrorPassword1("Password must be at least 8 characters long");
+		// else if (!foundLetter)
+		// 	setErrorPassword1("Password must contain as least one capital letter [A-Z]");
+		// else if (!foundNumber)
+		// 	setErrorPassword1("Password must contain as least one number [0-9]");
 		else
 			setErrorPassword1("");
 

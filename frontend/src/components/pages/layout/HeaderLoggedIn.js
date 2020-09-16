@@ -1,10 +1,22 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+
+import StateContext from '../../../context/StateContext';
+import DispatchContext from '../../../context/DispatchContext';
 
 import logo from "../../../images/logo.png";
+import profilePicture from "../../../images/profile.jpg";
 
 const HeaderLoggedIn = () =>
 {
+	const globalState = useContext(StateContext);
+	const globalDispatch = useContext(DispatchContext);
+
+	const handleLogout = async () =>
+	{
+		globalDispatch({ type: "logout" });
+	}
+
 	return (
 		<header>
 		<nav className='navbar'>
@@ -22,13 +34,16 @@ const HeaderLoggedIn = () =>
 							</NavLink>
 						</li>
 						<li>
-							<NavLink to='/login' alt='Log In' title='Log In'>
-								<i className="fas fa-key color-yellow"></i> Log In
-							</NavLink></li>
+							<Link to="" alt='Profile' title='Profile'>
+								{typeof globalState.profileImage !== "undefined" ?
+								<img className="profile-image" src={globalState.profileImage} alt='Profile'/> :
+								<img className="profile-image" src={profilePicture} alt='Profile'/>}
+							</Link>
+						</li>
 						<li>
-							<NavLink to='/register' alt='Register' title='Register'>
-								<i className="fas fa-edit color-yellow"></i> Register
-							</NavLink>
+							<Link to='#' alt='Logout' title='Logout'>
+								<span onClick={handleLogout}><i className="fas fa-share-square color-primary"></i> Logout</span>
+							</Link>
 						</li>
 					</ul>
 				</div>
