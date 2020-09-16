@@ -49,6 +49,9 @@ app.get('/api/cinema/:magnet/',
 					if (file.name.includes('mp4'))
 					{
 						const range = req.headers.range;
+
+						console.log(range);
+
 						const pos = range ? range.replace(/bytes=/, '').split('-') : null;
 						const start = pos ? parseInt(pos[0], 10) : 0;
 						const end = (pos && pos[1]) ? parseInt(pos[1], 10) : file.length - 1;
