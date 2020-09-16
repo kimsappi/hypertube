@@ -18,6 +18,17 @@ const config = require('./config/config');
 app.get('/api/cinema/:magnet/',
 	async (req, res) =>
 	{
+		// res.on('close', () =>
+		// {
+		// 	console.log('Streaming: closed')
+		// 	engine.remove(true, () =>
+		// 		{
+		// 			console.log('Engine cleared') 
+		// 		}
+		// 	)
+		// 	engine.destroy()
+		// })
+
 		try
 		{
 			const { magnet } = req.params;
