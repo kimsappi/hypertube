@@ -128,6 +128,9 @@ const Login = () =>
 						</div>
 						<div className="center mt-4">Don't have an account? <Link to='/register'>Register</Link></div>
 					</form>
+					<h4>42 TESTING</h4>
+					<a href="https://api.intra.42.fr/oauth/authorize?client_id=2d02a773dfbb227ded338c162245907ac4e2fa874a5e24a5e421aca1177cacab&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flogin&response_type=code">login 42</a>
+			
 				</div>
 			</div>
 		</main>

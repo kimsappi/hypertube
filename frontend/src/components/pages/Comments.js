@@ -75,7 +75,7 @@ const Comments = ({ movieId }) =>
 						movie: movieId,
 						comment: commentInput
 					},
-					{headers: {token}}
+					{headers: {authorization: 'Bearer '+token}}
 				)
 				console.log("test1")
 				console.log(response);

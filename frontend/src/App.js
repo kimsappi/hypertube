@@ -21,6 +21,8 @@ import ActivationSent from './components/pages/ActivationSent';
 import NewPassword from './components/pages/NewPassword';
 import ForgotPassword from './components/pages/ForgotPassword';
 import ConfirmEmail from './components/pages/ConfirmEmail';
+import ApiLog from './components/pages/apiLog';
+
 
 // CSS
 import './css/main.css';
@@ -68,6 +70,8 @@ const App = () =>
 				<BrowserRouter>
 					{initialState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
 					<Switch>
+						<Route exact path='/api/:action' component={ApiLog} />
+
 						<Route exact path='/about' component={About} />
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
 						<Route exact path='/cinema/:magnet' component={initialState.loggedIn ? Cinema : Login} />
