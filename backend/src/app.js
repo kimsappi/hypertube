@@ -9,8 +9,9 @@ const cors = require('cors');
 const Logger = require('./utils/logger');
 const config = require('./utils/config');
 
-var authRouter = require('./routes/auth');
-var commentRouter = require('./routes/comment');
+const authRouter = require('./routes/auth');
+const commentRouter = require('./routes/comment');
+const cinemaRouter = require('./routes/cinema');
 
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
@@ -42,6 +43,7 @@ app.use('/api/auth', authRouter);
 
 // Comment routes
 app.use('/api/comment', commentRouter);
+app.use('/api/cinema', cinemaRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
