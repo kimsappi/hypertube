@@ -8,6 +8,7 @@ import StateContext from './context/StateContext';
 import DispatchContext from './context/DispatchContext';
 
 // Components
+import HeaderLoggedIn from './components/pages/layout/HeaderLoggedIn';
 import HeaderLoggedOut from './components/pages/layout/HeaderLoggedOut';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
@@ -19,7 +20,7 @@ import Profile from './components/pages/Profile';
 import ActivationSent from './components/pages/ActivationSent';
 import NewPassword from './components/pages/NewPassword';
 import ForgotPassword from './components/pages/ForgotPassword';
-import Activation from './components/pages/Activation';
+import ConfirmEmail from './components/pages/ConfirmEmail';
 
 // CSS
 import './css/main.css';
@@ -30,7 +31,7 @@ const App = () =>
 		loggedIn: Boolean(localStorage.getItem('HiveflixToken')),
 		token: localStorage.getItem("HiveflixToken"),
 		username: localStorage.getItem("HiveflixUsername"),
-		profileImage: localStorage.getItem("HiveflixProfileImage")
+		profilePicture: localStorage.getItem("HiveflixProfilePicture")
 	};
 
 	function ourReducer(draft, action)
@@ -41,17 +42,17 @@ const App = () =>
 				draft.loggedIn = true;
 				draft.token = localStorage.getItem("HiveflixToken");
 				draft.username = localStorage.getItem("HiveflixUsername");
-				draft.profileImage = localStorage.getItem("HiveflixProfileImage");
+				draft.profilePicture = localStorage.getItem("HiveflixProfilePicture");
 				return;
 			case "logout":
 				draft.loggedIn = false;
 				localStorage.removeItem("HiveflixToken");
 				localStorage.removeItem("HiveflixUsername");
-				localStorage.removeItem("HiveflixProfileImage");
+				localStorage.removeItem("HiveflixProfilePicture");
 				return;
-			case "changeProfileImage":
-				draft.profileImage = action.value;
-				localStorage.setItem("HiveflixProfileImage", action.value);
+			case "changeProfilePicture":
+				draft.profilePicture = action.value;
+				localStorage.setItem("HiveflixProfilePicture", action.value);
 				return;
 			default:
 				// without this there's an error
@@ -75,7 +76,7 @@ const App = () =>
 						<Route exact path='/activationsent' component={ActivationSent} />
 						<Route exact path='/newpassword/:token' component={NewPassword}/>
 						<Route exact path='/forgotpassword' component={ForgotPassword}/>
-						<Route exact path='/activation/:key' component={Activation}/>
+						<Route exact path='/confirmemail/:key' component={ConfirmEmail}/>
 						<Route path='/' component={Home} />
 					</Switch>
 				</BrowserRouter>
