@@ -12,7 +12,7 @@ const config = require('./utils/config');
 const authRouter = require('./routes/auth');
 const commentRouter = require('./routes/comment');
 const cinemaRouter = require('./routes/cinema');
-const schoolLogin = require('./routes/login42');
+const myListRouter = require('./routes/myList');
 
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
@@ -45,6 +45,7 @@ app.use('/api/auth', authRouter);
 // Comment routes
 app.use('/api/comment', commentRouter);
 app.use('/api/cinema', cinemaRouter);
+app.use('/api/myList', myListRouter);
 
 // 42login route
 app.use('/42', schoolLogin)
