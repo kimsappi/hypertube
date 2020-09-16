@@ -2,11 +2,26 @@ const express = require('express');
 const srt2vtt = require('srt-to-vtt')
 const torrentStream = require('torrent-stream');
 
+const Movie = require('../models/Movie');
+const Logger = require('../utils/logger');
+
 const router = express.Router();
 
 router.get('/:magnet', async (req, res, next) => {
   try {
     const { magnet } = req.params;
+
+    try {
+      const dbMovie = new Movie({magnet});
+      await dbMovie.save();
+    } catch(err) {
+      // Movie is already in database
+      const oldMovie = Movie.findOne({magnet});
+      if (oldMovie.fullyDownloaded)
+        console.log('Movie is already fully downloaded');
+        // The above is not actually implemented yet
+      await Movie.findOneAndUpdate({magnet}, {lastViewed: new Date()});
+    }
 
     // start engine
     const engine = torrentStream("magnet:?" + magnet, {
