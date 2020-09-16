@@ -6,17 +6,15 @@ const validatePassword = password => {
     return false;
 
   const strengthTests = [
-    /[a-z]/,
     /[A-Z]/,
-    /[0-9]/,
-    /\W/
+    /[0-9]/
   ];
 
   const passwordStrength = strengthTests.reduce((total, current) => 
     total + current.test(password)
   , 0);
 
-  return passwordStrength > 2;
+  return passwordStrength === 2;
 };
 
 const validateName = name => 

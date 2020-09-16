@@ -62,4 +62,17 @@ router.patch('/forgotPassword/:id', async (req, res, next) => {
   }
 });
 
+router.get('/confirmEmail/:id', async (req, res, next) => {
+  try {
+    const data = await authService.confirmEmail(req);
+    if (data)
+      return res.status(301).redirect('http://localhost:3000?emailConfirmed=1'); // TODO
+    else
+      throw 'Email confirmation failure';
+  } catch(err) {
+    Logger.error(err);
+    return res.status(301).redirect('http://localhost:3000?emailConfirmationFailure=1'); // TODO
+  }
+});
+
 module.exports = router;
