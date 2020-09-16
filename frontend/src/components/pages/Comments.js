@@ -3,6 +3,8 @@ import axios from "axios";
 
 import config from '../../config/config';
 
+import timeSinceCreated from "../../functions/timeSinceCreated";
+
 import CommentItem from './CommentItem';
 
 const Comments = ({ movieId }) =>
@@ -22,21 +24,11 @@ const Comments = ({ movieId }) =>
 			try
 			{
 				// // fetch all comments of given movie
-				// let response = await axios.get(`${config.SERVER_URL}/api/comments/${movieId}`);
-
 				var response = await axios.get(
-					config.SERVER_URL + `/api/comment/getComments/${movieId}`)
+					config.SERVER_URL + `/api/comment/getComments/${movieId}`);
 
 				setComments(response);
-				console.log(response);
-					
-				
 
-
-				
-				// console.log("comments.data", response.data);
-				
-				// setComments(response.data);
 				setLoading(false);
 			}
 			catch (err)
@@ -48,8 +40,8 @@ const Comments = ({ movieId }) =>
 
 	const changeCommentInput = (event) =>
 	{
-		if (event.target.value.length > 300)
-			setErrorCommentInput("a single comment cannot exceed 300 characters");
+		if (event.target.value.length > 1000)
+			setErrorCommentInput("a single comment cannot exceed 1000 characters");
 		else
 		{
 			setErrorCommentInput("");
@@ -75,7 +67,7 @@ const Comments = ({ movieId }) =>
 						movie: movieId,
 						comment: commentInput
 					},
-					{headers: {authorization: 'Bearer '+token}}
+					{headers: {authorization: 'Bearer ' + token}}
 				)
 				console.log("test1")
 				console.log(response);
@@ -106,7 +98,6 @@ const Comments = ({ movieId }) =>
 				{errorCommentInput && <div className="small alert alert-error">{errorCommentInput}</div>}
 				<div className="flex-left my-2">
 					<button type="submit">Comment</button>
-					<button className="ml-3" type="clear">Reset</button>
 				</div>
 			</form>
 			<hr className="my-2"></hr>
@@ -116,8 +107,8 @@ const Comments = ({ movieId }) =>
 				<CommentItem
 					sender={comment.username}
 					message={comment.comment}
-					created={comment.created}
-					key={comment.id}
+					created={timeSinceCreated(comment.time)}
+					key={comment._id}
 					index={index}
 				/>
 			))}

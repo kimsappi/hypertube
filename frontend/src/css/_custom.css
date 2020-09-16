@@ -111,8 +111,37 @@ hr {
 	border: 1px solid #000;
 }
 
-.comment {
+.comment-img {
+	float: left;
+	/* vertical-align: middle; */
+	width: 40px;
+	height: 40px;
+	/* object-fit: cover; */
+	border: 3px solid #ddd;
+	border-radius: 50%;
+	margin: 5px 10px 0 5px;
+}
 
+.comment-username {
+	font-weight: bold;
+	font-size: 0.9rem;
+}
+
+.comment-created {
+	font-size: 0.9rem;
+	color: #666;
+}
+
+.comment-message {
+
+}
+
+.comment-item {
+	overflow-wrap: anywhere;
+	margin-top: 0.2rem;
+	padding: 0.5rem;
+	background-color: rgba(22, 22, 22, .9);
+	border-radius: 0.5rem;
 }
 
 /* MOVIE ITEM ON HOME PAGE

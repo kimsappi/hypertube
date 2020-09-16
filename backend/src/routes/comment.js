@@ -34,8 +34,9 @@ router.get('/getComments/:id', async (req, res) => {
     const comments = await Comment.find({
         movieId: req.params.id
     },
-    'username comment'
-    );
+    '_id username comment time'
+	)
+	.sort({ time: -1 })
 
     console.log("COMMENTS :", comments);
 

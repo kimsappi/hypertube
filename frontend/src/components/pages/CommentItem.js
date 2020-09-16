@@ -1,11 +1,13 @@
-import React, { useState, useEffect, Fragment } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+// import axios from "axios";
 
-import config from '../../config/config';
+// import config from '../../config/config';
+import image from "../../images/profile.jpg";
 
 const CommentItem = ({ sender, message, created }) =>
 {
-	const [senderName, setSender] = useState([]);
+	// const [senderName, setSender] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() =>
@@ -24,7 +26,7 @@ const CommentItem = ({ sender, message, created }) =>
 				//console.log("user.data", response.data);
 				
 				//setSender(response.data);
-				//setLoading(false);
+				setLoading(false);
 			}
 			catch (err)
 			{
@@ -34,19 +36,30 @@ const CommentItem = ({ sender, message, created }) =>
 	}, [sender]);
 
 	return (
-		<div className="comment-container">
-			<div className="comment-image">
-				<img src={sender.profile_image} className='profile-image' alt='profile image'/>
-			</div>
-			<div className="comment-data">
-				<div className="comment-username">
-					{sender} {created}
+			<div className="comment-item">
+				<div>
+					<Link to={"/"}>
+						<img className="comment-img" src={image} alt='Profile'/>
+					</Link>
 				</div>
-				<div className="comment-message">
-					{message}
-				</div>
+				<table>
+					<tbody>
+						<tr>
+							<td className="flex-left">
+								<Link to={"/"}>
+									<div className="comment-username mr-2">{sender}</div>
+								</Link>
+								<div className="comment-created">{created}</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div className="comment-message">{message}</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
-		</div>
 	)
 }
 

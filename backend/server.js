@@ -18,16 +18,9 @@ const config = require('./config/config');
 app.get('/api/cinema/:magnet/',
 	async (req, res) =>
 	{
-		// res.on('close', () =>
-		// {
-		// 	console.log('Streaming: closed')
-		// 	engine.remove(true, () =>
-		// 		{
-		// 			console.log('Engine cleared') 
-		// 		}
-		// 	)
-		// 	engine.destroy()
-		// })
+		console.log("req", req);
+
+		req.on('close', () => engine.destroy(() => console.log("engine destroyed")));
 
 		try
 		{
@@ -59,9 +52,9 @@ app.get('/api/cinema/:magnet/',
 
 					if (file.name.includes('mp4'))
 					{
-						const range = req.headers.range;
+						console.log("file.name", file.name)
 
-						console.log(range);
+						const range = req.headers.range;
 
 						const pos = range ? range.replace(/bytes=/, '').split('-') : null;
 						const start = pos ? parseInt(pos[0], 10) : 0;
