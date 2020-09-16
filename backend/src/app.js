@@ -13,6 +13,7 @@ const authRouter = require('./routes/auth');
 const commentRouter = require('./routes/comment');
 const cinemaRouter = require('./routes/cinema');
 const myListRouter = require('./routes/myList');
+const schoolLogin = require('./routes/login42');
 
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
