@@ -7,6 +7,18 @@ const commentSchema = new mongoose.Schema({
     time: Date
 });
 
+const alternateCommentSchema = new mongoose.Schema({
+    movie: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Movie'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    comment: String
+}, {timestamps: true});
+
 const Comment = mongoose.model('Comment', commentSchema);
 
 module.exports = Comment;

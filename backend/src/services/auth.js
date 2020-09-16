@@ -39,8 +39,11 @@ const login = async data => {
     throw 'invalid username or password';
   else if (user.emailVerification)
     throw 'email not verified';
-  // const {password, emailVerification, ...ret} = user;
-  return {username: user.username, profilePicture: user.profilePicture};
+  return {
+    username: user.username,
+    profilePicture: user.profilePicture,
+    id: user._id
+  };
 };
 
 const resetPassword = async email => {
