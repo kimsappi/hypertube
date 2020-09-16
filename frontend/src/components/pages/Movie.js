@@ -4,6 +4,7 @@ import axios from "axios";
 import ReactPlayer from "react-player";
 
 import Comments from "./Comments";
+import AddToMyList from './AddToMyList';
 
 import image from "../../images/profile.jpg";
 
@@ -88,6 +89,7 @@ const Movie = () =>
 							{/* <Link className="center" to={"/cinema/" + magnet}>PLAY MOVIE</Link> */}
 						</div>
 						<div className="movie-right-column">
+							<AddToMyList id={id} />
 							<Comments movieId={id}/>
 						</div>
 					</div>
