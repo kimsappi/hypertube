@@ -10,6 +10,8 @@ const Cinema = () =>
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
 	const [totalSeconds, setTotalSeconds] = useState(0);
 
+	const token = localStorage.getItem("HiveflixToken");
+
 	const onProgress = ({ playedSeconds, loadedSeconds }) =>
 	{
 		setSecondsPlayed(playedSeconds);
@@ -44,7 +46,7 @@ const Cinema = () =>
 					// onBufferEnd={onBufferEnd}
 					onEnded={onEnded}
 					onError={onError}
-					url={"http://localhost:5000/api/cinema/" + magnet}
+					url={"http://localhost:5000/api/cinema/" + magnet + '?token=' + token}
 					config={
 						{ file: {
 							attributes: {
