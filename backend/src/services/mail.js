@@ -35,9 +35,16 @@ const registration = async (data, req) => {
   return await sendEmail(data.email, subject, HTMLEmail.toString(content), true);
 };
 
-// Link should probably be to /api/auth/forgotPassword/{id}?code={emailVerification}
-const forgotPassword = async data => {
-  return true;
+const forgotPassword = async (data, req) => {
+  const subject = 'Reset your Hiveflix password';
+  const baseUrl = getServerUrl(req);
+  const fullUrl = `${baseUrl}/forgotPassword/${data._id}?code=${data.emailVerification}`;
+  const content = `
+<h2>Hiveflix password reset requested</h2>
+<p>To reset your password, click <a href='${fullUrl}'>here</a>.
+<p>Sincerely,<br>The Hiveflix team</p>
+`;
+  return await sendEmail(data.email, subject, HTMLEmail.toString(content), true);
 };
 
 module.exports = {

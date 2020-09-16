@@ -14,9 +14,9 @@ var commentRouter = require('./routes/comment');
 
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true
 });
-mongoose.set('useCreateIndex', true);
 
 mongoose.connection.on('error', err => {
   Logger.error('Mongoose connection error:');
@@ -41,9 +41,6 @@ app.use('/api/auth', authRouter);
 
 // Comment routes
 app.use('/api/comment', commentRouter);
-
-// Private routes
-// app.use...
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

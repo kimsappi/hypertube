@@ -41,7 +41,7 @@ router.post('/forgotPassword', async (req, res, next) => {
   try {
     const email = req.body.email;
     const data = await authService.resetPassword(email);
-    const mailSent = await mailService.forgotPassword(data);
+    const mailSent = await mailService.forgotPassword(data, req);
     return res.status(200).json(mailSent);
   } catch(err) {
     Logger.error(err);
