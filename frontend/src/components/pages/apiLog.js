@@ -30,6 +30,7 @@ const ApiLog = () => {
                 localStorage.setItem("HiveflixToken", axiosResponse.data.token);
                 localStorage.setItem("HiveflixUsername", axiosResponse.data.username);
                 localStorage.setItem("HiveflixProfilePicture", axiosResponse.data.profilePicture);
+                localStorage.setItem("HiveflixId", axiosResponse.data.id);
                 window.location.replace("http://localhost:3000/home");
             }
             setResponse(axiosResponse);
@@ -74,6 +75,7 @@ const registerSubmit = async (event) => {
             localStorage.setItem("HiveflixToken", passResponse.data.token);
 			localStorage.setItem("HiveflixUsername", passResponse.data.username);
             localStorage.setItem("HiveflixProfilePicture", passResponse.data.profilePicture);
+            localStorage.setItem("HiveflixId", passResponse.data.id);
             window.location.replace("http://localhost:3000/home");
         }
     }

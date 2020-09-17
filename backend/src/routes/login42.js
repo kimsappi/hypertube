@@ -46,7 +46,8 @@ router.post('/login', async (req, res)  => {
             message: 'login success',
             username: confirm.username,
             token,
-            profilePicture: confirm.profilePicture || null
+            profilePicture: confirm.profilePicture || null,
+            id: confirm._id
           });
     }
     res.send("logging in from 42");
@@ -144,7 +145,8 @@ router.post('/register', async (req, res) => {
             email: responseTwo.data.email,
             firstName: responseTwo.data.first_name,
             login: name,
-            usernameTaken: takenValue
+            usernameTaken: takenValue,
+            id: result._id
         })
     }
     else
@@ -183,7 +185,8 @@ router.post('/submitPass', async (req, res) => {
             message: 'login success',
             username: req.body.user,
             token,
-            profilePicture: null
+            profilePicture: null,
+            id: response._id
           });
     }
     
