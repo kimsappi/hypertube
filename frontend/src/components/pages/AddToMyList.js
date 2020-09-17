@@ -5,16 +5,20 @@ import config from '../../config/config';
 
 const AddToMyList = ({id}) => {
   const addItemToMyList = async () => {
+    console.log(id)
     try {
-      const res = await axios.post(config.SERVER_URL + '/api/myList', {magnet: id});
+      const token = localStorage.getItem("HiveflixToken");
+      const res = await axios.post(config.SERVER_URL + '/api/myList',
+        {id},
+        {headers: {authorization: 'Bearer ' + token}});
       console.log('added to My List');
     } catch(err) {
-      console.warn(err);
+      console.error(err);
     }
   };
 
   return (
-    <button class='btn btn-primary' onClick={addItemToMyList}>Add to My List</button>
+    <button className='btn btn-primary' onClick={addItemToMyList}>Add to My List</button>
   );
 };
 

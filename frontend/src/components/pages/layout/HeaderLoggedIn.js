@@ -5,7 +5,7 @@ import StateContext from '../../../context/StateContext';
 import DispatchContext from '../../../context/DispatchContext';
 
 import logo from "../../../images/logo.png";
-import profilePicture from "../../../images/profile.jpg";
+import ProfilePicture from '../../ProfilePicture';
 
 const HeaderLoggedIn = () =>
 {
@@ -35,9 +35,7 @@ const HeaderLoggedIn = () =>
 						</li>
 						<li>
 							<Link to="" alt='Profile' title='Profile'>
-								{typeof globalState.profileImage !== "undefined" ?
-								<img className="profile-image" src={globalState.profileImage} alt='Profile'/> :
-								<img className="profile-image" src={profilePicture} alt='Profile'/>}
+								<ProfilePicture src={globalState.profileImage} classNames='profile-image' />
 							</Link>
 						</li>
 						<li>

@@ -28,15 +28,14 @@ const verifyToken = async token => {
 // Use this middleware on a router to make sure only logged in users can access
 // the endpoint. Will decode the user's token as req.user or return 401 if token
 // is invalid or not found.
-const authenticationMiddleware = (req, res, next) => {
+const authenticationMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
-    console.log(authHeader);
     const token = authHeader && authHeader.split(' ')[1];
     if (!token)
       return res.status(401).json('auth error');
     else {
-      const user = verifyToken(token);
+      const user = await verifyToken(token);
       if (!user)
         return res.status(401).json('auth error');
       else {

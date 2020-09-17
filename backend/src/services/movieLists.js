@@ -1,8 +1,8 @@
 const User = require('../models/User');
 
-const addToList = async (magnet, user, myList) => {
+const addToList = async (id, user, listType) => {
   await User.findByIdAndUpdate(user.id, {
-    $addToSet: {myList: magnet}
+    $addToSet: {myList: id}
   });
 };
 
