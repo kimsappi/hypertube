@@ -29,7 +29,8 @@ router.post('/login', async (req, res, next) => {
       message: 'login success',
       username: data.username,
       token,
-      profilePicture: data.profilePicture || null
+      profilePicture: data.profilePicture || null,
+      id: data.id
     });
   } catch(err) {
     Logger.error(err);

@@ -52,6 +52,7 @@ const Login = () =>
 					localStorage.setItem("HiveflixToken", response.data.token);
 					localStorage.setItem("HiveflixUsername", response.data.username);
 					localStorage.setItem("HiveflixProfilePicture", response.data.profilePicture);
+					localStorage.setItem("HiveflixId", response.data.id);
 					globalDispatch({ type: "login" });
 				}
 				else if (response.data.message === "email not verified")
