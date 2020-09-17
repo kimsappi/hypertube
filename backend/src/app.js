@@ -11,6 +11,7 @@ const config = require('./utils/config');
 
 const authRouter = require('./routes/auth');
 const commentRouter = require('./routes/comment');
+const userRouter = require('./routes/user');
 const cinemaRouter = require('./routes/cinema');
 const myListRouter = require('./routes/myList');
 const schoolLogin = require('./routes/login42');
@@ -44,7 +45,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', authRouter);
 
 // Comment routes
-app.use('/api/comment', commentRouter);
+app.use('/api/comments', commentRouter);
+app.use('/api/users', userRouter);
 app.use('/api/cinema', cinemaRouter);
 app.use('/api/myList', myListRouter);
 

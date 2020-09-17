@@ -31,9 +31,15 @@ const App = () =>
 {
 	const initialState = {
 		loggedIn: Boolean(localStorage.getItem('HiveflixToken')),
+		id: localStorage.getItem("HiveflixId"),
 		token: localStorage.getItem("HiveflixToken"),
 		username: localStorage.getItem("HiveflixUsername"),
-		profilePicture: localStorage.getItem("HiveflixProfilePicture")
+		profilePicture: localStorage.getItem("HiveflixProfilePicture"),
+		config: {
+			headers: {
+				'authorization': "Bearer " + localStorage.getItem("HiveflixToken")
+			},
+		},
 	};
 
 	function ourReducer(draft, action)
@@ -43,12 +49,14 @@ const App = () =>
 			case "login":
 				draft.loggedIn = true;
 				console.log("dispatch login");
+				draft.id = localStorage.getItem("HiveflixId");
 				draft.token = localStorage.getItem("HiveflixToken");
 				draft.username = localStorage.getItem("HiveflixUsername");
 				draft.profilePicture = localStorage.getItem("HiveflixProfilePicture");
 				return;
 			case "logout":
 				draft.loggedIn = false;
+				localStorage.removeItem("HiveflixId");
 				localStorage.removeItem("HiveflixToken");
 				localStorage.removeItem("HiveflixUsername");
 				localStorage.removeItem("HiveflixProfilePicture");
@@ -75,7 +83,7 @@ const App = () =>
 						<Route exact path='/about' component={About} />
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
 						<Route exact path='/cinema/:magnet' component={initialState.loggedIn ? Cinema : Login} />
-						<Route exact path='/profile' component={initialState.loggedIn ? Profile : Login} />
+						<Route exact path='/profile/:id' component={initialState.loggedIn ? Profile : Login} />
 						<Route exact path='/login' component={initialState.loggedIn ? Home : Login} />
 						<Route exact path='/register' component={initialState.loggedIn ? Home : Register} />
 						<Route exact path='/activationsent' component={ActivationSent} />

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const commentSchema = new mongoose.Schema({
     movieId: {type: Number},
     username: String,
+    id: String,
     comment: String,
     time: Date
 });

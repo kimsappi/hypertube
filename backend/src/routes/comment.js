@@ -17,6 +17,7 @@ router.post('/new', authenticationMiddleware, async (req, res) => {
     const comment = new Comment({
         movieId: req.body.movie,
         username: req.body.username,
+        id: req.body.id,
         comment: req.body.comment,
         time: Date()
       });
@@ -34,7 +35,7 @@ router.get('/getComments/:id', async (req, res) => {
     const comments = await Comment.find({
         movieId: req.params.id
     },
-    '_id username comment time'
+    '_id username id comment time'
 	)
 	.sort({ time: -1 })
 

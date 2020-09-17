@@ -1,14 +1,15 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import axios from "axios";
 
 import config from '../../config/config';
 
 import timeSinceCreated from "../../functions/timeSinceCreated";
-
+import StateContext from "../../context/StateContext";
 import CommentItem from './CommentItem';
 
 const Comments = ({ movieId }) =>
 {
+	const globalState = useContext(StateContext);
 	const [comments, setComments] = useState([]);
 	const [commentInput, setCommentInput] = useState("");
 	const [errorCommentInput, setErrorCommentInput] = useState("");
@@ -25,7 +26,7 @@ const Comments = ({ movieId }) =>
 			{
 				// // fetch all comments of given movie
 				var response = await axios.get(
-					config.SERVER_URL + `/api/comment/getComments/${movieId}`);
+					config.SERVER_URL + `/api/comments/getComments/${movieId}`);
 
 				setComments(response);
 
@@ -61,9 +62,10 @@ const Comments = ({ movieId }) =>
 				// Create new comment
 				var token = localStorage.getItem("HiveflixToken");
 				var response = await axios.post(
-					config.SERVER_URL + '/api/comment/new/',
+					config.SERVER_URL + '/api/comments/new/',
 					{
-						username: localStorage.getItem("HiveflixUsername"),
+						username: globalState.username,
+						id: globalState.id,
 						movie: movieId,
 						comment: commentInput
 					},
@@ -106,6 +108,7 @@ const Comments = ({ movieId }) =>
 			{!loading && comments.data.comments.map ((comment, index) => (
 				<CommentItem
 					sender={comment.username}
+					id={comment.id}
 					message={comment.comment}
 					created={timeSinceCreated(comment.time)}
 					key={comment._id}

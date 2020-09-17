@@ -86,7 +86,6 @@ const Movie = () =>
 								)}
 							</div>
 							<Link className="center" to={"/cinema/xt=urn:btih:" + movie.torrents[0].hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337"}>PLAY MOVIE</Link>
-							{/* <Link className="center" to={"/cinema/" + magnet}>PLAY MOVIE</Link> */}
 						</div>
 						<div className="movie-right-column">
 							<AddToMyList id={id} />

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 // import config from '../../config/config';
 import image from "../../images/profile.jpg";
 
-const CommentItem = ({ sender, message, created }) =>
+const CommentItem = ({ sender, id, message, created }) =>
 {
 	// const [senderName, setSender] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -46,7 +46,7 @@ const CommentItem = ({ sender, message, created }) =>
 					<tbody>
 						<tr>
 							<td className="flex-left">
-								<Link to={"/"}>
+								<Link to={"/profile/" + id}>
 									<div className="comment-username mr-2">{sender}</div>
 								</Link>
 								<div className="comment-created">{created}</div>

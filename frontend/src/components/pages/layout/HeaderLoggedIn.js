@@ -34,7 +34,7 @@ const HeaderLoggedIn = () =>
 							</NavLink>
 						</li>
 						<li>
-							<Link to="" alt='Profile' title='Profile'>
+							<Link to={"/profile/" + globalState.id} alt='Profile' title='Profile'>
 								<ProfilePicture src={globalState.profileImage} classNames='profile-image' />
 							</Link>
 						</li>
