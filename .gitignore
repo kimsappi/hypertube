@@ -22,6 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/backend/src/public
+/backend/public
 
 config.secret.json

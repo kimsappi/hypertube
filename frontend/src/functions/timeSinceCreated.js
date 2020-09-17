@@ -5,6 +5,8 @@ const timeSinceCreated = (time) =>
 	const timeNow = Date.now();
 	const sinceCreated = (timeNow - time) / 1000;
 	if (sinceCreated < 60)
+		return "just now";
+	if (sinceCreated < 120)
 		return "1 minute ago";
 	if (sinceCreated < 3600)
 		return Math.floor(sinceCreated / 60) + " minutes ago";

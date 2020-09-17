@@ -12,7 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-all": "npm i && npm i ./backend/ && npm i ./frontend/",
-    "dev": "concurrently \"cd backend && npm run server\" \"cd frontend && npm start\""
+    "dev": "concurrently \"cd backend/src && npm run dev\" \"cd frontend && npm start\""
   },
   "repository": {
     "type": "git",
