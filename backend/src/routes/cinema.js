@@ -71,6 +71,20 @@ router.get('/:magnet/:token/:imdb_id', async (req, res, next) => {
       // STREAM
       engine.files.forEach(file =>
       {
+		// check video file type and store into a variable
+		if (file.name.includes(".srt"))
+		{
+			// find out language
+
+			const language = "en";
+
+			const split = file.path.split("/");
+
+			fs.createReadStream(__dirname + "/../../public/" + file.path)
+				.pipe(srt2vtt())
+				.pipe(fs.createWriteStream("../public/" + split[0] + "/" + "subs." + language + ".vtt"));
+			}
+
         if (file.name.includes('mp4'))
         {
           const range = req.headers.range;
@@ -97,20 +111,6 @@ router.get('/:magnet/:token/:imdb_id', async (req, res, next) => {
         else
         {
 			file.createReadStream();
-		  
-		  	// check video file type and store into a variable
-			if (file.name.includes(".srt"))
-			{
-				// find out language
-
-				const language = "en";
-
-				const split = file.path.split("/");
-
-				fs.createReadStream(__dirname + "/../../public/" + file.path)
-					.pipe(srt2vtt())
-					.pipe(fs.createWriteStream("../public/" + split[0] + "/" + "subs." + language + ".vtt"));
-			}
 		}
 	  });
     });
