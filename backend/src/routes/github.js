@@ -46,7 +46,7 @@ router.post('/register', async (req, res) => {
             if (findEmail !== null)
             {
                 console.log("EMAIL TAKEN");
-                //return res.status(300).json({err: "email taken"});
+                return res.status(300).json({err: "email taken"});
             }
 
             let takenValue = false;

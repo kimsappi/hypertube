@@ -20,19 +20,24 @@ const GithubLog = () => {
 
 
     useEffect(() => {
+    
 
     const githubReg = async (code) => {
         console.log(code);
-
+        try{
         const response = await Axios.post(
             config.SERVER_URL+'/github/register',
             {code}
         )
         console.log(response);
         setResponse(response);
-    }
+    }catch(err){console.log(err);
+}
+        
+        }
 
     const githubLog = async () => {
+
         console.log('logging');
         const loginResponse = await Axios.post(
             config.SERVER_URL+'/github/login',
@@ -47,14 +52,26 @@ const GithubLog = () => {
             localStorage.setItem("HiveflixId", loginResponse.data.id);
             window.location.replace("http://localhost:3000/home");
         }
+            
     }
 
+ 
+    
+
     if (action === 'register')
+    {
+    
         githubReg(code)
+   
+}
     else if (action === 'login')
         githubLog()
+
+
     }, [])
 
+
+    
     const setPassOneF = (event) => {
         setPassOne(event.target.value);
         console.log(passOne);
@@ -64,7 +81,7 @@ const GithubLog = () => {
         setPassTwo(event.target.value);
         console.log(passTwo);
     }
-
+    
     const registerSubmit = async (event) => {
         event.preventDefault();
         console.log("SUBMIT");
@@ -85,6 +102,8 @@ const GithubLog = () => {
             localStorage.setItem("HiveflixId", responseFinal.data.id);
             window.location.replace("http://localhost:3000/home");
         }
+        else
+            window.location.replace("http://localhost:3000/home");
 
         console.log(responseFinal);
         }

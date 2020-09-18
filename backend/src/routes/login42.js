@@ -6,6 +6,7 @@ const User = require('../models/User');
 const { updateOne } = require('../models/User');
 const { generateJWT } = require('../utils/auth');
 const { hashPassword } = require('../utils/auth');
+const { NotExtended } = require('http-errors');
 
 router.post('/login', async (req, res)  => {
 
@@ -59,7 +60,7 @@ router.post('/login', async (req, res)  => {
     }
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     console.log("OUJEE REGISTER");
     try
     {
@@ -84,8 +85,6 @@ router.post('/register', async (req, res) => {
     )
     console.log(responseTwo);
 
-
-
     if (responseTwo.status == 200)
     {
         
@@ -97,8 +96,7 @@ router.post('/register', async (req, res) => {
 
         if (email !== null)
         {
-            res.send("Email used");
-            return;
+            throw "email used";
         }
 
         var usernameTaken = true;
@@ -153,13 +151,14 @@ router.post('/register', async (req, res) => {
     else
         console.log("STATUS NOT 200");
 
-
-
     }
     catch(err)
     {
         console.log(err);
         console.log("ERROR!");
+        res.status(400);
+        res.statusMessage = err;
+        return res.send("test");
     }
     
 

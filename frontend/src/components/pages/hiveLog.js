@@ -46,6 +46,8 @@ const HiveLog = () => {
             
         const registerApi = async (code) => {
             console.log('codeREGISTER', code);
+            try
+            {
             let axiosResponse = await Axios.post(
                 config.SERVER_URL+'/42/register',
                 {code: code,
@@ -54,6 +56,11 @@ const HiveLog = () => {
             setResponse(axiosResponse);
             console.log(axiosResponse);
             console.log("REGISTER");
+            }catch
+            {
+                window.location.replace("http://localhost:3000/home");
+            }
+            
         }
         
         if (action == 'login')
