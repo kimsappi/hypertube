@@ -39,7 +39,7 @@ router.get('/getComments/:id', async (req, res) => {
 	)
 	.sort({ time: -1 })
 
-    console.log("COMMENTS :", comments);
+    // console.log("COMMENTS :", comments);
 
     res.json({comments: comments});
 })

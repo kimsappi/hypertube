@@ -1,6 +1,8 @@
 const express = require('express');
-const srt2vtt = require('srt-to-vtt')
 const torrentStream = require('torrent-stream');
+
+const fs = require('fs');
+const srt2vtt = require('srt-to-vtt')
 
 const { verifyToken } = require('../utils/auth');
 const movieListService = require('../services/movieLists');
@@ -10,10 +12,14 @@ const Movie = require('../models/Movie');
 
 const router = express.Router();
 
-router.get('/:magnet', async (req, res, next) => {
+router.get('/:magnet/:token/:imdb_id', async (req, res, next) => {
   try {
-    const { magnet } = req.params;
-    const token = req.query.token;
+    const { magnet, token, imdb_id } = req.params;
+	// const token = req.query.token;
+	
+	console.log("magnet", magnet);
+	console.log("token", token);
+	console.log("imdb_id", imdb_id);
 
     const user = await verifyToken(token);
     if (!user)
@@ -46,7 +52,7 @@ router.get('/:magnet', async (req, res, next) => {
     // start engine
     const engine = torrentStream("magnet:?" + magnet, {
       tmp: "../public",
-      path: "../public",
+      path: "../public" ,
       trackers: [
         "udp://glotorrents.pw:6969/announce",
         "udp://tracker.opentrackr.org:1337/announce",
@@ -65,8 +71,6 @@ router.get('/:magnet', async (req, res, next) => {
       // STREAM
       engine.files.forEach(file =>
       {
-        // check video file type and store into a variable
-
         if (file.name.includes('mp4'))
         {
           const range = req.headers.range;
@@ -89,15 +93,33 @@ router.get('/:magnet', async (req, res, next) => {
             end: end
           })
           .pipe(res);
-        }
-      });
+		}
+        else
+        {
+			file.createReadStream();
+		  
+		  	// check video file type and store into a variable
+			if (file.name.includes(".srt"))
+			{
+				// find out language
+
+				const language = "en";
+
+				const split = file.path.split("/");
+
+				fs.createReadStream(__dirname + "/../../public/" + file.path)
+					.pipe(srt2vtt())
+					.pipe(fs.createWriteStream("../public/" + split[0] + "/" + "subs." + language + ".vtt"));
+			}
+		}
+	  });
     });
 
     // emitted when the metadata has been fetched.
     engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
 
     // // emitted everytime a piece has been downloaded and verified.
-    engine.on('download', index => console.log("\033[36mpart " + index +  " downloaded and verified\033[0m"));
+	engine.on('download', index => console.log("\033[36mpart " + index +  " downloaded and verified\033[0m"));
 
     // emitted when all selected files have been completely downloaded.
     engine.on('idle', () => console.log("\033[0;32mall selected files have been completely downloaded\033[0m"));

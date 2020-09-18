@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useParams, Redirect } from 'react-router-dom';
 import ReactPlayer from "react-player";
 
+import config from '../../config/config';
+
 const Cinema = () =>
 {
-	const { magnet } = useParams();
+	const { magnet, imdb_id, title_long } = useParams();
 	const [status, setStatus] = useState("...");
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
@@ -33,6 +35,8 @@ const Cinema = () =>
 	const onEnded = () => setStatus("VIDEO END");
 	const onError = () => setStatus("ERROR");
 
+	const language = "en";
+	const folder = title_long + " [720p] [WEBRip] [YTS.MX]";
 
 	let count = setTimeout(() =>
 	{
@@ -50,6 +54,7 @@ const Cinema = () =>
 		}
 	}, 1000);
 
+	console.log(config.SERVER_URL + folder + "/subs." + language + ".vtt");
 
 	return (
 		<Fragment>
@@ -69,14 +74,14 @@ const Cinema = () =>
 					// onBufferEnd={onBufferEnd}
 					onEnded={onEnded}
 					onError={onError}
-					url={"http://localhost:5000/api/cinema/" + magnet + '?token=' + token}
+					url={config.SERVER_URL + "/api/cinema/" + magnet + "/" + token + "/" + imdb_id}
 					config={
 						{ file: {
 							attributes: {
 								crossOrigin: 'true'
 							},
 							tracks: [
-							{ kind: 'subtitles', src: 'http://localhost:5000/sample.vtt', srcLang: 'en', default: true }
+							{ kind: 'subtitles', src: config.SERVER_URL + "/" + folder + "/subs." + language + ".vtt", srcLang: language, default: true } 
 							]
 							}
 						}
