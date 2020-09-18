@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from "react";
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, Fragment } from "react";
+import { useParams, Redirect } from 'react-router-dom';
 import ReactPlayer from "react-player";
 
 const Cinema = () =>
@@ -9,6 +9,9 @@ const Cinema = () =>
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
 	const [totalSeconds, setTotalSeconds] = useState(0);
+
+	const [countdown, setCountdown] = useState(10);
+	const [countdownIsOn, setCountdownIsON] = useState(true);
 
 	const token = localStorage.getItem("HiveflixToken");
 
@@ -29,8 +32,15 @@ const Cinema = () =>
 	const onEnded = () => setStatus("VIDEO END");
 	const onError = () => setStatus("ERROR");
 
+	useEffect(() => {
+		setTimeout(() => {
+		  setCountdown(countdown - 1);
+		}, 1000);
+	  });
+
 	return (
 		<Fragment>
+			{countdown === 0 && <Redirect to="/home" />}
 			<div className="flex-center p-4 bg-black100">
 				<ReactPlayer
 					playing={true}
@@ -61,6 +71,10 @@ const Cinema = () =>
 				/>
 				</div>
 			<div className="flex-column center">
+				<div>
+					Attempting to start video {countdown}
+					<hr></hr>
+				</div>
 				<div>{status}</div>
 				<div>played: {Math.round(secondsPlayed)} seconds</div>
 				<div>loaded: {Math.round(secondsLoaded)} / {Math.round(totalSeconds)} seconds</div>
