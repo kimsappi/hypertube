@@ -87,7 +87,7 @@ const App = () =>
 						<Route exact path='/login' component={initialState.loggedIn ? Home : Login} />
 						<Route exact path='/register' component={initialState.loggedIn ? Home : Register} />
 						<Route exact path='/activationsent' component={ActivationSent} />
-						<Route exact path='/newpassword/:token' component={NewPassword}/>
+						<Route exact path='/newpassword/:id' component={NewPassword}/>
 						<Route exact path='/forgotpassword' component={ForgotPassword}/>
 						<Route exact path='/confirmemail/:key' component={ConfirmEmail}/>
 						<Route exact path='/home' component={Home} />

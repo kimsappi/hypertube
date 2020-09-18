@@ -15,17 +15,17 @@ const ForgotPassword = () =>
 
 	const submitResetPassword = async event => {
 		event.preventDefault();
+		setSuccess("");
+		setError("");
 		if (!event.target.checkValidity())
 			return;
 		try {
 			const res = await axios.post(config.SERVER_URL + '/api/auth/forgotPassword', {email});
 			if (res) {
 				setSuccess("Password reset email sent.");
-				setError("");
 			}
 		} catch(err) {
 			setError("Couldn't reset password.");
-			setSuccess("");
 		}
 	};
 

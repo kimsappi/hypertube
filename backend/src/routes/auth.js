@@ -5,6 +5,7 @@ const Logger = require('../utils/logger');
 const authService = require('../services/auth');
 const mailService = require('../services/mail');
 const { generateJWT } = require('../utils/auth');
+const { query } = require('express');
 
 router.post('/register', async (req, res, next) => {
   try {
@@ -52,7 +53,10 @@ router.post('/forgotPassword', async (req, res, next) => {
 
 router.patch('/forgotPassword/:id', async (req, res, next) => {
   try {
-    const data = authService.setNewPassword(req.params.id, req.body);
+    const data = await authService.setNewPassword(req.params.id, {
+      ...req.body,
+      code: req.query.code
+    });
     if (data)
       return res.status(200).json(true);
     else
