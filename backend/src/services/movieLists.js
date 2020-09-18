@@ -10,12 +10,29 @@ const addToList = async (id, user, listType) => {
     {myList: id} :
     {watched: id};
 
-  await User.findByIdAndUpdate(user.id, {
-    $addToSet: valueToAdd
-  });
+  const res = await User
+    .findByIdAndUpdate(user.id, {
+      $addToSet: valueToAdd
+    })
+    .lean();
+  if (res)
+    return true
+  else
+    throw 'Something went wrong'
+};
+
+const getMyList = async id => {
+  console.log(id)
+  const res = await User.findById(id, 'myList');
+
+  if (res)
+    return res.myList;
+  else
+    throw 'User not found';
 };
 
 module.exports = {
   addToList,
+  getMyList,
   Lists
 };

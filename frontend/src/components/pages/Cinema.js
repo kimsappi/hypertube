@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from "react";
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef, Fragment } from "react";
+import { useParams, Redirect } from 'react-router-dom';
 import ReactPlayer from "react-player";
 
 const Cinema = () =>
@@ -9,6 +9,9 @@ const Cinema = () =>
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
 	const [totalSeconds, setTotalSeconds] = useState(0);
+	
+	const [movieReady, setMovieReady] = useState(false);
+	const [timeLeft, setTimeLeft] = useState(10);
 
 	const token = localStorage.getItem("HiveflixToken");
 
@@ -21,6 +24,7 @@ const Cinema = () =>
 	const onDuration = (duration) => setTotalSeconds(duration);
 
 	// const onReady = () => setStatus("READY");
+
 	const onStart = () => setStatus("START");
 	const onPlay = () => setStatus("PLAY");
 	const onPause = () => setStatus("PAUSE");
@@ -28,6 +32,24 @@ const Cinema = () =>
 	// const onBufferEnd = () => setStatus("BUFFERING END");
 	const onEnded = () => setStatus("VIDEO END");
 	const onError = () => setStatus("ERROR");
+
+
+	let count = setTimeout(() =>
+	{
+		if (movieReady === true)
+		{
+			clearTimeout(count);
+			setTimeLeft("Success!");
+		}
+		else if (timeLeft > 1)
+			setTimeLeft(timeLeft - 1);
+		else
+		{
+			clearTimeout(count);
+			setTimeLeft("Fail!")
+		}
+	}, 1000);
+
 
 	return (
 		<Fragment>
@@ -37,6 +59,7 @@ const Cinema = () =>
 					controls={true}
 					pip={false}
 					// onReady={onReady}
+					onReady={() => setMovieReady(true)}
 					onStart={onStart}
 					onPlay={onPlay}
 					onProgress={onProgress}
@@ -53,7 +76,7 @@ const Cinema = () =>
 								crossOrigin: 'true'
 							},
 							tracks: [
-							{ kind: 'subtitles', src: '../sample.vtt', srcLang: 'en', default: true }
+							{ kind: 'subtitles', src: 'http://localhost:5000/sample.vtt', srcLang: 'en', default: true }
 							]
 							}
 						}
@@ -61,6 +84,10 @@ const Cinema = () =>
 				/>
 				</div>
 			<div className="flex-column center">
+				<div>
+					Attempting to start video {timeLeft}
+					<hr></hr>
+				</div>
 				<div>{status}</div>
 				<div>played: {Math.round(secondsPlayed)} seconds</div>
 				<div>loaded: {Math.round(secondsLoaded)} / {Math.round(totalSeconds)} seconds</div>
