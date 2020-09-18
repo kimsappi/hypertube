@@ -50,7 +50,8 @@ router.post('/login', async (req, res)  => {
             id: confirm._id
           });
     }
-    res.send("logging in from 42");
+    else
+        return res.send("User not found. Register first.");
     }
     catch(err)
     {

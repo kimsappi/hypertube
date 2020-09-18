@@ -1,7 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Axios from "axios";
 import config from '../../config/config';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
+
 
 const ApiLog = () => {
 
@@ -13,6 +14,8 @@ const ApiLog = () => {
     const [passOne, setPassOne] = useState('');
     const [passTwo, setPassTwo] = useState('');
     
+    let history = useHistory();
+
     useEffect(() => {
         console.log('axios updated');
 
@@ -25,14 +28,17 @@ const ApiLog = () => {
                 config.SERVER_URL+'/42/login',
                 {code: code}
             )
+            console.log("test1")
             if (axiosResponse.status === 200)
             {
                 localStorage.setItem("HiveflixToken", axiosResponse.data.token);
                 localStorage.setItem("HiveflixUsername", axiosResponse.data.username);
                 localStorage.setItem("HiveflixProfilePicture", axiosResponse.data.profilePicture);
                 localStorage.setItem("HiveflixId", axiosResponse.data.id);
-                window.location.replace("http://localhost:3000/home");
+                history.push('/');
             }
+            else
+                history.push('/');
             setResponse(axiosResponse);
             console.log(axiosResponse);
             console.log("LOGIN");
