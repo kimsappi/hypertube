@@ -33,6 +33,7 @@ const ForgotPassword = () =>
 		<div className="center">
 			<h1 className="my-4">Forgot Password</h1>
 			{error && <div className="small alert alert-error">{error}</div>}
+			{success && <div className="small alert alert-success">{success}</div>}
 			<form onSubmit={submitResetPassword}>
 				<label htmlFor="email">Enter your account's email</label>
 				<input

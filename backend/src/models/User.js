@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   oauth: Array,
   emailVerification: String,
   profilePicture: String,
-  language: {type: Date, default: 'English'},
+  language: {type: String, default: 'English'},
 
   watched: Array,
   myList: Array,
