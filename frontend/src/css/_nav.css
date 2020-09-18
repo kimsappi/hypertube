@@ -2,31 +2,33 @@
 --------------------------------------------------------------------- */
 
 .navbar {
-	padding: 0.2rem 1rem;
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+	align-items: center;
+	align-content: center;
 	z-index: 1;
 	background-color: var(--navbar);
 	color: #bbb;
-	border-bottom: solid 2px #333;
+	border-bottom: solid 3px #333;
+	padding-right: 2rem;
 }
 
 .navbar-title {
-	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-family: 'Nunito', sans-serif;
 	font-size: 2rem;
-	white-space: nowrap;
-	line-height: 100%;
 }
 
 .navbar ul {
 	display: flex;
 	align-items: center;
-	list-style-position:inside;
+	list-style-position: inside;
 	margin:0;
 	padding:0;
 }
 
 .navbar li {
-	padding-left: .5rem;
-	margin: .5rem;
+	padding-left: 1.5rem;
 	white-space: nowrap;
 }
 
@@ -50,5 +52,5 @@
 	display: inline-block;
 	width: 24px;
 	height: 24px;
-	line-height: 100%;
+	vertical-align: middle;
 }

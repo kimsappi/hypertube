@@ -139,7 +139,7 @@ const Home = () =>
 						value={searchInput}
 						onChange={changeSearchInput}
 					/>
-					<div className="flex-center mx-5 my-4">
+					<div className="movie-items-container">
 						{movies.movie_count > 0 && movies.movies.map (movie => (
 							<Fragment key={movie.imdb_code}>
 								<MovieItem movie={movie}/>
