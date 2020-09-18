@@ -13,8 +13,10 @@ const Home = () =>
 	const [trailerMovieId, setTrailerMovieId] = useState(null);
 	const [searchInput, setSearchInput] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
-	const [isLoading, setIsLoading] = useState(true);
 	const [hasMoreItems, setHasMoreItems] = useState(true);
+
+	const [loadingPage, setLoadingPage] = useState(true);
+	const [loadingMovies, setLoadingMovies] = useState(true);
 
 	useEffect(() =>
 	{
@@ -43,7 +45,7 @@ const Home = () =>
 					if (response.data.data.movies[randomNumber].yt_trailer_code !== "")
 					{
 						setTrailerMovieId(response.data.data.movies[randomNumber].id)
-						setIsLoading(false);
+						setLoadingPage(false);
 						break;
 					}
 				}
@@ -63,6 +65,7 @@ const Home = () =>
 	// this prevents performing a new search each time the users inputs one characters
 	useEffect(() =>
 	{
+		setLoadingMovies(true);
 		console.log("useEffect 2");
 		const CancelToken = axios.CancelToken;
 		const source = CancelToken.source();
@@ -77,7 +80,8 @@ const Home = () =>
 					const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=6&query_term=" + searchInput, { cancelToken: source.token });
 
 					setMovies(response.data.data);
-					setHasMoreItems(false); 
+					setHasMoreItems(true);
+					setLoadingMovies(false);
 				}
 				catch (err)
 				{
@@ -110,6 +114,8 @@ const Home = () =>
 		setMovies(moviesCopy);
 		setCurrentPage(currentPage + 1);
 
+		console.log("moviesCopy.movies", moviesCopy.movies);
+
 		// has more items
 		if (moviesCopy.movies.length < moviesCopy.movie_count)
 			setHasMoreItems(true);
@@ -119,13 +125,12 @@ const Home = () =>
 
 	return (
 		<Fragment> 
-			{isLoading && <div className="loading"></div>}
-			{!isLoading && (
+			{loadingPage && <div className="loading"></div>}
+			{!loadingPage && (
 				<Fragment>
 					<InfiniteScroll
 						dataLength={typeof movies.movies !== "undefined" ? movies.movies.length : 0}
 						next={handleLoadMore}
-						// hasMore={true}
 						hasMore={hasMoreItems}
 						loader={<div className="loading"></div>}
 					>
@@ -139,15 +144,18 @@ const Home = () =>
 						value={searchInput}
 						onChange={changeSearchInput}
 					/>
-					<div className="movie-items-container">
-						{movies.movie_count > 0 && movies.movies.map (movie => (
-							<Fragment key={movie.imdb_code}>
-								<MovieItem movie={movie}/>
-							</Fragment>
-							)
-						)}
-						{movies.movie_count === 0 && <h4>Oh snap, no results.</h4>}
-					</div>
+					{loadingMovies && <div className="loading"></div>}
+					{!loadingMovies && (
+						<div className="movie-items-container">
+							{movies.movie_count > 0 && movies.movies.map (movie => (
+								<Fragment key={movie.imdb_code}>
+									<MovieItem movie={movie}/>
+								</Fragment>
+								)
+							)}
+							{movies.movie_count === 0 && <h4>Oh snap, no results.</h4>}
+						</div>
+					)}
 					</InfiniteScroll>
 				</Fragment>
 			)}
