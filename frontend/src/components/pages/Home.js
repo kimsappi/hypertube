@@ -79,7 +79,7 @@ const Home = () =>
 					// fetch all movies
 					const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=6&query_term=" + searchInput, { cancelToken: source.token });
 
-					setMovies(response.data.data);
+					//setMovies(response.data.data);
 					setHasMoreItems(true);
 					setLoadingMovies(false);
 				}

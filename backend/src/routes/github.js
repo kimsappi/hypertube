@@ -84,7 +84,7 @@ router.post('/register', async (req, res) => {
             console.log(saveResult);
 
             res.json({
-                username: 'josiz',
+                username: name,
                 takenValue,
                 firstName: nameArray[0],
                 id: saveResult._id
