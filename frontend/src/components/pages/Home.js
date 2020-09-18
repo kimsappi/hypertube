@@ -79,7 +79,7 @@ const Home = () =>
 					// fetch all movies
 					const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=6&query_term=" + searchInput, { cancelToken: source.token });
 
-					//setMovies(response.data.data);
+					setMovies(response.data.data);
 					setHasMoreItems(true);
 					setLoadingMovies(false);
 				}
@@ -106,7 +106,7 @@ const Home = () =>
 	{
 		let moviesCopy = clone(movies);
 		const response = await axios.get(`https://yts.mx/api/v2/list_movies.json?page=${currentPage}&limit=20&sort_by=year&minimum_rating=6`);
-		console.log("HANDLE MORE");		// combine objects
+
 		for (let i = 0; response.data.data.movies[i]; i++)
 			moviesCopy.movies.push(response.data.data.movies[i]);
 
