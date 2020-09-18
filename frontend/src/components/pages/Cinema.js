@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useParams, Redirect } from 'react-router-dom';
 import ReactPlayer from "react-player";
 
@@ -9,9 +9,9 @@ const Cinema = () =>
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
 	const [totalSeconds, setTotalSeconds] = useState(0);
-
-	const [countdown, setCountdown] = useState(10);
-	const [countdownIsOn, setCountdownIsON] = useState(true);
+	
+	const [movieReady, setMovieReady] = useState(false);
+	const [timeLeft, setTimeLeft] = useState(10);
 
 	const token = localStorage.getItem("HiveflixToken");
 
@@ -24,6 +24,7 @@ const Cinema = () =>
 	const onDuration = (duration) => setTotalSeconds(duration);
 
 	// const onReady = () => setStatus("READY");
+
 	const onStart = () => setStatus("START");
 	const onPlay = () => setStatus("PLAY");
 	const onPause = () => setStatus("PAUSE");
@@ -32,21 +33,33 @@ const Cinema = () =>
 	const onEnded = () => setStatus("VIDEO END");
 	const onError = () => setStatus("ERROR");
 
-	useEffect(() => {
-		setTimeout(() => {
-		  setCountdown(countdown - 1);
-		}, 1000);
-	  });
+
+	let count = setTimeout(() =>
+	{
+		if (movieReady === true)
+		{
+			clearTimeout(count);
+			setTimeLeft("Success!");
+		}
+		else if (timeLeft > 1)
+			setTimeLeft(timeLeft - 1);
+		else
+		{
+			clearTimeout(count);
+			setTimeLeft("Fail!")
+		}
+	}, 1000);
+
 
 	return (
 		<Fragment>
-			{countdown === 0 && <Redirect to="/home" />}
 			<div className="flex-center p-4 bg-black100">
 				<ReactPlayer
 					playing={true}
 					controls={true}
 					pip={false}
 					// onReady={onReady}
+					onReady={() => setMovieReady(true)}
 					onStart={onStart}
 					onPlay={onPlay}
 					onProgress={onProgress}
@@ -72,7 +85,7 @@ const Cinema = () =>
 				</div>
 			<div className="flex-column center">
 				<div>
-					Attempting to start video {countdown}
+					Attempting to start video {timeLeft}
 					<hr></hr>
 				</div>
 				<div>{status}</div>
