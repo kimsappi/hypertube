@@ -47,7 +47,7 @@ const Movie = () =>
 			{!loading && (
 				<div className="ram-container">
 					<div className="ram">
-						<div className="movie-left-column">
+						<div className="movie-left-container">
 							<img className="movie-image-large" src={movie.large_cover_image} alt='Profile'/>
 						</div>
 						<div className="movie-center-column">
@@ -67,7 +67,7 @@ const Movie = () =>
 								<p>{movie.description_intro}</p>
 								{typeof movie.cast !== "undefined" && (
 									<Fragment>
-										<h3 className="color-white center">Cast</h3>
+										<h3 className="color-white center">Starring</h3>
 										<div className="cast-member-container">
 											{movie.cast.map(cast_member =>
 												<div className="cast-member-item" key={cast_member.name}>

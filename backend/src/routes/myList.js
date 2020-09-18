@@ -11,7 +11,7 @@ router.post('/', authenticationMiddleware, async (req, res, next) => {
     await movieListService.addToList(
       req.body.id,
       req.user,
-      true
+      movieListService.Lists.myList
     );
   } catch(err) {
     Logger.error(err);

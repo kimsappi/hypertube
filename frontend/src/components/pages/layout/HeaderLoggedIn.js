@@ -4,7 +4,6 @@ import { Link, NavLink } from 'react-router-dom';
 import StateContext from '../../../context/StateContext';
 import DispatchContext from '../../../context/DispatchContext';
 
-import logo from "../../../images/logo.png";
 import ProfilePicture from '../../ProfilePicture';
 
 const HeaderLoggedIn = () =>
@@ -19,34 +18,32 @@ const HeaderLoggedIn = () =>
 
 	return (
 		<header>
-		<nav className='navbar'>
-			<div className="flex" style={{ width: '100%' }}>
-				<div className="navbar-title">
-					<NavLink to='/home' alt='Home' title='Home'>
-						<img src={logo} className='logo' alt='site logo'/> HIVEFLIX
+			<nav className='navbar'>
+				<ul>
+					<li>
+					<NavLink className="navbar-title" to='/home' alt='Home' title='Home'>
+						HIVEFLIX
 					</NavLink>
-				</div>
-				<div>
-					<ul>
-						<li>
-							<NavLink to='/about' alt='About' title='About'>
-								<i className="fas fa-question-circle color-yellow"></i> About
-							</NavLink>
-						</li>
-						<li>
-							<Link to={"/profile/" + globalState.id} alt='Profile' title='Profile'>
-								<ProfilePicture src={globalState.profileImage} classNames='profile-image' />
-							</Link>
-						</li>
-						<li>
-							<Link to='#' alt='Logout' title='Logout'>
-								<span onClick={handleLogout}><i className="fas fa-share-square color-primary"></i> Logout</span>
-							</Link>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
+					</li>
+					<li>
+						<NavLink to='/mylist' alt='My List' title='My List'>
+							<i className="fas fa-images color-primary"></i> My List
+						</NavLink>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<Link to={"/profile/" + globalState.id} alt='Profile' title='Profile'>
+							<ProfilePicture url={globalState.profileImage} className='profile-image' />
+						</Link>
+					</li>
+					<li>
+						<Link to='#' alt='Logout' title='Logout' onClick={handleLogout}>
+							<i className="fas fa-share-square color-primary"></i> Log Out
+						</Link>
+					</li>
+				</ul>
+			</nav>
 		</header>
 	)
 }

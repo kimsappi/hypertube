@@ -1,6 +1,6 @@
 // React
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { useImmerReducer } from "use-immer";
 
 // Context
@@ -11,7 +11,7 @@ import DispatchContext from './context/DispatchContext';
 import HeaderLoggedIn from './components/pages/layout/HeaderLoggedIn';
 import HeaderLoggedOut from './components/pages/layout/HeaderLoggedOut';
 import Home from './components/pages/Home';
-import About from './components/pages/About';
+import MyList from './components/pages/MyList';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Movie from './components/pages/Movie';
@@ -80,8 +80,8 @@ const App = () =>
 					<Switch>
 						<Route exact path='/api/:action' component={ApiLog} />
 
-						<Route exact path='/about' component={About} />
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
+						<Route exact path='/mylist' component={initialState.loggedIn ? MyList : Login} />
 						<Route exact path='/cinema/:magnet' component={initialState.loggedIn ? Cinema : Login} />
 						<Route exact path='/profile/:id' component={initialState.loggedIn ? Profile : Login} />
 						<Route exact path='/login' component={initialState.loggedIn ? Home : Login} />
@@ -90,7 +90,8 @@ const App = () =>
 						<Route exact path='/newpassword/:token' component={NewPassword}/>
 						<Route exact path='/forgotpassword' component={ForgotPassword}/>
 						<Route exact path='/confirmemail/:key' component={ConfirmEmail}/>
-						<Route path='/' component={Home} />
+						<Route exact path='/home' component={Home} />
+						<Redirect to='/home' />
 					</Switch>
 				</BrowserRouter>
 			</DispatchContext.Provider>

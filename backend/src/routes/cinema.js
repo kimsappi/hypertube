@@ -1,10 +1,12 @@
 const express = require('express');
 const srt2vtt = require('srt-to-vtt')
 const torrentStream = require('torrent-stream');
-const { authenticationMiddleware, verifyToken } = require('../utils/auth');
+
+const { verifyToken } = require('../utils/auth');
+const movieListService = require('../services/movieLists');
+const Logger = require('../utils/logger');
 
 const Movie = require('../models/Movie');
-const Logger = require('../utils/logger');
 
 const router = express.Router();
 
@@ -13,12 +15,22 @@ router.get('/:magnet', async (req, res, next) => {
     const { magnet } = req.params;
     const token = req.query.token;
 
-    const user = verifyToken(token);
+    const user = await verifyToken(token);
     if (!user)
       return res.status(401).json('auth error');
 
+    // Add movie to user's watched movies
+    try {
+      movieListService.addToList(
+        magnet,
+        {...user, id: user.id},
+        movieListService.Lists.watched
+      );
+    } catch(err) {
+      Logger.error(err);
+    }
+
     // Saving movie into database or editing its lastViewed
-    // TODO add movie to user's viewed list
     try {
       const dbMovie = new Movie({magnet});
       await dbMovie.save();
