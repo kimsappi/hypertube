@@ -21,7 +21,8 @@ import ActivationSent from './components/pages/ActivationSent';
 import NewPassword from './components/pages/NewPassword';
 import ForgotPassword from './components/pages/ForgotPassword';
 import ConfirmEmail from './components/pages/ConfirmEmail';
-import ApiLog from './components/pages/apiLog';
+import HiveLog from './components/pages/hiveLog';
+import GithubLog from './components/pages/GithubLog';
 
 
 // CSS
@@ -78,7 +79,8 @@ const App = () =>
 				<BrowserRouter>
 					{initialState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
 					<Switch>
-						<Route exact path='/api/:action' component={ApiLog} />
+						<Route exact path='/api/:action' component={HiveLog} />
+						<Route exact path='/github/:action' component={GithubLog} />
 
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
 						<Route exact path='/mylist' component={initialState.loggedIn ? MyList : Login} />

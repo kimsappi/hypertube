@@ -15,6 +15,7 @@ const userRouter = require('./routes/user');
 const cinemaRouter = require('./routes/cinema');
 const myListRouter = require('./routes/myList');
 const schoolLogin = require('./routes/login42');
+const githubLogin = require('./routes/github');
 
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
@@ -50,8 +51,9 @@ app.use('/api/users', userRouter);
 app.use('/api/cinema', cinemaRouter);
 app.use('/api/myList', myListRouter);
 
-// 42login route
+// API login routes
 app.use('/42', schoolLogin)
+app.use('/github', githubLogin)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

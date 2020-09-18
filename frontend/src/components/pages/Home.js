@@ -76,7 +76,7 @@ const Home = () =>
 					// fetch all movies
 					const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=6&query_term=" + searchInput, { cancelToken: source.token });
 
-					setMovies(response.data.data);
+					//setMovies(response.data.data);
 					setHasMoreItems(false); 
 				}
 				catch (err)
@@ -102,8 +102,7 @@ const Home = () =>
 	{
 		let moviesCopy = clone(movies);
 		const response = await axios.get(`https://yts.mx/api/v2/list_movies.json?page=${currentPage}&limit=20&sort_by=year&minimum_rating=6`);
-
-		// combine objects
+		console.log("HANDLE MORE");		// combine objects
 		for (let i = 0; response.data.data.movies[i]; i++)
 			moviesCopy.movies.push(response.data.data.movies[i]);
 
@@ -117,6 +116,7 @@ const Home = () =>
 			setHasMoreItems(false);
 	};
 
+
 	return (
 		<Fragment> 
 			{isLoading && <div className="loading"></div>}
@@ -125,7 +125,7 @@ const Home = () =>
 					<InfiniteScroll
 						dataLength={typeof movies.movies !== "undefined" ? movies.movies.length : 0}
 						next={handleLoadMore}
-						// hasMore={true}
+						hasMore={true}
 						hasMore={hasMoreItems}
 						loader={<div className="loading"></div>}
 					>

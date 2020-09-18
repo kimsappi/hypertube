@@ -4,7 +4,7 @@ import config from '../../config/config';
 import { useParams, Link, useHistory } from 'react-router-dom';
 
 
-const ApiLog = () => {
+const HiveLog = () => {
 
     const { action } = useParams();
     const queryString = window.location.search;
@@ -64,42 +64,42 @@ const ApiLog = () => {
         
     }, [])
     
-const registerSubmit = async (event) => {
-    event.preventDefault();
-    console.log("pw submitted");
+    const registerSubmit = async (event) => {
+        event.preventDefault();
+        console.log("pw submitted");
 
-    if (passOne === passTwo)
-    {
-        let passResponse = await Axios.post(
-            config.SERVER_URL+'/42/submitPass',
-            {user: response.data.login,
-            password: passOne}
-        )
-        console.log(passResponse);
-        if (passResponse.status === 200)
+        if (passOne === passTwo)
         {
-            localStorage.setItem("HiveflixToken", passResponse.data.token);
-			localStorage.setItem("HiveflixUsername", passResponse.data.username);
-            localStorage.setItem("HiveflixProfilePicture", passResponse.data.profilePicture);
-            localStorage.setItem("HiveflixId", passResponse.data.id);
-            window.location.replace("http://localhost:3000/home");
+            let passResponse = await Axios.post(
+                config.SERVER_URL+'/42/submitPass',
+                {user: response.data.login,
+                password: passOne}
+            )
+            console.log(passResponse);
+            if (passResponse.status === 200)
+            {
+                localStorage.setItem("HiveflixToken", passResponse.data.token);
+                localStorage.setItem("HiveflixUsername", passResponse.data.username);
+                localStorage.setItem("HiveflixProfilePicture", passResponse.data.profilePicture);
+                localStorage.setItem("HiveflixId", passResponse.data.id);
+                window.location.replace("http://localhost:3000/home");
+            }
+        }
+        else
+        {
+            console.log("Passwords dont match")
         }
     }
-    else
-    {
-        console.log("Passwords dont match")
+
+    const setPassOneF = (event) => {
+        setPassOne(event.target.value);
+        console.log(passOne);
     }
-}
 
-const setPassOneF = (event) => {
-    setPassOne(event.target.value);
-    console.log(passOne);
-}
-
-const setPassTwoF = (event) => {
-    setPassTwo(event.target.value);
-    console.log(passTwo);
-}
+    const setPassTwoF = (event) => {
+        setPassTwo(event.target.value);
+        console.log(passTwo);
+    }
 
     return (
         <>
@@ -127,4 +127,4 @@ const setPassTwoF = (event) => {
     )
 }
 
-export default ApiLog;
+export default HiveLog;
