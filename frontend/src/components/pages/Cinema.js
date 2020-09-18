@@ -76,7 +76,7 @@ const Cinema = () =>
 								crossOrigin: 'true'
 							},
 							tracks: [
-							{ kind: 'subtitles', src: '../sample.vtt', srcLang: 'en', default: true }
+							{ kind: 'subtitles', src: 'http://localhost:5000/sample.vtt', srcLang: 'en', default: true }
 							]
 							}
 						}
