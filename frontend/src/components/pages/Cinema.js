@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
-import { useParams, Redirect } from 'react-router-dom';
+import React, { useState, Fragment } from "react";
+import { useParams } from 'react-router-dom';
 import ReactPlayer from "react-player";
 
 import config from '../../config/config';
@@ -25,18 +25,16 @@ const Cinema = () =>
 
 	const onDuration = (duration) => setTotalSeconds(duration);
 
-	// const onReady = () => setStatus("READY");
-
 	const onStart = () => setStatus("START");
 	const onPlay = () => setStatus("PLAY");
 	const onPause = () => setStatus("PAUSE");
 	const onBuffer = () => setStatus("BUFFERING");
-	// const onBufferEnd = () => setStatus("BUFFERING END");
 	const onEnded = () => setStatus("VIDEO END");
 	const onError = () => setStatus("ERROR");
 
 	const language = "en";
-	const folder = title_long + " [720p] [WEBRip] [YTS.MX]";
+	const resolution = "720p";
+	const subtitleUrl = config.SERVER_URL + "/" + title_long + " [" + resolution + "] [WEBRip] [YTS.MX]/subs." + language + ".vtt";
 
 	let count = setTimeout(() =>
 	{
@@ -50,7 +48,7 @@ const Cinema = () =>
 		else
 		{
 			clearTimeout(count);
-			setTimeLeft("Fail!")
+			setTimeLeft("Oh snap, downloading is taking longer than usual")
 		}
 	}, 1000);
 
@@ -61,7 +59,6 @@ const Cinema = () =>
 					playing={true}
 					controls={true}
 					pip={false}
-					// onReady={onPlay}
 					onReady={() => setMovieReady(true)}
 					onStart={onStart}
 					onPlay={onPlay}
@@ -79,16 +76,16 @@ const Cinema = () =>
 								crossOrigin: 'true'
 							},
 							tracks: [
-							{ kind: 'subtitles', src: config.SERVER_URL + "/" + folder + "/subs." + language + ".vtt", srcLang: language, default: true } 
+							{ kind: 'subtitles', src: subtitleUrl, srcLang: language, default: true } 
 							]
 							}
 						}
 					}
 				/>
-				</div>
+			</div>
 			<div className="flex-column center">
 				<div>
-					Attempting to start video {timeLeft}
+					Attempting to start video: {timeLeft}
 					<hr></hr>
 				</div>
 				<div>{status}</div>
