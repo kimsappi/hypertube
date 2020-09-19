@@ -31,27 +31,42 @@ const GithubLog = () => {
         )
         console.log(response);
         setResponse(response);
-    }catch(err){console.log(err);
-}
+        }
+        catch(err)
+        {
+            console.log(err.response);
+            alert(err.response.data.message);
+            window.location.replace("http://localhost:3000/home");
+        }
         
         }
 
     const githubLog = async () => {
 
         console.log('logging');
-        const loginResponse = await Axios.post(
-            config.SERVER_URL+'/github/login',
-            {code}
-        )
-        console.log(loginResponse);
-        if (loginResponse.status === 200)
+        try
         {
-            localStorage.setItem("HiveflixToken", loginResponse.data.token);
-            localStorage.setItem("HiveflixUsername", loginResponse.data.username);
-            localStorage.setItem("HiveflixProfilePicture", loginResponse.data.profilePicture);
-            localStorage.setItem("HiveflixId", loginResponse.data.id);
+            const loginResponse = await Axios.post(
+                config.SERVER_URL+'/github/login',
+                {code}
+            )
+            console.log(loginResponse);
+            if (loginResponse.status === 200)
+            {
+                localStorage.setItem("HiveflixToken", loginResponse.data.token);
+                localStorage.setItem("HiveflixUsername", loginResponse.data.username);
+                localStorage.setItem("HiveflixProfilePicture", loginResponse.data.profilePicture);
+                localStorage.setItem("HiveflixId", loginResponse.data.id);
+                window.location.replace("http://localhost:3000/home");
+            }
+        }
+        catch(err)
+        {
+            console.log(err.response);
+            alert(err.response.data.message);
             window.location.replace("http://localhost:3000/home");
         }
+
             
     }
 

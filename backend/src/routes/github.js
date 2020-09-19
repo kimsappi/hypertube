@@ -7,8 +7,10 @@ const { updateOne } = require('../models/User');
 const { generateJWT } = require('../utils/auth');
 const { hashPassword } = require('../utils/auth');
 const { default: Axios } = require('axios');
+const { NotExtended } = require('http-errors');
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
+    
     console.log("perilla");
 
     const code = req.body.code;
@@ -45,10 +47,12 @@ router.post('/register', async (req, res) => {
             
             if (findEmail !== null)
             {
-                console.log("EMAIL TAKEN");
-                return res.status(300).json({err: "email taken"});
+                const err = new Error("The email given is already taken by someone");
+                err.status = 'email taken';
+                err.statusCode = 400;
+                next(err);
+                throw "email taken";
             }
-
             let takenValue = false;
             let postfix = 0;
             let usernameTaken = true;
@@ -92,10 +96,16 @@ router.post('/register', async (req, res) => {
 
         }
         else
-        return res.status(400).send("something went wrong.. Propably github not working")
+        throw "something went wrong.. Propably github not working"
     }
     else
-        return res.status(400).send("invalid code");
+    {
+        const err = new Error("invalid code");
+        err.status = 'invalid code';
+        err.statusCode = 400;
+        next(err);
+        throw "invalid code";
+    }
 
     
     }
@@ -105,7 +115,7 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
     console.log("logging");
     console.log(req.body.code);
 
@@ -148,13 +158,25 @@ router.post('/login', async (req, res) => {
                     });
                 }
                 else
-                    return res.status(300).send("Check that your email is public");
+                {
+                    const err = new Error("Not registered");
+                    err.status = 'You are not registered. Register first. OR your email is not public in github';
+                    err.statusCode = 300;
+                    next(err);
+                    throw "not registered";
+                }
             }
             else
-                return res.status(400).send("Something wrong with github");
+                throw "github not responding";
         }
         else
-            return res.status(400).send("invalid code");
+        {
+            const err = new Error("invalid code");
+            err.status = 'invalid code';
+            err.statusCode = 400;
+            next(err);
+            throw "invalid code";
+        }
     }
     catch(err)
     {

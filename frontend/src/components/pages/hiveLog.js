@@ -22,42 +22,57 @@ const HiveLog = () => {
     }, [response]);
 
     useEffect(() => {
+
+
         const loginApi = async (code) => {
             console.log('codeLOGIN', code);
-            let axiosResponse = await Axios.post(
-                config.SERVER_URL+'/42/login',
-                {code: code}
-            )
-            console.log("test1")
-            if (axiosResponse.status === 200)
+
+            try
             {
-                localStorage.setItem("HiveflixToken", axiosResponse.data.token);
-                localStorage.setItem("HiveflixUsername", axiosResponse.data.username);
-                localStorage.setItem("HiveflixProfilePicture", axiosResponse.data.profilePicture);
-                localStorage.setItem("HiveflixId", axiosResponse.data.id);
-                history.push('/');
+                let axiosResponse = await Axios.post(
+                    config.SERVER_URL+'/42/login',
+                    {code: code}
+                )
+                console.log("test1")
+                if (axiosResponse.status === 200)
+                {
+                    localStorage.setItem("HiveflixToken", axiosResponse.data.token);
+                    localStorage.setItem("HiveflixUsername", axiosResponse.data.username);
+                    localStorage.setItem("HiveflixProfilePicture", axiosResponse.data.profilePicture);
+                    localStorage.setItem("HiveflixId", axiosResponse.data.id);
+                    history.push('/');
+                }
+                else
+                    history.push('/');
+                setResponse(axiosResponse);
+                console.log(axiosResponse);
+                console.log("LOGIN");
             }
-            else
-                history.push('/');
-            setResponse(axiosResponse);
-            console.log(axiosResponse);
-            console.log("LOGIN");
+            catch(err)
+            {
+                console.log(err.response);
+                alert(err.response.data.message);
+                window.location.replace("http://localhost:3000/home");
+            }
         }
             
         const registerApi = async (code) => {
             console.log('codeREGISTER', code);
             try
             {
-            let axiosResponse = await Axios.post(
-                config.SERVER_URL+'/42/register',
-                {code: code,
-                test: "asd"}
-            )
-            setResponse(axiosResponse);
-            console.log(axiosResponse);
-            console.log("REGISTER");
-            }catch
+                let axiosResponse = await Axios.post(
+                    config.SERVER_URL+'/42/register',
+                    {code: code,
+                    test: "asd"}
+                )
+                setResponse(axiosResponse);
+                console.log(axiosResponse);
+                console.log("REGISTER");
+            }
+            catch(err)
             {
+                console.log(err.response);
+                alert(err.response.data.message);
                 window.location.replace("http://localhost:3000/home");
             }
             

@@ -17,6 +17,7 @@ const cinemaRouter = require('./routes/cinema');
 const myListRouter = require('./routes/myList');
 const schoolLogin = require('./routes/login42');
 const githubLogin = require('./routes/github');
+const { ETXTBSY } = require('constants');
 
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
@@ -57,6 +58,9 @@ app.use('/api/myList', myListRouter);
 app.use('/42', schoolLogin)
 app.use('/github', githubLogin)
 
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -65,12 +69,20 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 406);
-  res.json('error');
+  console.log(err.status);
+  console.log(err.statusCode);
+  console.log(err);
+
+  return res.status(err.statusCode).json({
+    message: err.status
+  });
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // // render the error page
+  // res.status(err.status || 406);
+  // res.json('error');
 });
 
 module.exports = app;

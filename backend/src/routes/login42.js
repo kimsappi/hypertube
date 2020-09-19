@@ -8,51 +8,57 @@ const { generateJWT } = require('../utils/auth');
 const { hashPassword } = require('../utils/auth');
 const { NotExtended } = require('http-errors');
 
-router.post('/login', async (req, res)  => {
+router.post('/login', async (req, res, next)  => {
 
     console.log(req.body.code);
     console.log(codes.CLIENTID);
 
     try
     {
-    const response = await axios.post(
-        'https://api.intra.42.fr/oauth/token',
+        const response = await axios.post(
+            'https://api.intra.42.fr/oauth/token',
+            {
+                grant_type: 'authorization_code',
+                client_id: codes.CLIENTID,
+                client_secret: codes.SECRET,
+                code: req.body.code,
+                redirect_uri: codes.logUrl
+            }
+        )
+        
+
+        const token42 = response.data.access_token;
+        console.log(token42);
+
+        const responseTwo = await axios.get(
+            'https://api.intra.42.fr/v2/me',
+            {headers: {Authorization: 'Bearer '+token42}}
+        )
+        console.log(responseTwo);
+
+        var confirm = await User.findOne({
+            "oauth.provider": "42", "oauth.email": responseTwo.data.email
+        })
+        console.log(confirm);
+        if (confirm !== null)
         {
-            grant_type: 'authorization_code',
-            client_id: codes.CLIENTID,
-            client_secret: codes.SECRET,
-            code: req.body.code,
-            redirect_uri: codes.logUrl
+            token = generateJWT({username: confirm.username, profilePicture: confirm.profilePicture || null, id: confirm._id});
+            return res.status(200).json({
+                message: 'login success',
+                username: confirm.username,
+                token,
+                profilePicture: confirm.profilePicture || null,
+                id: confirm._id
+            });
         }
-    )
-    
-
-    const token42 = response.data.access_token;
-    console.log(token42);
-
-    const responseTwo = await axios.get(
-        'https://api.intra.42.fr/v2/me',
-        {headers: {Authorization: 'Bearer '+token42}}
-    )
-    console.log(responseTwo);
-
-    var confirm = await User.findOne({
-        "oauth.provider": "42", "oauth.email": responseTwo.data.email
-    })
-    console.log(confirm);
-    if (confirm !== null)
-    {
-        token = generateJWT({username: confirm.username, profilePicture: confirm.profilePicture || null, id: confirm._id});
-        return res.status(200).json({
-            message: 'login success',
-            username: confirm.username,
-            token,
-            profilePicture: confirm.profilePicture || null,
-            id: confirm._id
-          });
-    }
-    else
-        return res.send("User not found. Register first.");
+        else
+        {
+            const err = new Error("Not registered");
+            err.status = 'You are not registered. Register first via 42.';
+            err.statusCode = 300;
+            next(err);
+            throw "not registered";
+        }
     }
     catch(err)
     {
@@ -96,7 +102,11 @@ router.post('/register', async (req, res, next) => {
 
         if (email !== null)
         {
-            throw "email used";
+            const err = new Error("You have already registered with 42. Use login.");
+            err.status = 'email taken';
+            err.statusCode = 400;
+            next(err);
+            throw "email taken";
         }
 
         var usernameTaken = true;
