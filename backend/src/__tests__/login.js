@@ -27,6 +27,15 @@ describe('Logging in', () => {
     expect(response.body.profilePicture).toBe(null);
   });
 
+  test("Login injection attempt fails", async () => {
+    const response = await api
+      .post('/api/auth/login')
+      .send({username: {$ne: ''}, password: validAccount.password})
+      .expect(200);
+
+    expect(response.body.token).not.toBeDefined();
+  });
+
   test("Login failure with incorrect username", async () => {
     const response = await api
       .post('/api/auth/login')
@@ -34,6 +43,7 @@ describe('Logging in', () => {
       .send({username: 'invalidUsername', password: validAccount.password})
       .expect(200);
 
+    expect(response.body.token).not.toBeDefined();
     expect(response.body).toEqual({message: 'invalid username or password'});
   });
 
@@ -44,6 +54,7 @@ describe('Logging in', () => {
       .send({username: validAccount.username, password: '123'})
       .expect(200);
 
+      expect(response.body.token).not.toBeDefined();
       expect(response.body).toEqual({message: 'invalid username or password'});
   });
 
@@ -57,6 +68,7 @@ describe('Logging in', () => {
       .send({username: validAccount.username, password: validAccount.password})
       .expect(200);
 
+    expect(response.body.token).not.toBeDefined();
     expect(response.body).toEqual({message: 'email not verified'});
   });
 

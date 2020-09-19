@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
+const mongoSanitize = require('express-mongo-sanitize');
 const cors = require('cors');
 
 const Logger = require('./utils/logger');
@@ -41,6 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(mongoSanitize());
 
 // Public routes
 app.use('/api/auth', authRouter);
