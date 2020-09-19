@@ -28,6 +28,8 @@ describe('Logging in', () => {
   });
 
   test("Login injection attempt fails", async () => {
+    // Database is emptied beforeAll and only one user is created,
+    // so this is valid
     const response = await api
       .post('/api/auth/login')
       .send({username: {$ne: ''}, password: validAccount.password})

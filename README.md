@@ -7,18 +7,18 @@
 - [ ] **No errors, warnings or logs**
 
 ## Security
-- [ ] Password encryption
-- [ ] XSS prevention
+- [x] Password encryption
+- [x] XSS prevention => React
 - [ ] Form data must be validated
 - [ ] Disallow uploading unwanted content
-- [ ] SQL injection prevention
+- [x] SQL injection prevention => NoSQL/Mongoose + sanitiser
 
 ## User
 - [ ] Registration with email, username, first & last names, password (reasonably complex)
-- [ ] Authentication must be possible via 42 API and another Oauth API
-- [ ] 'Forgot password' feature (email)
-- [ ] Ability to log out in 1 click from any page
-- [ ] Ability so choose a preferred language (English by default)
+- [x] Authentication must be possible via 42 API and another Oauth API
+- [x] 'Forgot password' feature (email)
+- [x] Ability to log out in 1 click from any page
+- [ ] Ability to choose a preferred language (English by default)
 - [ ] Modify email address, **profile picture** and other info
 - [ ] Browse the profiles of other users (email must not be shown)
 

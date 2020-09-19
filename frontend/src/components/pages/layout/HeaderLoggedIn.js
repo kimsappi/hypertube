@@ -34,7 +34,7 @@ const HeaderLoggedIn = () =>
 				<ul>
 					<li>
 						<Link to={"/profile/" + globalState.id} alt='Profile' title='Profile'>
-							<ProfilePicture url={globalState.profileImage} className='profile-image' />
+							<ProfilePicture url={globalState.ProfilePicture} className='profile-image' />
 						</Link>
 					</li>
 					<li>

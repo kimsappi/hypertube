@@ -35,7 +35,12 @@ const validateRegistrationData = data => {
     return false;
 };
 
+const validatePhoto = photo => {
+  return photo.size < 6000000 && photo.mimetype.substr(0, 6) === 'image/';
+};
+
 module.exports = {
   validateRegistrationData,
-  validatePassword
+  validatePassword,
+  validatePhoto
 };

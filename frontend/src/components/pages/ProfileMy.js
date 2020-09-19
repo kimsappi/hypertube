@@ -29,6 +29,22 @@ const ProfileMy = () =>
 			}
 		})();
 	}, []);
+
+	const handlePicUpload = async event => {
+		try {
+			const formData = new FormData();
+			formData.append('photo', event.target.files[0]);
+			const res = await axios.post(config.SERVER_URL + "/api/users/profilePic", formData, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('HiveflixToken')}`,
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+			console.log(res);
+		} catch(err) {
+			console.warn(err);
+		}
+	};
 	
 	return (
 		<Fragment>
@@ -41,6 +57,8 @@ const ProfileMy = () =>
 				<div>
 					Data
 				</div>
+				<input type='file' onChange={handlePicUpload}
+				/>
 			</div>
 		)}
 		</Fragment>

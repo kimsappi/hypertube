@@ -1,8 +1,13 @@
 const express = require('express');
-const router = express.Router();
+const multer = require('multer');
+
 const User = require('../models/User');
 const { authenticationMiddleware } = require('../utils/auth');
 const Logger = require('../utils/logger');
+const profilePicService = require('../services/profilePic');
+
+const router = express.Router();
+const upload = multer({dest: __dirname + '/../../tmp/'});
 
 router.get('/me/', authenticationMiddleware, async (req, res) => {
 	console.log(req.user.id);
@@ -33,5 +38,24 @@ router.get('/:id', authenticationMiddleware, async (req, res) => {
 		res.json(null);
 	}
 })
+
+router.post(
+	'/profilePic',
+	authenticationMiddleware,
+	upload.single('photo'),
+	async (req, res, next) => {
+	try {
+		if (!req.file)
+			throw 'No file uploaded';
+		const result = profilePicService.uploadPhoto(req.file, req.user);
+		if (result)
+			return res.status(200).json(true);
+		else
+			throw 'Failed to upload image';
+	} catch(err) {
+		Logger.error(err);
+		return res.status(400).json(false);
+	}
+});
 
 module.exports = router;
