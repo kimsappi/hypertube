@@ -13,24 +13,19 @@ const Comments = ({ movieId }) =>
 	const [comments, setComments] = useState([]);
 	const [commentInput, setCommentInput] = useState("");
 	const [errorCommentInput, setErrorCommentInput] = useState("");
-	const [loading, setLoading] = useState(true);
 	const [render, setRender] = useState(false);
 
 	useEffect(() =>
 	{
-		setLoading(true);
-
 		(async () =>
 		{
 			try
 			{
-				// // fetch all comments of given movie
+				// fetch all comments of a movie
 				var response = await axios.get(
 					config.SERVER_URL + `/api/comments/getComments/${movieId}`);
 
 				setComments(response);
-
-				setLoading(false);
 			}
 			catch (err)
 			{
@@ -42,7 +37,7 @@ const Comments = ({ movieId }) =>
 	const changeCommentInput = (event) =>
 	{
 		if (event.target.value.length > 1000)
-			setErrorCommentInput("a single comment cannot exceed 1000 characters");
+			setErrorCommentInput("comment cannot exceed 1000 characters");
 		else
 		{
 			setErrorCommentInput("");
@@ -60,8 +55,7 @@ const Comments = ({ movieId }) =>
 			try
 			{
 				// Create new comment
-				var token = localStorage.getItem("HiveflixToken");
-				var response = await axios.post(
+				await axios.post(
 					config.SERVER_URL + '/api/comments/new/',
 					{
 						username: globalState.username,
@@ -69,14 +63,9 @@ const Comments = ({ movieId }) =>
 						movie: movieId,
 						comment: commentInput
 					},
-					{headers: {authorization: 'Bearer ' + token}}
+					globalState.config
 				)
-				console.log("test1")
-				console.log(response);
 				setRender(!render);
-				console.log("test2")
-				console.log("message sent");
-
 				setCommentInput("");
 			}
 			catch (err)
@@ -104,8 +93,7 @@ const Comments = ({ movieId }) =>
 			</form>
 			<hr className="my-2"></hr>
 			<h4 className="mb-2">Comments</h4>
-			{loading && <div className="loading"></div>}
-			{!loading && comments.data.comments.map ((comment, index) => (
+			{typeof comments.data !== "undefined" && comments.data.comments.map ((comment, index) => (
 				<CommentItem
 					sender={comment.username}
 					id={comment.id}
