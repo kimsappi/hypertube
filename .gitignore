@@ -25,3 +25,4 @@ yarn-error.log*
 /backend/public
 
 config.secret.json
+.vsls.json

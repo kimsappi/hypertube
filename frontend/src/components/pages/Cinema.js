@@ -13,7 +13,7 @@ const Cinema = () =>
 	const [totalSeconds, setTotalSeconds] = useState(0);
 	
 	const [movieReady, setMovieReady] = useState(false);
-	const [timeLeft, setTimeLeft] = useState(10);
+	const [timeLeft, setTimeLeft] = useState(15);
 
 	const token = localStorage.getItem("HiveflixToken");
 
@@ -54,8 +54,6 @@ const Cinema = () =>
 		}
 	}, 1000);
 
-	console.log(config.SERVER_URL + folder + "/subs." + language + ".vtt");
-
 	return (
 		<Fragment>
 			<div className="flex-center p-4 bg-black100">
@@ -63,7 +61,7 @@ const Cinema = () =>
 					playing={true}
 					controls={true}
 					pip={false}
-					// onReady={onReady}
+					// onReady={onPlay}
 					onReady={() => setMovieReady(true)}
 					onStart={onStart}
 					onPlay={onPlay}
@@ -71,7 +69,7 @@ const Cinema = () =>
 					onDuration={onDuration}
 					onPause={onPause}
 					onBuffer={onBuffer}
-					// onBufferEnd={onBufferEnd}
+					onBufferEnd={onPlay}
 					onEnded={onEnded}
 					onError={onError}
 					url={config.SERVER_URL + "/api/cinema/" + magnet + "/" + token + "/" + imdb_id}
