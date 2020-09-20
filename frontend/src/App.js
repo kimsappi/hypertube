@@ -50,7 +50,19 @@ const App = () =>
 		switch (action.type)
 		{
 			case "login":
-				return initialState;
+				draft.loggedIn = true;
+				draft.id = localStorage.getItem("HiveflixId");
+				draft.token = localStorage.getItem("HiveflixToken");
+				draft.username = localStorage.getItem("HiveflixUsername");
+				draft.profilePicture = localStorage.getItem("HiveflixProfilePicture");
+				draft.config = {
+					headers: {
+						'authorization': "Bearer " + localStorage.getItem("HiveflixToken"),
+						"x-rapidapi-host": "imdb8.p.rapidapi.com",
+						"x-rapidapi-key": "e1d70abcdfmsh47c075d344167e6p12a880jsn7dcdcaa36c45"
+					},
+				};
+				return;
 			case "logout":
 				draft.loggedIn = false;
 				localStorage.removeItem("HiveflixId");
