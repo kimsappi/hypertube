@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import config from '../../config/config';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 
 const HiveLog = () => {
@@ -78,9 +78,9 @@ const HiveLog = () => {
             
         }
         
-        if (action == 'login')
+        if (action === 'login')
             loginApi(code);
-        else if (action == 'register')
+        else if (action === 'register')
             registerApi(code);
 
         
@@ -129,7 +129,7 @@ const HiveLog = () => {
             {response && action == 'register' ? 
             <>
                 <h1>Hello {response.data.firstName}!</h1>
-                {response.data.usernameTaken == true ? <h4>Your username was taken, so we added some numbers to the end..</h4> : ''}
+                {response.data.usernameTaken === true ? <h4>Your username was taken, so we added some numbers to the end..</h4> : ''}
                 <h3>Your username is: {response.data.login}</h3>
                 <h4>Set your password:</h4>
                 <form onSubmit={registerSubmit}>

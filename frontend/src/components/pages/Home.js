@@ -1,22 +1,36 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import axios from "axios";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ScrollMenu from 'react-horizontal-scrolling-menu';
 import clone from 'clone';
 
 // components
 import Trailer from "./Trailer";
 import MovieItem from "./MovieItem";
 
+// to-do
+// remove duplicates from search results
+
 const Home = () =>
 {
 	const [movies, setMovies] = useState([]);
+
+	const [moviesSearch, setMoviesSearch] = useState([]);
+
+	const [moviesByGenre1, setMoviesByGenre1] = useState([]);
+	const [moviesByGenre2, setMoviesByGenre2] = useState([]);
+	const [moviesByGenre3, setMoviesByGenre3] = useState([]);
+
 	const [trailerMovieId, setTrailerMovieId] = useState(null);
 	const [searchInput, setSearchInput] = useState("");
-	const [currentPage, setCurrentPage] = useState(1);
+	const [searchHasResults, setSearchHasResults] = useState(false);
+	const [currentPage, setCurrentPage] = useState(2);
 	const [hasMoreItems, setHasMoreItems] = useState(true);
 
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [loadingMovies, setLoadingMovies] = useState(true);
+
+	const isInitialMount = useRef(true);
 
 	useEffect(() =>
 	{
@@ -28,27 +42,68 @@ const Home = () =>
 		{
 			try
 			{
-				// fetch all movies
-				const response = await axios.get("https://yts.mx/api/v2/list_movies.json?page=0&limit=20&sort_by=year&minimum_rating=6", { cancelToken: source.token });
-
-				console.log("movies", response.data.data);
-
-				setCurrentPage(2);
+				// fetch 10 latest movies
+				let response = await axios.get(
+					"https://yts.mx/api/v2/list_movies.json?page=0&sort_by=year&minimum_rating=5&limit=10",
+					{ cancelToken: source.token }
+				);
+				console.log("10 latest movies", response.data.data);
 
 				setMovies(response.data.data);
 
-				// pick a random video for trailer
-				while (1)
+				// pick a random video out of the 10 for trailer
+				while (response.data.data.movies.length > 0)
 				{
-					let randomNumber = Math.floor(Math.random() * 20);
+					let randomIndex = Math.round(Math.random() * 9);
 
-					if (response.data.data.movies[randomNumber].yt_trailer_code !== "")
+					if (response.data.data.movies[randomIndex].yt_trailer_code !== "")
 					{
-						setTrailerMovieId(response.data.data.movies[randomNumber].id)
+						setTrailerMovieId(response.data.data.movies[randomIndex].id)
 						setLoadingPage(false);
 						break;
 					}
+					else
+						response.data.data.movies.splice(randomIndex, 1);
 				}
+
+				// all movie genres from IMDb
+				let genres = ["Action", "Adventure", "Animation", "Biography", "Comedy",
+				"Crime", "Documentary", "Drama", "Family", "Fantasy", "Film Noir",
+				"History", "Horror", "Music", "Musical", "Mystery", "Romance",
+				"Sci-Fi", "Short Film", "Sport", "Superhero", "Thriller",
+				"War", "Western" ];
+
+				// tahan vois ehka tehda loopin ja hakea vaikka 5 kategoriaa
+
+				// fetch 10 most recent movies from random genre 1
+				let randomIndex = Math.round(Math.random() * (genres.length - 1));
+				response = await axios.get(
+					"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[randomIndex],
+					{ cancelToken: source.token }
+				);
+				response.data.data.genre = genres.splice(randomIndex, 1);
+				console.log("genre 1", genres[randomIndex], response.data.data);
+				setMoviesByGenre1(response.data.data);
+
+				// fetch 10 most recent movies from random genre 2
+				randomIndex = Math.round(Math.random() * (genres.length - 1));
+				response = await axios.get(
+					"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[randomIndex],
+					{ cancelToken: source.token }
+				);
+				response.data.data.genre = genres.splice(randomIndex, 1);
+				console.log("genre 2", genres[randomIndex], response.data.data);
+				setMoviesByGenre2(response.data.data);
+
+				// fetch 10 most recent movies from random genre 3
+				randomIndex = Math.round(Math.random() * (genres.length - 1));
+				response = await axios.get(
+					"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[randomIndex],
+					{ cancelToken: source.token }
+				);
+				response.data.data.genre = genres.splice(randomIndex, 1);
+				console.log("genre 3", genres[randomIndex], response.data.data);
+				setMoviesByGenre3(response.data.data);
 			}
 			catch (err)
 			{
@@ -65,38 +120,57 @@ const Home = () =>
 	// this prevents performing a new search each time the users inputs one characters
 	useEffect(() =>
 	{
-		setLoadingMovies(true);
-		console.log("useEffect 2");
-		const CancelToken = axios.CancelToken;
-		const source = CancelToken.source();
-
-		let timer = setTimeout(() =>
+		if (isInitialMount.current)
 		{
-			(async () =>
-			{
-				try
-				{
-					// fetch all movies
-					const response = await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=6&query_term=" + searchInput, { cancelToken: source.token });
-
-					setMovies(response.data.data);
-					setHasMoreItems(true);
-					setLoadingMovies(false);
-				}
-				catch (err)
-				{
-					if (axios.isCancel(err))
-						source.cancel();
-					console.error(err.message);
-				}
-			})();
-		}, 700);
-		return () =>
-		{
-			clearTimeout(timer);
-			source.cancel();
+			isInitialMount.current = false;
+			setLoadingMovies(false);
 		}
-	  }, [searchInput]);
+		else
+		{
+			setLoadingMovies(true);
+			console.log("useEffect 2");
+			const CancelToken = axios.CancelToken;
+			const source = CancelToken.source();
+
+			let timer = setTimeout(() =>
+			{
+				(async () =>
+				{
+					try
+					{
+						// fetch all movies
+						const response = await axios.get(
+							"https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=5&limit=10&query_term=" + searchInput,
+							{ cancelToken: source.token }
+						);
+
+						console.log("response.data.data.movie_count", response.data.data.movie_count);
+
+						if (response.data.data.movie_count > 0)
+							setSearchHasResults(true);
+						else
+							setSearchHasResults(false);
+
+						setMoviesSearch(response.data.data);
+						// setHasMoreItems(true);
+						setLoadingMovies(false);
+					}
+					catch (err)
+					{
+						if (axios.isCancel(err))
+							source.cancel();
+						console.error(err.message);
+					}
+				})();
+			}, 700);
+			return () =>
+			{
+				clearTimeout(timer);
+				setCurrentPage(2);
+				source.cancel();
+			}
+		}
+	}, [searchInput]);
 
 	// update state when user inputs text in search bar
 	const changeSearchInput = event => setSearchInput(event.target.value);
@@ -104,16 +178,16 @@ const Home = () =>
 	// load more results for Infinite Scroller
 	const handleLoadMore = async () =>
 	{
-		let moviesCopy = clone(movies);
-		const response = await axios.get(`https://yts.mx/api/v2/list_movies.json?page=${currentPage}&limit=20&sort_by=year&minimum_rating=6`);
+		let moviesCopy = clone(moviesSearch);
+		const response = await axios.get(`https://yts.mx/api/v2/list_movies.json?page=${currentPage}&limit=10&sort_by=year&minimum_rating=5`);
 
 		for (let i = 0; response.data.data.movies[i]; i++)
 			moviesCopy.movies.push(response.data.data.movies[i]);
 
-		setMovies(moviesCopy);
+		setMoviesSearch(moviesCopy);
 		setCurrentPage(currentPage + 1);
 
-		console.log("moviesCopy.movies", moviesCopy.movies);
+		console.log("moviesSearch", moviesCopy);
 
 		// check if has more items
 		if (moviesCopy.movies.length < moviesCopy.movie_count)
@@ -124,15 +198,8 @@ const Home = () =>
 
 	return (
 		<Fragment> 
-			{loadingPage && <div className="loading"></div>}
-			{!loadingPage && (
+			{loadingPage ? <div className="loading"></div> :
 				<Fragment>
-					<InfiniteScroll
-						dataLength={typeof movies.movies !== "undefined" ? movies.movies.length : 0}
-						next={handleLoadMore}
-						hasMore={hasMoreItems}
-						loader={<div className="loading"></div>}
-					>
 					<Trailer id={trailerMovieId} />
 					<input
 						className="search-bar"
@@ -143,21 +210,74 @@ const Home = () =>
 						value={searchInput}
 						onChange={changeSearchInput}
 					/>
-					{loadingMovies && <div className="loading"></div>}
-					{!loadingMovies && (
-						<div className="movie-items-container">
-							{movies.movie_count > 0 && movies.movies.map (movie => (
-								<Fragment key={movie.imdb_code}>
-									<MovieItem movie={movie}/>
+					{loadingMovies ? <div className="loading"></div> :
+						<Fragment>
+							{searchHasResults && searchInput !== "" ?
+								<InfiniteScroll
+									dataLength={typeof moviesSearch.movies !== "undefined" ? moviesSearch.movies.length : 0}
+									next={handleLoadMore}
+									hasMore={hasMoreItems}
+									loader={<div className="loading"></div>}
+								>
+								{loadingMovies && <div className="loading"></div>}
+								{!loadingMovies && (
+									<Fragment>
+										<h2 className="center bg-black100 py-4 mt-5">{moviesSearch.movie_count} Results</h2>
+										<div className="movie-items-container">
+											{searchHasResults && moviesSearch.movies.map (movie => (
+												<Fragment key={movie.imdb_code}>
+													<MovieItem movie={movie}/>
+												</Fragment>
+												)
+											)}
+											{moviesSearch.movie_count === 0 && <h4>Oh snap, no results.</h4>}
+										</div>
+									</Fragment>
+								)}
+								</InfiniteScroll> :
+								<Fragment>
+									<h2 className="center bg-black100 py-4 mt-5">New Releases</h2>
+									<div className="movie-items-container">
+										{movies.movies && movies.movies.map (movie => (
+												<Fragment key={movie.imdb_code}>
+													<MovieItem movie={movie}/>
+												</Fragment>
+												)
+											)}
+									</div>
+									<h2 className="center bg-black100 py-4 mt-5">New in {moviesByGenre1.genre}</h2>
+									<div className="movie-items-container">
+										{moviesByGenre1.movies && moviesByGenre1.movies.map (movie => (
+												<Fragment key={movie.imdb_code}>
+													<MovieItem movie={movie}/>
+												</Fragment>
+												)
+											)}
+									</div>
+									<h2 className="center bg-black100 py-4 ">New in {moviesByGenre2.genre}</h2>
+									<div className="movie-items-container">
+										{moviesByGenre2.movies && moviesByGenre2.movies.map (movie => (
+												<Fragment key={movie.imdb_code}>
+													<MovieItem movie={movie}/>
+												</Fragment>
+												)
+											)}
+									</div>
+									<h2 className="center bg-black100 py-4 ">New in {moviesByGenre3.genre}</h2>
+									<div className="movie-items-container">
+										{moviesByGenre3.movies && moviesByGenre3.movies.map (movie => (
+												<Fragment key={movie.imdb_code}>
+													<MovieItem movie={movie}/>
+												</Fragment>
+												)
+											)}
+									</div>
 								</Fragment>
-								)
-							)}
-							{movies.movie_count === 0 && <h4>Oh snap, no results.</h4>}
-						</div>
-					)}
-					</InfiniteScroll>
+							}
+						</Fragment>
+					}
 				</Fragment>
-			)}
+			}
 		</Fragment>
 	)
 }

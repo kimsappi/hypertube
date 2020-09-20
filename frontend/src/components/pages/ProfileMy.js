@@ -14,7 +14,6 @@ const ProfileMy = () =>
 
 	const [errorCurrentPassword, setErrorCurrentPassword] = useState("");
 	const [errorNewPassword1, setErrorNewPassword1] = useState("");
-	const [errorNewPassword2, setErrorNewPassword2] = useState("");
 
 	const [userData, setUserData] = useState();
 	const [loading, setLoading] = useState(true);
@@ -160,7 +159,7 @@ const ProfileMy = () =>
 
 	const noErrors = () =>
 	{
-		if (errorCurrentPassword === "" && errorNewPassword1 === "" && errorNewPassword2 === "")
+		if (errorCurrentPassword === "" && errorNewPassword1 === "")
 			return true;
 		return false;
 	}
@@ -232,7 +231,6 @@ const ProfileMy = () =>
 										autoComplete="new-password"
 										onChange={handleNewPassword2}
 									/>
-									{errorNewPassword2 && <div className="small alert alert-error">{errorNewPassword2}</div>}
 								</td>															
 							</tr>
 							<tr>

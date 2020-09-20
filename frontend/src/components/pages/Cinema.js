@@ -69,7 +69,7 @@ const Cinema = () =>
 					onBufferEnd={onPlay}
 					onEnded={onEnded}
 					onError={onError}
-					url={config.SERVER_URL + "/api/cinema/" + magnet + "/" + token + "/" + imdb_id}
+					url={config.SERVER_URL + "/api/cinema/" + magnet + "/" + token}
 					config={
 						{ file: {
 							attributes: {

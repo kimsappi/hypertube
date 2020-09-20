@@ -1,20 +1,19 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import config from '../../config/config';
 
-import StateContext from "../../context/StateContext";
+// import StateContext from "../../context/StateContext";
 
 const ProfileOther = ({ id }) =>
 {
-	const globalState = useContext(StateContext);
+// 	const globalState = useContext(StateContext);
 	const [userData, setUserData] = useState();
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() =>
 	{
-		setLoading(true);
+		// setLoading(true);
 		(async () =>
 		{
 			try

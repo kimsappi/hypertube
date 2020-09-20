@@ -93,7 +93,7 @@ const App = () =>
 
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
 						<Route exact path='/mylist' component={initialState.loggedIn ? MyList : Login} />
-						<Route exact path='/cinema/:magnet/:imdb_id/:title_long' component={initialState.loggedIn ? Cinema : Login} />
+						<Route exact path='/cinema/:magnet' component={initialState.loggedIn ? Cinema : Login} />
 						<Route exact path='/profile/:id' component={initialState.loggedIn ? Profile : Login} />
 						<Route exact path='/login' component={initialState.loggedIn ? Home : Login} />
 						<Route exact path='/register' component={initialState.loggedIn ? Home : Register} />
@@ -101,7 +101,7 @@ const App = () =>
 						<Route exact path='/newpassword/:id' component={NewPassword}/>
 						<Route exact path='/forgotpassword' component={ForgotPassword}/>
 						<Route exact path='/confirmemail/:key' component={ConfirmEmail}/>
-						<Route exact path='/home' component={Home} />
+						<Route exact path='/home' component={initialState.loggedIn ? Home : Login} />
 						<Redirect to='/home' />
 					</Switch>
 				</BrowserRouter>

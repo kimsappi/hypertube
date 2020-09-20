@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect} from "react";
 import Axios from "axios";
 import config from '../../config/config';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 
 const GithubLog = () => {
@@ -83,7 +83,7 @@ const GithubLog = () => {
         githubLog()
 
 
-    }, [])
+    }, [action, code])
 
 
     

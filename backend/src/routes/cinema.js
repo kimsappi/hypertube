@@ -12,14 +12,13 @@ const Movie = require('../models/Movie');
 
 const router = express.Router();
 
-router.get('/:magnet/:token/:imdb_id', async (req, res, next) => {
+router.get('/:magnet/:token', async (req, res, next) => {
   try {
-    const { magnet, token, imdb_id } = req.params;
+    const { magnet, token } = req.params;
 	// const token = req.query.token;
 	
 	console.log("magnet", magnet);
 	console.log("token", token);
-	console.log("imdb_id", imdb_id);
 
     const user = await verifyToken(token);
     if (!user)

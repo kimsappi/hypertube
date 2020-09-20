@@ -36,7 +36,7 @@ const Trailer = ({ id }) =>
 					<div className="movie-title-huge">{movie.title_english}</div>
 					{movie.yt_trailer_code !== "" ?
 						<ReactPlayer
-							width="100vw"
+							width="100%"
 							playing={true}
 							loop={true}
 							// light={true}
