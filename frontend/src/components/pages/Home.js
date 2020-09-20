@@ -68,12 +68,19 @@ const Home = () =>
 
 				// all movie genres from IMDb
 				let genres = ["Action", "Adventure", "Animation", "Biography", "Comedy",
-				"Crime", "Documentary", "Drama", "Family", "Fantasy", "Film Noir",
+				"Crime", "Documentary", "Drama", "Family", "Fantasy",
 				"History", "Horror", "Music", "Musical", "Mystery", "Romance",
-				"Sci-Fi", "Short Film", "Sport", "Superhero", "Thriller",
+				"Sci-Fi", "Sport", "Thriller",
 				"War", "Western" ];
+				// let genres = ["Action", "Adventure", "Animation", "Biography", "Comedy",
+				// "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film Noir",
+				// "History", "Horror", "Music", "Musical", "Mystery", "Romance",
+				// "Sci-Fi", "Short Film", "Sport", "Superhero", "Thriller",
+				// "War", "Western" ];
 
 				// tahan vois ehka tehda loopin ja hakea vaikka 5 kategoriaa
+
+				console.log(genres);
 
 				// fetch 10 most recent movies from random genre 1
 				let randomIndex = Math.round(Math.random() * (genres.length - 1));
@@ -85,6 +92,8 @@ const Home = () =>
 				console.log("genre 1", genres[randomIndex], response.data.data);
 				setMoviesByGenre1(response.data.data);
 
+				console.log(genres);
+
 				// fetch 10 most recent movies from random genre 2
 				randomIndex = Math.round(Math.random() * (genres.length - 1));
 				response = await axios.get(
@@ -95,6 +104,8 @@ const Home = () =>
 				console.log("genre 2", genres[randomIndex], response.data.data);
 				setMoviesByGenre2(response.data.data);
 
+				console.log(genres);
+
 				// fetch 10 most recent movies from random genre 3
 				randomIndex = Math.round(Math.random() * (genres.length - 1));
 				response = await axios.get(
@@ -104,6 +115,8 @@ const Home = () =>
 				response.data.data.genre = genres.splice(randomIndex, 1);
 				console.log("genre 3", genres[randomIndex], response.data.data);
 				setMoviesByGenre3(response.data.data);
+
+				console.log(genres);
 			}
 			catch (err)
 			{
