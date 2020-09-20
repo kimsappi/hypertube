@@ -150,9 +150,6 @@ const ProfileMy = () =>
 				// missing endpoint
 				await axios.put(config.SERVER_URL + "/api/users/" + globalState.id, userData, globalState.config);
 
-				setCurrentPassword("");
-				setNewPassword1("");
-				setNewPassword2("");
 			}
 			catch (err)
 			{
