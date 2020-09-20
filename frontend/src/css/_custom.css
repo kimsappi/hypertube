@@ -184,7 +184,7 @@ hr {
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
-	margin: 1rem 2rem 4rem 2rem;
+	margin: 2rem 2rem 4rem 2rem;
 }
 
 .movie-item {
@@ -247,7 +247,8 @@ hr {
 
 .search-bar {
 	max-width: 500px;
+	min-width: 230px;
 	width: 50%;
-	margin: 1.5rem auto 0 auto;
+	margin: 2rem auto 0 auto;
 	text-align:	center;
 }

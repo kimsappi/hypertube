@@ -7,7 +7,7 @@ const MovieItem = ({ movie }) =>
 
 	return (
 		<div className="movie-item" onMouseEnter={() => setMouseHover(true)} onMouseLeave={() => setMouseHover(false)}>
-			<Link to={`/movie/${movie.id}`}>
+			<Link to={"/movie/" + movie.id}>
 				<img className="movie-image-medium" src={movie.medium_cover_image} alt='Profile'/>
 			</Link>
 			{/* {mouseHover && (

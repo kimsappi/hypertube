@@ -11,19 +11,14 @@ const HeaderLoggedIn = () =>
 	const globalState = useContext(StateContext);
 	const globalDispatch = useContext(DispatchContext);
 
-	const handleLogout = async () =>
-	{
-		globalDispatch({ type: "logout" });
-	}
-
 	return (
 		<header>
 			<nav className='navbar'>
 				<ul>
 					<li>
-					<NavLink className="navbar-title" to='/home' alt='Home' title='Home'>
-						HIVEFLIX
-					</NavLink>
+						<NavLink className="navbar-title" to='/home' alt='Home' title='Home'>
+							HIVEFLIX
+						</NavLink>
 					</li>
 					<li>
 						<NavLink to='/mylist' alt='My List' title='My List'>
@@ -34,11 +29,11 @@ const HeaderLoggedIn = () =>
 				<ul>
 					<li>
 						<Link to={"/profile/" + globalState.id} alt='Profile' title='Profile'>
-							<ProfilePicture url={globalState.ProfilePicture} className='profile-image' />
+							<ProfilePicture url={globalState.profilePicture} className='profile-image' />
 						</Link>
 					</li>
 					<li>
-						<Link to='#' alt='Logout' title='Logout' onClick={handleLogout}>
+						<Link to='#' alt='Logout' title='Logout' onClick={() => globalDispatch({ type: "logout" })}>
 							<i className="fas fa-share-square color-primary"></i> Log Out
 						</Link>
 					</li>

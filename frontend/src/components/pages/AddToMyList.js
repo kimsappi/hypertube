@@ -8,7 +8,7 @@ const AddToMyList = ({id}) => {
     console.log(id)
     try {
       const token = localStorage.getItem("HiveflixToken");
-      const res = await axios.post(config.SERVER_URL + '/api/myList',
+      await axios.post(config.SERVER_URL + '/api/myList',
         {id},
         {headers: {authorization: 'Bearer ' + token}});
       console.log('added to My List');

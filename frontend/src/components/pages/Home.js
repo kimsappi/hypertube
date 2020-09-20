@@ -115,13 +115,12 @@ const Home = () =>
 
 		console.log("moviesCopy.movies", moviesCopy.movies);
 
-		// has more items
+		// check if has more items
 		if (moviesCopy.movies.length < moviesCopy.movie_count)
 			setHasMoreItems(true);
 		else
 			setHasMoreItems(false);
 	};
-
 
 	return (
 		<Fragment> 

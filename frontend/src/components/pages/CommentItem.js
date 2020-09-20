@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from 'react-router-dom';
 // import axios from "axios";
 
@@ -8,11 +8,11 @@ import image from "../../images/profile.jpg";
 const CommentItem = ({ sender, id, message, created }) =>
 {
 	// const [senderName, setSender] = useState([]);
-	const [loading, setLoading] = useState(true);
+	// const [loading, setLoading] = useState(true);
 
 	useEffect(() =>
 	{
-		setLoading(true);
+		// setLoading(true);
 
 		(async () =>
 		{
@@ -26,7 +26,7 @@ const CommentItem = ({ sender, id, message, created }) =>
 				//console.log("user.data", response.data);
 				
 				//setSender(response.data);
-				setLoading(false);
+				// setLoading(false);
 			}
 			catch (err)
 			{

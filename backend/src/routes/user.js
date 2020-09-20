@@ -15,7 +15,7 @@ router.get('/me/', authenticationMiddleware, async (req, res) => {
 
 	try {
 		const userData = await User.findById(req.user.id,
-			'username firstname lastname email password profilePicture'
+			'username firstName lastName email password profilePicture'
 		);
 		res.json(userData);
 	} catch(err) {
@@ -44,6 +44,7 @@ router.post(
 	authenticationMiddleware,
 	upload.single('photo'),
 	async (req, res, next) => {
+		console.log(req.file);
 	try {
 		if (!req.file)
 			throw 'No file uploaded';
@@ -57,5 +58,11 @@ router.post(
 		return res.status(400).json(false);
 	}
 });
+
+// router.put('/:id', authenticationMiddleware, async (req, res) => {
+// 	console.log(req.userData);
+// 	console.log("update my user data");
+
+// })
 
 module.exports = router;

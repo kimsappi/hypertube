@@ -83,10 +83,16 @@ const confirmEmail = async req => {
   return user;
 };
 
+// const updateUserData = async (id, data) => {
+// 	if (!validatePassword(data.password))
+//     	throw 'invalid password';
+// };
+
 module.exports = {
   register,
   login,
   resetPassword,
   setNewPassword,
-  confirmEmail
+  confirmEmail,
+//   updateUserData
 }
