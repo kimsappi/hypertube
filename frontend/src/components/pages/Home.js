@@ -5,7 +5,7 @@ import ScrollMenu from 'react-horizontal-scrolling-menu';
 import clone from 'clone';
 
 // components
-import Trailer from "./Trailer";
+import HomeTrailer from "./HomeTrailer";
 import MovieItem from "./MovieItem";
 
 // to-do
@@ -153,7 +153,7 @@ const Home = () =>
 					{
 						// fetch all movies
 						const response = await axios.get(
-							"https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=5&limit=10&query_term=" + searchInput,
+							"https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=5&limit=20&query_term=" + searchInput,
 							{ cancelToken: source.token }
 						);
 
@@ -165,7 +165,7 @@ const Home = () =>
 							setSearchHasResults(false);
 
 						setMoviesSearch(response.data.data);
-						// setHasMoreItems(true);
+						setHasMoreItems(true);
 						setLoadingMovies(false);
 					}
 					catch (err)
@@ -192,7 +192,9 @@ const Home = () =>
 	const handleLoadMore = async () =>
 	{
 		let moviesCopy = clone(moviesSearch);
-		const response = await axios.get(`https://yts.mx/api/v2/list_movies.json?page=${currentPage}&limit=10&sort_by=year&minimum_rating=5`);
+		const response = await axios.get(
+			`https://yts.mx/api/v2/list_movies.json?page=${currentPage}&limit=20&sort_by=year&minimum_rating=5&query_term=${searchInput}`
+		);
 
 		for (let i = 0; response.data.data.movies[i]; i++)
 			moviesCopy.movies.push(response.data.data.movies[i]);
@@ -213,7 +215,7 @@ const Home = () =>
 		<Fragment> 
 			{loadingPage ? <div className="loading"></div> :
 				<Fragment>
-					<Trailer id={trailerMovieId} />
+					<HomeTrailer id={trailerMovieId} />
 					<input
 						className="search-bar"
 						type="text"

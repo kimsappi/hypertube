@@ -1,45 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from 'react-router-dom';
-// import axios from "axios";
 
-// import config from '../../config/config';
 import image from "../../images/profile.jpg";
+import ProfilePicture from "../ProfilePicture";
 
 const CommentItem = ({ sender, id, message, created }) =>
 {
-	// const [senderName, setSender] = useState([]);
-	// const [loading, setLoading] = useState(true);
-
-	useEffect(() =>
-	{
-		// setLoading(true);
-
-		(async () =>
-		{
-			try
-			{
-				// fetch profile image of user who posted the comment
-
-				// Backissa ei ole viela routea talle..
-				//let response = await axios.get(`${config.SERVER_URL}/api/users/${sender}`);
-
-				//console.log("user.data", response.data);
-				
-				//setSender(response.data);
-				// setLoading(false);
-			}
-			catch (err)
-			{
-				console.error(err.message);
-			}
-		})()
-	}, [sender]);
-
+	console.log(sender);
 	return (
 			<div className="comment-item">
 				<div>
 					<Link to={"/"}>
-						<img className="comment-img" src={image} alt='Profile'/>
+						{/* needs a fix */}
+						<ProfilePicture url={sender + ".jpeg"} className='comment-img' />
 					</Link>
 				</div>
 				<table>

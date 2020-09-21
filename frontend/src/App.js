@@ -8,8 +8,8 @@ import StateContext from './context/StateContext';
 import DispatchContext from './context/DispatchContext';
 
 // Components
-import HeaderLoggedIn from './components/pages/layout/HeaderLoggedIn';
-import HeaderLoggedOut from './components/pages/layout/HeaderLoggedOut';
+import HeaderLoggedIn from './components/layout/HeaderLoggedIn';
+import HeaderLoggedOut from './components/layout/HeaderLoggedOut';
 import Home from './components/pages/Home';
 import MyList from './components/pages/MyList';
 import Login from './components/pages/Login';
@@ -23,7 +23,6 @@ import ForgotPassword from './components/pages/ForgotPassword';
 import ConfirmEmail from './components/pages/ConfirmEmail';
 import HiveLog from './components/pages/hiveLog';
 import GithubLog from './components/pages/GithubLog';
-
 
 // CSS
 import './css/main.css';

@@ -3,7 +3,7 @@ import axios from "axios";
 
 import config from '../../config/config';
 
-import timeSinceCreated from "../../functions/timeSinceCreated";
+import timeSinceCreated from "../../utils/timeSinceCreated";
 import StateContext from "../../context/StateContext";
 import CommentItem from './CommentItem';
 

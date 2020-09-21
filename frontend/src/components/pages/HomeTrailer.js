@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import ReactPlayer from "react-player";
 import axios from "axios";
 
-const Trailer = ({ id }) =>
+const HomeTrailer = ({ id }) =>
 {
 	const [movie, setMovie] = useState("");
 	const [isLoading, setIsLoading] = useState(true);
@@ -52,4 +52,4 @@ const Trailer = ({ id }) =>
 	)
 }
 
-export default Trailer;
+export default HomeTrailer;

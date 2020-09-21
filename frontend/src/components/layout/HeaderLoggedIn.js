@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-import StateContext from '../../../context/StateContext';
-import DispatchContext from '../../../context/DispatchContext';
+import StateContext from '../../context/StateContext';
+import DispatchContext from '../../context/DispatchContext';
 
-import ProfilePicture from '../../ProfilePicture';
+import ProfilePicture from '../ProfilePicture';
 
 const HeaderLoggedIn = () =>
 {
