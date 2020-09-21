@@ -12,7 +12,7 @@ const CommentItem = ({ sender, id, message, created }) =>
 				<div>
 					<Link to={"/"}>
 						{/* needs a fix */}
-						<ProfilePicture url={sender + ".jpeg"} className='comment-img' />
+						<ProfilePicture url={id + ".jpeg"} className='comment-image' />
 					</Link>
 				</div>
 				<table>

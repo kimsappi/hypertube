@@ -111,15 +111,15 @@ hr {
 	border: 5px solid #000;
 }
 
-.comment-img {
+.comment-image {
 	float: left;
-	/* vertical-align: middle; */
-	width: 40px;
-	height: 40px;
-	/* object-fit: cover; */
+	width: 48px;
+	height: 48px;
+	object-fit: cover;
 	border: 3px solid #ddd;
-	border-radius: 50%;
+	border-radius: 100%;
 	margin: 5px 10px 0 5px;
+	vertical-align: middle;
 }
 
 .comment-username {
