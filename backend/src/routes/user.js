@@ -44,18 +44,19 @@ router.post(
 	authenticationMiddleware,
 	upload.single('photo'),
 	async (req, res, next) => {
-		console.log(req.file);
+
 	try {
 		if (!req.file)
 			throw 'No file uploaded';
-		const result = profilePicService.uploadPhoto(req.file, req.user);
+		const result = await profilePicService.uploadPhoto(req.file, req.user);
+
 		if (result)
-			return res.status(200).json(true);
+			return res.status(200).json(result);
 		else
 			throw 'Failed to upload image';
 	} catch(err) {
 		Logger.error(err);
-		return res.status(400).json(false);
+		return res.status(400).json(null);
 	}
 });
 

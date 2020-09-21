@@ -5,12 +5,14 @@ import clone from "clone";
 import config from '../../config/config';
 
 import StateContext from "../../context/StateContext";
+import DispatchContext from '../../context/DispatchContext';
 
 import ProfilePicture from "../ProfilePicture";
 
 const ProfileMy = () =>
 {
 	const globalState = useContext(StateContext);
+	const globalDispatch = useContext(DispatchContext);
 
 	const [errorCurrentPassword, setErrorCurrentPassword] = useState("");
 	const [errorNewPassword1, setErrorNewPassword1] = useState("");
@@ -49,7 +51,8 @@ const ProfileMy = () =>
 			// 	}
 			// }
 			);
-			// globalDispatch({ type: "changeProfilePicture", value: globalState.id + ".jpeg" });
+			console.log('asd' + res.data);
+			globalDispatch({ type: "changeProfilePicture", value: res.data });
 			console.log("res", res);
 		} catch(err) {
 			console.warn(err);
