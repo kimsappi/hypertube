@@ -42,5 +42,7 @@ const validatePhoto = photo => {
 module.exports = {
   validateRegistrationData,
   validatePassword,
-  validatePhoto
+  validatePhoto,
+  validateName,
+  validateEmail
 };

@@ -78,7 +78,7 @@ router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
 			});
 	} catch(err) {
 		Logger.error(err);
-		return res.status(400);
+		return res.status(400).json(null);
 	}
 });
 

@@ -17,8 +17,12 @@ const ProfileMy = () =>
 	const [errorCurrentPassword, setErrorCurrentPassword] = useState("");
 	const [errorNewPassword1, setErrorNewPassword1] = useState("");
 
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
+
 	const [userData, setUserData] = useState();
 	const [loading, setLoading] = useState(true);
+	const [originalUserData, setOriginalUserData] = useState();
 
 	useEffect(() =>
 	{
@@ -29,6 +33,7 @@ const ProfileMy = () =>
 				const response = await axios.get(config.SERVER_URL + "/api/users/me/", globalState.config);
 
 				setUserData(response.data);
+				setOriginalUserData(response.data);
 				console.log(response.data);
 				setLoading(false);
 			}
@@ -133,17 +138,20 @@ const ProfileMy = () =>
 	const handleSubmit = async (event) =>
 	{
 		event.preventDefault();
+		setError('');
+		setSuccess('');
 
 		if (userData.currentPassword !== "" && noErrors())
 		{
 			try
 			{
 				await axios.patch(config.SERVER_URL + "/api/users/" + globalState.id, userData, globalState.config);
-
+				setSuccess("Profile updated successfully.");
 			}
 			catch (err)
 			{
-				console.error(err.message);
+				setError("Something went wrong.");
+				setUserData(originalUserData);
 			}
 		}
 	}
@@ -168,6 +176,8 @@ const ProfileMy = () =>
 					/>
 				</div>
 
+				{error && <div className='alert alert-error'>{error}</div>}
+				{success && <div className='alert alert-success'>{success}</div>}
 				<form onSubmit={handleSubmit}>
 					<table className="profile-table m-a mb-4">
 						<tbody>
