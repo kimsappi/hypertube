@@ -3,10 +3,15 @@ const User = require('../models/User');
 const { hashPassword } = require('../utils/auth');
 
 const updateUserData = async data => {
-
+  const result = await User.findByIdAndUpdate(data.id, data, {
+    new: true,
+    lean: true
+  });
+  return result || null;
 };
 
 const omitExtraData = data => ({
+  id: data._id,
   firstName: data.firstName,
   lastName: data.lastName,
   email: data.email

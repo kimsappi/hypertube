@@ -68,16 +68,18 @@ router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
 	console.log(req.body);
 	try {
 		const result = await userService.updateProfile(req.body);
+		if (!result)
+			throw 'Something went wrong';
+		else
+			return res.status(200).json({
+				email: result.email,
+				firstName: result.firstName,
+				lastName: result.lastName
+			});
 	} catch(err) {
 		Logger.error(err);
 		return res.status(400);
 	}
 });
-
-// router.put('/:id', authenticationMiddleware, async (req, res) => {
-// 	console.log(req.userData);
-// 	console.log("update my user data");
-
-// })
 
 module.exports = router;

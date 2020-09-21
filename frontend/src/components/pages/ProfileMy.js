@@ -138,7 +138,6 @@ const ProfileMy = () =>
 		{
 			try
 			{
-				// missing endpoint
 				await axios.patch(config.SERVER_URL + "/api/users/" + globalState.id, userData, globalState.config);
 
 			}
