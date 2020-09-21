@@ -17,7 +17,14 @@ router.post('/register', async (req, res, next) => {
       return res.status(201).json(true);
   } catch(err) {
     Logger.error(err);
-    return res.status(400).json(false);
+    if (!err || !err.errors)
+      return res.status(200).json({message: 'invalid data'});
+    else if (err.errors.username)
+      return res.status(200).json({message: 'username already exists'});
+    else if (err.errors.email)
+      return res.status(200).json({message: 'email used by another account'});
+    else
+      return res.status(200).json({message: 'invalid data'});
   }
 });
 

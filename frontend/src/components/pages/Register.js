@@ -118,6 +118,8 @@ const Register = () =>
 					password: password1
 				});
 
+				console.log(response)
+
 				// joku parempi tapa?
 				if (response.data.message === "username already exists")
 					setErrorUsername("username already exists");

@@ -1,5 +1,5 @@
 const validateUsername = username => 
-  /^\w{4,16}$/.test(username);
+  /^\w{3,20}$/.test(username);
 
 const validatePassword = password => {
   if (password.length < 7)
