@@ -17,15 +17,15 @@ const Home = () =>
 
 	const [moviesSearch, setMoviesSearch] = useState([]);
 
-	const [moviesByGenre1, setMoviesByGenre1] = useState([]);
-	const [moviesByGenre2, setMoviesByGenre2] = useState([]);
-	const [moviesByGenre3, setMoviesByGenre3] = useState([]);
+	const [moviesByGenre, setMoviesByGenre] = useState([]);
 
 	const [trailerMovieId, setTrailerMovieId] = useState(null);
 	const [searchInput, setSearchInput] = useState("");
 	const [searchHasResults, setSearchHasResults] = useState(false);
 	const [currentPage, setCurrentPage] = useState(2);
+	const [currentPageGenre, setCurrentPageGenre] = useState(0);
 	const [hasMoreItems, setHasMoreItems] = useState(true);
+	const [hasMoreGenres, setHasMoreGenres] = useState(true);
 
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [loadingMovies, setLoadingMovies] = useState(true);
@@ -42,14 +42,9 @@ const Home = () =>
 		{
 			try
 			{
-				// test
-				// const test = await axios.get(
-				// 	"http://www.omdbapi.com/?i=" + "tt3896198" + "&apikey=cc729f53"
-				// );
-				// console.log("test", test);
 				// fetch 10 latest movies
 				let response = await axios.get(
-					"https://yts.mx/api/v2/list_movies.json?page=0&sort_by=year&minimum_rating=5&limit=10",
+					"https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=5&limit=10",
 					{ cancelToken: source.token }
 				);
 				console.log("10 latest movies", response.data.data);
@@ -64,49 +59,13 @@ const Home = () =>
 					if (response.data.data.movies[randomIndex].yt_trailer_code !== "")
 					{
 						setTrailerMovieId(response.data.data.movies[randomIndex].id)
-						setLoadingPage(false);
 						break;
 					}
 					else
 						response.data.data.movies.splice(randomIndex, 1);
 				}
 
-				// all movie genres from IMDb
-				let genres = ["Action", "Adventure", "Animation", "Biography", "Comedy",
-				"Crime", "Documentary", "Drama", "Family", "Fantasy",
-				"History", "Horror", "Music", "Musical", "Mystery", "Romance",
-				"Sci-Fi", "Sport", "Thriller",
-				"War", "Western" ];
-
-				// fetch 10 most recent movies from random genre 1
-				let randomIndex = Math.round(Math.random() * (genres.length - 1));
-				response = await axios.get(
-					"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[randomIndex],
-					{ cancelToken: source.token }
-				);
-				response.data.data.genre = genres.splice(randomIndex, 1);
-				console.log("genre 1", genres[randomIndex], response.data.data);
-				setMoviesByGenre1(response.data.data);
-
-				// fetch 10 most recent movies from random genre 2
-				randomIndex = Math.round(Math.random() * (genres.length - 1));
-				response = await axios.get(
-					"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[randomIndex],
-					{ cancelToken: source.token }
-				);
-				response.data.data.genre = genres.splice(randomIndex, 1);
-				console.log("genre 2", genres[randomIndex], response.data.data);
-				setMoviesByGenre2(response.data.data);
-
-				// fetch 10 most recent movies from random genre 3
-				randomIndex = Math.round(Math.random() * (genres.length - 1));
-				response = await axios.get(
-					"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[randomIndex],
-					{ cancelToken: source.token }
-				);
-				response.data.data.genre = genres.splice(randomIndex, 1);
-				console.log("genre 3", genres[randomIndex], response.data.data);
-				setMoviesByGenre3(response.data.data);
+				setLoadingPage(false);
 			}
 			catch (err)
 			{
@@ -206,6 +165,33 @@ const Home = () =>
 			setHasMoreItems(false);
 	};
 
+	const getMoviesByGenre = async () =>
+	{
+		console.log("currentPageGenre", currentPageGenre);
+
+		let genres = ["Action", "Animation", "Adventure", "Biography", "Comedy",
+		"Crime", "Documentary", "Drama", "Family", "Fantasy",
+		"History", "Horror", "Music", "Musical", "Mystery", "Romance",
+		"Sci-Fi", "Sport", "Thriller",
+		"War", "Western"];
+
+		const response = await axios.get(
+			"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[currentPageGenre]
+		);
+		let tmp = clone(moviesByGenre);
+		tmp[currentPageGenre] = response.data.data.movies;
+		tmp[currentPageGenre].genre = genres[currentPageGenre];
+		console.log("tmp", tmp, "Get movies page: ", currentPageGenre);
+		setCurrentPageGenre(currentPageGenre + 1);
+		setMoviesByGenre(tmp);
+
+		// check if has more items
+		if (currentPageGenre < 20)
+				setHasMoreGenres(true);
+			else
+				setHasMoreGenres(false);
+	}
+
 	return (
 		<Fragment> 
 			{loadingPage ? <div className="loading"></div> :
@@ -245,7 +231,12 @@ const Home = () =>
 									</Fragment>
 								)}
 								</InfiniteScroll> :
-								<Fragment>
+								<InfiniteScroll
+									dataLength={currentPageGenre}
+									next={getMoviesByGenre}
+									hasMore={hasMoreGenres}
+									loader={<div className="loading"></div>}
+								>
 									<h2 className="center bg-black100 py-4 mt-5">New Releases</h2>
 									<div className="movie-items-container">
 										{movies.movies && movies.movies.map (movie => (
@@ -255,34 +246,20 @@ const Home = () =>
 												)
 											)}
 									</div>
-									<h2 className="center bg-black100 py-4 mt-5">New in {moviesByGenre1.genre}</h2>
-									<div className="movie-items-container">
-										{moviesByGenre1.movies && moviesByGenre1.movies.map (movie => (
-												<Fragment key={movie.imdb_code}>
-													<MovieItem movie={movie}/>
-												</Fragment>
-												)
-											)}
-									</div>
-									<h2 className="center bg-black100 py-4 ">New in {moviesByGenre2.genre}</h2>
-									<div className="movie-items-container">
-										{moviesByGenre2.movies && moviesByGenre2.movies.map (movie => (
-												<Fragment key={movie.imdb_code}>
-													<MovieItem movie={movie}/>
-												</Fragment>
-												)
-											)}
-									</div>
-									<h2 className="center bg-black100 py-4 ">New in {moviesByGenre3.genre}</h2>
-									<div className="movie-items-container">
-										{moviesByGenre3.movies && moviesByGenre3.movies.map (movie => (
-												<Fragment key={movie.imdb_code}>
-													<MovieItem movie={movie}/>
-												</Fragment>
-												)
-											)}
-									</div>
-								</Fragment>
+									{moviesByGenre && moviesByGenre.map (movieByGenre => (
+										<Fragment>
+											<h2 className="center bg-black100 py-4 mt-5">New in {movieByGenre.genre}</h2>
+											<div className="movie-items-container">
+												{movieByGenre && movieByGenre.map (movie => (
+														<Fragment key={movie.imdb_code}>
+															<MovieItem movie={movie}/>
+														</Fragment>
+														)
+													)}
+											</div>
+										</Fragment>
+									))}
+								</InfiniteScroll>
 							}
 						</Fragment>
 					}

@@ -31,8 +31,6 @@ const MovieItem = ({ movie }) =>
 						const response = await axios.get(
 							"http://www.omdbapi.com/?i=" + movie.imdb_code + "&apikey=cc729f53"
 						);
-
-						console.log(response.data);
 						
 						setMovieData(response.data);
 					}
