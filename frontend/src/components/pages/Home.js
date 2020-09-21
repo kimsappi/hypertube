@@ -42,6 +42,11 @@ const Home = () =>
 		{
 			try
 			{
+				// test
+				// const test = await axios.get(
+				// 	"http://www.omdbapi.com/?i=" + "tt3896198" + "&apikey=cc729f53"
+				// );
+				// console.log("test", test);
 				// fetch 10 latest movies
 				let response = await axios.get(
 					"https://yts.mx/api/v2/list_movies.json?page=0&sort_by=year&minimum_rating=5&limit=10",
@@ -72,15 +77,6 @@ const Home = () =>
 				"History", "Horror", "Music", "Musical", "Mystery", "Romance",
 				"Sci-Fi", "Sport", "Thriller",
 				"War", "Western" ];
-				// let genres = ["Action", "Adventure", "Animation", "Biography", "Comedy",
-				// "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film Noir",
-				// "History", "Horror", "Music", "Musical", "Mystery", "Romance",
-				// "Sci-Fi", "Short Film", "Sport", "Superhero", "Thriller",
-				// "War", "Western" ];
-
-				// tahan vois ehka tehda loopin ja hakea vaikka 5 kategoriaa
-
-				console.log(genres);
 
 				// fetch 10 most recent movies from random genre 1
 				let randomIndex = Math.round(Math.random() * (genres.length - 1));
@@ -92,8 +88,6 @@ const Home = () =>
 				console.log("genre 1", genres[randomIndex], response.data.data);
 				setMoviesByGenre1(response.data.data);
 
-				console.log(genres);
-
 				// fetch 10 most recent movies from random genre 2
 				randomIndex = Math.round(Math.random() * (genres.length - 1));
 				response = await axios.get(
@@ -104,8 +98,6 @@ const Home = () =>
 				console.log("genre 2", genres[randomIndex], response.data.data);
 				setMoviesByGenre2(response.data.data);
 
-				console.log(genres);
-
 				// fetch 10 most recent movies from random genre 3
 				randomIndex = Math.round(Math.random() * (genres.length - 1));
 				response = await axios.get(
@@ -115,8 +107,6 @@ const Home = () =>
 				response.data.data.genre = genres.splice(randomIndex, 1);
 				console.log("genre 3", genres[randomIndex], response.data.data);
 				setMoviesByGenre3(response.data.data);
-
-				console.log(genres);
 			}
 			catch (err)
 			{
@@ -165,7 +155,12 @@ const Home = () =>
 							setSearchHasResults(false);
 
 						setMoviesSearch(response.data.data);
-						setHasMoreItems(true);
+
+						if (response.data.data.movie_count > 20)
+							setHasMoreItems(true);
+						else
+							setHasMoreItems(false);
+
 						setLoadingMovies(false);
 					}
 					catch (err)

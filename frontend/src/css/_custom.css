@@ -188,17 +188,33 @@ hr {
 }
 
 .movie-item {
+	width: 230px;
+	height: 345px;
 	border: 3px solid #000;
-	transition: transform .4s;
+	transition: transform .3s;
 	margin: 2px;
 	box-shadow: 0 0 5px #000;
-	line-height : 0;
+	/* line-height: 0; */
+	color: #fff;
 }
+
 .movie-item:hover {
+	z-index: 2;
 	transform: scale(1.25);
-	border: 3px solid #fff;
-	box-shadow: 0 0 10px #aaa;
-	position: sticky;
+	border: 3px solid #ffc107;
+	/* box-shadow: 0 0 10px #aaa; */
+	/* position: sticky; */
+}
+
+.test {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+	width: 99%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
 }
 
 /* REGISTER / SIGN IN FORM
@@ -251,4 +267,30 @@ hr {
 	width: 50%;
 	margin: 2rem auto 0 auto;
 	text-align:	center;
+}
+
+#overlay {
+	position: fixed; /* Sit on top of the page content */
+	/* display: none; Hidden by default */
+	width: 100%; /* Full width (cover the whole page) */
+	height: 100%; /* Full height (cover the whole page) */
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+	z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+	cursor: pointer; /* Add a pointer on hover */
+  }
+
+.imdb-logo {
+	width: 58px;
+	height: 29px;
+}
+
+.ratings {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
 }
