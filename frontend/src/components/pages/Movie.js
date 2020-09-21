@@ -59,7 +59,7 @@ const Movie = () =>
 								loop={true}
 								volume={1}
 								muted={true}
-								controls={false}
+								controls={true}
 								url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=10"}
 							/>}
 							<div className="p-5">

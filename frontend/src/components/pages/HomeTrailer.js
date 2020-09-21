@@ -43,7 +43,7 @@ const HomeTrailer = ({ id }) =>
 							// playIcon={''}
 							volume={0}
 							controls={false}
-							url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=10"}
+							url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=7"}
 						/> :
 					<p className="center color-black70">Oh snap, no trailer found.</p>}
 				</div>

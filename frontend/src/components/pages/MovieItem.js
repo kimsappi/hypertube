@@ -72,9 +72,9 @@ const MovieItem = ({ movie }) =>
 									height="120px"
 									playing={true}
 									loop={true}
-									volume={0}
+									// volume={0}
 									controls={false}
-									url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=10"}
+									url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=7"}
 									config={{
 										youtube: {
 										  playerVars: { modestbranding: 1 }

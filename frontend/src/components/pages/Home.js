@@ -218,7 +218,7 @@ const Home = () =>
 								{loadingMovies && <div className="loading"></div>}
 								{!loadingMovies && (
 									<Fragment>
-										<h2 className="center bg-black100 py-4 mt-5">{moviesSearch.movie_count} Results</h2>
+										<h2 className="center bg-black100 py-4 mt-4">{moviesSearch.movie_count} Results</h2>
 										<div className="movie-items-container">
 											{searchHasResults && moviesSearch.movies.map (movie => (
 												<Fragment key={movie.imdb_code}>
@@ -237,7 +237,7 @@ const Home = () =>
 									hasMore={hasMoreGenres}
 									loader={<div className="loading"></div>}
 								>
-									<h2 className="center bg-black100 py-4 mt-5">New Releases</h2>
+									<h2 className="center bg-black100 py-4 mt-4">New Releases</h2>
 									<div className="movie-items-container">
 										{movies.movies && movies.movies.map (movie => (
 												<Fragment key={movie.imdb_code}>

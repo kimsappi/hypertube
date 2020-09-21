@@ -56,6 +56,8 @@ const Cinema = () =>
 		<Fragment>
 			<div className="flex-center p-4 bg-black100">
 				<ReactPlayer
+					width="100%"
+					height="500px"
 					playing={true}
 					controls={true}
 					pip={false}
