@@ -5,6 +5,7 @@ const User = require('../models/User');
 const { authenticationMiddleware } = require('../utils/auth');
 const Logger = require('../utils/logger');
 const profilePicService = require('../services/profilePic');
+const userService = require('../services/user');
 
 const router = express.Router();
 const upload = multer({dest: __dirname + '/../../tmp/'});
@@ -57,6 +58,19 @@ router.post(
 	} catch(err) {
 		Logger.error(err);
 		return res.status(400).json(null);
+	}
+});
+
+router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
+	// User is trying to change someone else's data
+	if (req.user.id !== req.body._id)
+		return res.status(401);
+	console.log(req.body);
+	try {
+		const result = await userService.updateProfile(req.body);
+	} catch(err) {
+		Logger.error(err);
+		return res.status(400);
 	}
 });
 

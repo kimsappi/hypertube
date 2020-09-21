@@ -43,20 +43,9 @@ const ProfileMy = () =>
 		try {
 			const formData = new FormData();
 			formData.append('photo', event.target.files[0]);
-			const res = await axios.post(config.SERVER_URL + "/api/users/profilePic", formData, globalState.config
-			// {
-			// 	headers: {
-			// 		Authorization: `Bearer ${localStorage.getItem('HiveflixToken')}`,
-			// 		'Content-Type': 'multipart/form-data'
-			// 	}
-			// }
-			);
-			console.log('asd' + res.data);
+			const res = await axios.post(config.SERVER_URL + "/api/users/profilePic", formData, globalState.config);
 			globalDispatch({ type: "changeProfilePicture", value: res.data });
-			console.log("res", res);
-		} catch(err) {
-			console.warn(err);
-		}
+		} catch(err) {}
 	};
 
 
@@ -150,7 +139,7 @@ const ProfileMy = () =>
 			try
 			{
 				// missing endpoint
-				await axios.put(config.SERVER_URL + "/api/users/" + globalState.id, userData, globalState.config);
+				await axios.patch(config.SERVER_URL + "/api/users/" + globalState.id, userData, globalState.config);
 
 			}
 			catch (err)
