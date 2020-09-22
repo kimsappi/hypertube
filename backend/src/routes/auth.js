@@ -39,6 +39,7 @@ router.post('/login', async (req, res, next) => {
       token,
       profilePicture: data.profilePicture || null,
 	  id: data.id,
+	  mute: data.mute,
 	  watched: data.watched,
 	  myList: data.myList
     });
