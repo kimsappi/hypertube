@@ -264,7 +264,7 @@ hr {
 .search-bar {
 	max-width: 500px;
 	min-width: 230px;
-	width: 50%;
+	width: 80%;
 	margin: 1rem auto 0 auto;
 	text-align:	center;
 }
