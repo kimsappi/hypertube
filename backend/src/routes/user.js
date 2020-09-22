@@ -11,9 +11,6 @@ const router = express.Router();
 const upload = multer({dest: __dirname + '/../../tmp/'});
 
 router.get('/me/', authenticationMiddleware, async (req, res) => {
-	console.log(req.user.id);
-	console.log("get my user data");
-
 	try {
 		const userData = await User.findById(req.user.id,
 			'username firstName lastName email password profilePicture'
@@ -26,9 +23,6 @@ router.get('/me/', authenticationMiddleware, async (req, res) => {
 })
 
 router.get('/:id', authenticationMiddleware, async (req, res) => {
-	console.log(req.params.id);
-	console.log("get other user data");
-
 	try {
 		const userData = await User.findById(req.params.id,
 		'username firstName lastName profilePicture'
@@ -61,11 +55,12 @@ router.post(
 	}
 });
 
+// Changing your own profile data
 router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
 	// User is trying to change someone else's data
 	if (req.user.id !== req.body._id)
 		return res.status(401);
-	console.log(req.body);
+
 	try {
 		const result = await userService.updateProfile(req.body);
 		if (!result)
@@ -78,7 +73,17 @@ router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
 			});
 	} catch(err) {
 		Logger.error(err);
-		return res.status(400).json(null);
+		const statusReturns =
+			['incorrect formatting', 'password', 'email conflict', 'username conflict',
+			'password mismatch'];
+		if (statusReturns.includes(err)) {
+			const error = new Error('Change request unsuccessful');
+			error.statusCode = 400;
+			error.status = err;
+			next(error);
+		}
+		else
+			return res.status(400).json(null);
 	}
 });
 

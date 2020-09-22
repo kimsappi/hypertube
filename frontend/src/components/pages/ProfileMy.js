@@ -83,6 +83,8 @@ const ProfileMy = () =>
 		}
 		if (tmp.newPassword1.length > 40)
 			setErrorNewPassword1("Password cannot be longer than 40 characters");
+		else if (!tmp.newPassword1.length)
+			setErrorNewPassword1("");
 		else if (tmp.newPassword1.length < 3)
 			setErrorNewPassword1("Password must be at least 3 characters long");
 		else if (!foundLetter)
@@ -141,19 +143,49 @@ const ProfileMy = () =>
 		setError('');
 		setSuccess('');
 
-		if (userData.currentPassword !== "" && noErrors())
+		if (userData.currentPassword && noErrors())
 		{
 			try
 			{
 				await axios.patch(config.SERVER_URL + "/api/users/" + globalState.id, userData, globalState.config);
 				setSuccess("Profile updated successfully.");
+				const {
+					newPassword1,
+					newPassword2,
+					currentPassword,
+					...userDataSansPasswords
+				} = userData;
+				setOriginalUserData(userDataSansPasswords);
+				setUserData(userDataSansPasswords)
 			}
 			catch (err)
 			{
-				setError("Something went wrong.");
+				if (err.response && err.response.data && err.response.data.message) {
+					switch (err.response.data.message) {
+						case 'password':
+							setError("Current password incorrect");
+							break;
+						case 'password mismatch':
+							setError("New passwords don't match");
+							break;
+						case 'incorrect formatting':
+							setError("Data is incorrectly formatted");
+							break;
+						case 'email conflict':
+							setError("Email is already in use by another account");
+							break;
+						case 'username conflict':
+							setError("Username is already in use by another account");
+							break;
+						default:
+							setError("Something went wrong");
+					}
+				}
 				setUserData(originalUserData);
 			}
 		}
+		else if (!userData.currentPassword)
+			setError("Please enter your current password.");
 	}
 
 	const noErrors = () =>
@@ -186,7 +218,7 @@ const ProfileMy = () =>
 									Email:
 								</td>
 								<td>
-									<input type="email" value={userData.email} onChange={handleEmail}/>
+									<input type="email" value={userData.email || ''} onChange={handleEmail} required={true}/>
 								</td>															
 							</tr>
 							<tr>
@@ -194,7 +226,7 @@ const ProfileMy = () =>
 									First Name:
 								</td>
 								<td>
-									<input type="text" value={userData.firstName} onChange={handleFirstName}/>
+									<input type="text" value={userData.firstName} onChange={handleFirstName} required={true}/>
 								</td>															
 							</tr>
 							<tr>
@@ -202,7 +234,7 @@ const ProfileMy = () =>
 									Last Name:
 								</td>
 								<td>
-									<input type="text" value={userData.lastName} onChange={handleLastName}/>
+									<input type="text" value={userData.lastName} onChange={handleLastName} required={true}/>
 								</td>															
 							</tr>
 							<tr>
@@ -212,7 +244,7 @@ const ProfileMy = () =>
 								<td>
 									<input
 										type="password"
-										value={userData.newPassword1}
+										value={userData.newPassword1 || ''}
 										placeholder="Enter new password"
 										autoComplete="new-password"
 										onChange={handleNewPassword1}
@@ -227,7 +259,7 @@ const ProfileMy = () =>
 								<td>
 									<input
 										type="password"
-										value={userData.newPassword2}
+										value={userData.newPassword2 || ''}
 										placeholder="Confirm new password"
 										autoComplete="new-password"
 										onChange={handleNewPassword2}
@@ -241,7 +273,7 @@ const ProfileMy = () =>
 								<td>
 									<input
 										type="password"
-										value={userData.currentPassword}
+										value={userData.currentPassword || ''}
 										placeholder="Enter current password"
 										autoComplete="current-password"
 										onChange={handleCurrentPassword}

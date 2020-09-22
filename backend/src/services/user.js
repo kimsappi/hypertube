@@ -6,11 +6,15 @@ const { validatePassword,
   validateEmail } = require('../utils/validateUserData');
 
 const updateUserData = async data => {
-  const result = await User.findByIdAndUpdate(data.id, data, {
-    new: true,
-    lean: true
-  });
-  return result || null;
+  try {
+    const result = await User.findByIdAndUpdate(data.id, data, {
+      new: true,
+      lean: true
+    });
+    return result || null;
+  } catch(err) {
+    throw 'email conflict';
+  }
 };
 
 const omitExtraData = data => ({
@@ -23,13 +27,18 @@ const omitExtraData = data => ({
 const updateProfile = async data => {
   if (!validateName(data.firstName) || !validateName(data.lastName) ||
     !validateEmail(data.email))
-    throw 'Data is incorrectly formatted';
+    throw 'incorrect formatting';
+  
+  const oldData = await User.findById(data._id, 'password');
+  console.log('passwordcomp:', await bcrypt.compare(oldData.password, data.currentPassword))
+  if (!await bcrypt.compare(data.currentPassword, oldData.password))
+    throw 'password';
+
   // User is trying to change their password
   if (data.newPassword1 && validatePassword(data.newPassword1)) {
-    const oldData = await User.findById(data._id, 'password');
-    if (!await bcrypt.compare(oldData.password, data.currentPassword) ||
-      data.newPassword1 !== data.newPassword2)
-      return null;
+    console.log(`password result ${passwordCorrect}`);
+    if (data.newPassword1 !== data.newPassword2)
+      throw 'password mismatch';
     else
       return updateUserData({
         ...omitExtraData(data),
