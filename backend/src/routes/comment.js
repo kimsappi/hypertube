@@ -10,36 +10,27 @@ router.post('/new', authenticationMiddleware, async (req, res) => {
     if (!req.body.username)
         res.json(null);
 
-    console.log("COMMENT: ", req.body);
-
-    console.log("HEADERTOKEN: ", req.headers.authorization);
-
     const comment = new Comment({
         movieId: req.body.movie,
-        username: req.body.username,
-        id: req.body.id,
+        user: req.user.id,
         comment: req.body.comment,
         time: Date()
       });
 
     const result = await comment.save();
     
-    console.log(result);
     res.json(result);
 });
 
 router.get('/getComments/:id', async (req, res) => {
-    console.log(req.params.id);
-    console.log("get comments");
 
     const comments = await Comment.find({
         movieId: req.params.id
     },
-    '_id username id comment time'
-	)
-	.sort({ time: -1 })
-
-    // console.log("COMMENTS :", comments);
+    '_id user comment time'
+    )
+    .populate('user', '_id profilePicture username')
+    .sort({ time: -1 })
 
     res.json({comments: comments});
 })

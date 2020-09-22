@@ -95,8 +95,7 @@ const Comments = ({ movieId }) =>
 			<h4 className="mb-2">Comments</h4>
 			{typeof comments.data !== "undefined" && comments.data.comments.map ((comment, index) => (
 				<CommentItem
-					sender={comment.username}
-					id={comment.id}
+					sender={comment.user}
 					message={comment.comment}
 					created={timeSinceCreated(comment.time)}
 					key={comment._id}

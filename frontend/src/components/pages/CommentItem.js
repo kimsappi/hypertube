@@ -1,26 +1,23 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 
-import image from "../../images/profile.jpg";
 import ProfilePicture from "../ProfilePicture";
 
 const CommentItem = ({ sender, id, message, created }) =>
 {
-	console.log(sender);
 	return (
 			<div className="comment-item">
 				<div>
 					<Link to={"/"}>
-						{/* needs a fix */}
-						<ProfilePicture url={id + ".jpeg"} className='comment-image' />
+						<ProfilePicture url={sender.profilePicture} className='comment-image' />
 					</Link>
 				</div>
 				<table>
 					<tbody>
 						<tr>
 							<td className="flex-left">
-								<Link to={"/profile/" + id}>
-									<div className="comment-username mr-2">{sender}</div>
+								<Link to={"/profile/" + sender._id}>
+									<div className="comment-username mr-2">{sender.username}</div>
 								</Link>
 								<div className="comment-created">{created}</div>
 							</td>
