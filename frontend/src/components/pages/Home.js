@@ -7,7 +7,6 @@ import clone from 'clone';
 // components
 import HomeTrailer from "./HomeTrailer";
 import MovieItem from "./MovieItem";
-
 // to-do
 // remove duplicates from search results
 

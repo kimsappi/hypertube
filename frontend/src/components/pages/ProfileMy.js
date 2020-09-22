@@ -195,6 +195,11 @@ const ProfileMy = () =>
 		return false;
 	}
 
+	const handleMute = () =>
+	{
+		globalDispatch({ type: "toggleMute", value: !globalState.mute });
+	}
+
 	return (
 		<Fragment>
 			{loading && <div className="loading"></div>}
@@ -290,6 +295,8 @@ const ProfileMy = () =>
 						</tbody>
 					</table>
 				</form>
+				<input type="checkbox" onChange={handleMute}/>
+				
 			</Fragment>
 			)}
 		</Fragment>

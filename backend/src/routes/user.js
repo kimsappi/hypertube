@@ -25,7 +25,7 @@ router.get('/me/', authenticationMiddleware, async (req, res) => {
 router.get('/:id', authenticationMiddleware, async (req, res) => {
 	try {
 		const userData = await User.findById(req.params.id,
-		'username firstName lastName profilePicture'
+		'username firstName lastName profilePicture myList'
 		);
 		res.json(userData);
 	} catch(err) {

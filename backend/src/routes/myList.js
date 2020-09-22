@@ -33,15 +33,15 @@ router.get('/', authenticationMiddleware, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', authenticationMiddleware, async (req, res, next) => {
-	try
-	{
-		// ???
-	}
-	catch(err) {
-		console.error(err.message);
-	}
+// router.delete('/:id', authenticationMiddleware, async (req, res, next) => {
+// 	try
+// 	{
+// 		// ???
+// 	}
+// 	catch(err) {
+// 		console.error(err.message);
+// 	}
 
-})
+// })
 
 module.exports = router;

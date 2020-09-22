@@ -49,10 +49,24 @@ const Login = () =>
 
 				if (response.data.message === "login success")
 				{
+					console.log(response.data.watched, response.data.myList)
 					localStorage.setItem("HiveflixToken", response.data.token);
 					localStorage.setItem("HiveflixUsername", response.data.username);
 					localStorage.setItem("HiveflixProfilePicture", response.data.profilePicture);
 					localStorage.setItem("HiveflixId", response.data.id);
+					localStorage.setItem("HiveflixMute", response.data.mute);
+
+					if (typeof response.data.watched !== "undefined")
+						localStorage.setItem("HiveflixWatched", JSON.stringify(response.data.watched));
+					else
+						localStorage.setItem("HiveflixWatched", JSON.stringify([]))
+
+					console.log("response.data.myList", response.data.myList);
+					// if (typeof response.data.myList !== "undefined")
+						localStorage.setItem("HiveflixMyList", JSON.stringify(response.data.myList));
+					// else
+					// 	localStorage.setItem("HiveflixMyList", JSON.stringify([]));
+
 					globalDispatch({ type: "login" });
 				}
 				else if (response.data.message === "email not verified")

@@ -293,9 +293,9 @@ hr {
 	align-items: center;
 }
 
-.button-delete {
+/* .button-delete {
 	background-color: transparent;
 	padding: 0;
 	border: none;
 	color: var(--error);
-}
+} */
