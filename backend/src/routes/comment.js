@@ -22,6 +22,31 @@ router.post('/new', authenticationMiddleware, async (req, res) => {
     res.json(result);
 });
 
+router.post('/remove', authenticationMiddleware, async (req, res, next) => {
+    console.log("COMMENT ID: ", req.body.commentId);
+
+    try
+    {
+        const comment = await Comment.findById(req.body.commentId, 'user');
+
+        if (comment.user == req.user.id)
+        {
+            await Comment.findByIdAndRemove(req.body.commentId);
+            return res.status(200).send("Comment removed");
+        }
+        else
+        {
+            next(createError(301, "Not your comment"));
+            throw "faled to remove comment";
+        }    
+    }
+    catch(err)
+    {
+        console.log(err)
+    }
+
+})
+
 router.get('/getComments/:id', async (req, res) => {
 
     const comments = await Comment.find({

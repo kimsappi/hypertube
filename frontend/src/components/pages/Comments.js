@@ -101,7 +101,7 @@ const Comments = ({ movieId }) =>
 					commentId={comment._id}
 					index={index}
 					render={render}
-					setRender={setRender}
+					setRenderTrick={setRender}
 				/>
 			))}
 		</Fragment>
