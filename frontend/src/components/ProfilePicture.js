@@ -3,7 +3,7 @@ import defaultPicture from "../images/profile.jpg";
 import config from '../config/config'
 
 const ProfilePicture = ({url, className = '', style = {}}) => {
-  const src = url ? `${config.SERVER_URL}/${url}` : defaultPicture;
+  const src = url && url !== 'null' ? `${config.SERVER_URL}/${url}` : defaultPicture;
 
   return (
     <img
