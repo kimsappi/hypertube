@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import ProfilePicture from "../ProfilePicture";
 
-const CommentItem = ({ sender, id, message, created }) =>
+const CommentItem = ({ sender, message, created }) =>
 {
 	return (
 			<div className="comment-item">

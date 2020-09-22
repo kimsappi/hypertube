@@ -8,12 +8,15 @@ const router = express.Router();
 
 router.post('/', authenticationMiddleware, async (req, res, next) => {
   try {
-    const res = await movieListService.addToList(
+    const response = await movieListService.addToList(
       req.body.id,
       req.user,
       movieListService.Lists.myList
     );
-    return res.status(200).json(true);
+    if (response)
+      return res.status(200).json(true);
+    else
+      throw "Couldn't add to My List";
   } catch(err) {
     Logger.error(err);
     return res.status(400).json(false);
