@@ -49,15 +49,22 @@ router.post('/remove', authenticationMiddleware, async (req, res, next) => {
 
 router.get('/getComments/:id', async (req, res) => {
 
-    const comments = await Comment.find({
-        movieId: req.params.id
-    },
-    '_id user comment time'
-    )
-    .populate('user', '_id profilePicture username')
-    .sort({ time: -1 })
+    try
+    {
+        const comments = await Comment.find({
+            movieId: req.params.id
+        },
+        '_id user comment time'
+        )
+        .populate('user', '_id profilePicture username')
+        .sort({ time: -1 })
 
-    res.json({comments: comments});
+        return res.status(200).json({comments: comments});
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 })
 
 module.exports = router;
