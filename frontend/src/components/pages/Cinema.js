@@ -1,8 +1,9 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import ReactPlayer from "react-player";
 
 import config from '../../config/config';
+import axios from "axios";
 
 const Cinema = () =>
 {
@@ -11,6 +12,7 @@ const Cinema = () =>
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
 	const [totalSeconds, setTotalSeconds] = useState(0);
+	const [subTrack, setSubTrack] = useState(null);
 	
 	const [movieReady, setMovieReady] = useState(false);
 	const [timeLeft, setTimeLeft] = useState(15);
@@ -22,6 +24,23 @@ const Cinema = () =>
 		setSecondsPlayed(playedSeconds);
 		setSecondsLoaded(loadedSeconds);
 	}
+
+	const getSubs = async () => {
+		try {
+			const sub = await axios.get(config.SERVER_URL + "/" + "Top Gun (1986)/Top Gun (1986) 720p BrRip x264 YIFY.srt");
+			setSubTrack(sub.data);
+			return sub ? true : false;
+		} catch(err) {
+			return false;
+		}
+	}
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (getSubs())
+				clearInterval(interval);
+		}, 1000);
+	}, []);
 
 	const onDuration = (duration) => setTotalSeconds(duration);
 
@@ -78,7 +97,7 @@ const Cinema = () =>
 								crossOrigin: 'true'
 							},
 							tracks: [
-							{ kind: 'subtitles', src: subtitleUrl, srcLang: language, default: true } 
+								{ kind: 'subtitles', src: subTrack, srcLang: language, default: true }
 							]
 							}
 						}
