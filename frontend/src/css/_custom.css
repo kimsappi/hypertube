@@ -292,3 +292,10 @@ hr {
 	justify-content: center;
 	align-items: center;
 }
+
+.button-delete {
+	background-color: transparent;
+	padding: 0;
+	border: none;
+	color: var(--error);
+}

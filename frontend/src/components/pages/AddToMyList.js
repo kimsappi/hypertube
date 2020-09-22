@@ -18,7 +18,9 @@ const AddToMyList = ({id}) => {
   };
 
   return (
-    <button className='btn btn-primary' onClick={addItemToMyList}>Add to My List</button>
+	<div className="flex m-2">
+    	<button onClick={addItemToMyList}>Add to My List</button>
+	</div>
   );
 };
 

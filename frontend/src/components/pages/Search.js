@@ -43,8 +43,6 @@ const Search = () =>
 						{ cancelToken: source.token }
 					);
 
-					// https://yts.mx/api/v2/list_movies.json?page=1&genre=all&sort_by=year&minimum_rating=5&query_term=
-
 					setMovieCount(response.data.data.movie_count);
 					setMovies(response.data.data.movies);
 					setCurrentPage(2);
@@ -57,7 +55,7 @@ const Search = () =>
 					console.error(err.message);
 				}
 			})();
-		}, 700);
+		}, 500);
 		return () =>
 		{
 			clearTimeout(timer);
