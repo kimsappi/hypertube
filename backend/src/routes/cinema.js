@@ -12,14 +12,13 @@ const Movie = require('../models/Movie');
 
 const router = express.Router();
 
-router.get('/:magnet/:token/:imdb_id', async (req, res, next) => {
+router.get('/:magnet/:token', async (req, res, next) => {
   try {
-    const { magnet, token, imdb_id } = req.params;
+    const { magnet, token } = req.params;
 	// const token = req.query.token;
 	
 	console.log("magnet", magnet);
 	console.log("token", token);
-	console.log("imdb_id", imdb_id);
 
     const user = await verifyToken(token);
     if (!user)
@@ -50,21 +49,23 @@ router.get('/:magnet/:token/:imdb_id', async (req, res, next) => {
     }
 
     // start engine
-    const engine = torrentStream("magnet:?" + magnet, {
-      tmp: "../public",
-      path: "../public" ,
-      trackers: [
-        "udp://glotorrents.pw:6969/announce",
-        "udp://tracker.opentrackr.org:1337/announce",
-        "udp://torrent.gresille.org:80/announce",
-        "udp://tracker.openbittorrent.com:80",
-        "udp://tracker.coppersurfer.tk:6969",
-        "udp://tracker.leechers-paradise.org:6969",
-        "udp://p4p.arenabg.ch:1337",
-        "udp://tracker.internetwarriors.net:1337"
-      ],
-    });
 
+    
+      const engine = torrentStream("magnet:?" + magnet, {
+        tmp: "../public",
+        path: "../public" ,
+        trackers: [
+          "udp://glotorrents.pw:6969/announce",
+          "udp://tracker.opentrackr.org:1337/announce",
+          "udp://torrent.gresille.org:80/announce",
+          "udp://tracker.openbittorrent.com:80",
+          "udp://tracker.coppersurfer.tk:6969",
+          "udp://tracker.leechers-paradise.org:6969",
+          "udp://p4p.arenabg.ch:1337",
+          "udp://tracker.internetwarriors.net:1337"
+        ],
+      });
+    
     // emitted when the engine is ready to be used. 
     engine.on('ready', () =>
     {
@@ -101,13 +102,14 @@ router.get('/:magnet/:token/:imdb_id', async (req, res, next) => {
             'Content-Length': end - start + 1,
             'Content-Type': 'video/mp4'
           });
-
+          
           file.createReadStream({
             start: start,
             end: end
           })
-          .pipe(res);
-		}
+            .pipe(res);
+          
+		    }
         else
         {
 			file.createReadStream();

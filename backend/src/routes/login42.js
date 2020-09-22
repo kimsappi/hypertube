@@ -1,3 +1,4 @@
+var createError = require('http-errors');
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
@@ -89,7 +90,7 @@ router.post('/register', async (req, res, next) => {
         'https://api.intra.42.fr/v2/me',
         {headers: {Authorization: 'Bearer '+token}}
     )
-    console.log(responseTwo);
+    //console.log(responseTwo);
 
     if (responseTwo.status == 200)
     {
@@ -102,10 +103,7 @@ router.post('/register', async (req, res, next) => {
 
         if (email !== null)
         {
-            const err = new Error("You have already registered with 42. Use login.");
-            err.status = 'email taken';
-            err.statusCode = 400;
-            next(err);
+            next(createError(301, "You have already registered with 42. Use login."));
             throw "email taken";
         }
 
@@ -119,7 +117,7 @@ router.post('/register', async (req, res, next) => {
             },
             'username'
             );
-            console.log(res);
+            //console.log(res);
             if (res === null)
                 usernameTaken = false;
             else
@@ -144,11 +142,11 @@ router.post('/register', async (req, res, next) => {
         });
         console.log('test22');
         const result = await newUser.save();
-        console.log(result);
+        //console.log(result);
         
-        console.log(responseTwo.data.email);
-        console.log(responseTwo.data.first_name);
-        console.log(name);
+        // console.log(responseTwo.data.email);
+        // console.log(responseTwo.data.first_name);
+        // console.log(name);
 
         res.json({
             email: responseTwo.data.email,
@@ -165,10 +163,6 @@ router.post('/register', async (req, res, next) => {
     catch(err)
     {
         console.log(err);
-        console.log("ERROR!");
-        res.status(400);
-        res.statusMessage = err;
-        return res.send("test");
     }
     
 
