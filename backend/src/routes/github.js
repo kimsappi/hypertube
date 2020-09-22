@@ -1,3 +1,4 @@
+var createError = require('http-errors');
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
@@ -47,10 +48,7 @@ router.post('/register', async (req, res, next) => {
             
             if (findEmail !== null)
             {
-                const err = new Error("The email given is already taken by someone");
-                err.status = 'email taken';
-                err.statusCode = 400;
-                next(err);
+                next(createError(400, "The email given is already taken by someone"));
                 throw "email taken";
             }
             let takenValue = false;
@@ -100,10 +98,7 @@ router.post('/register', async (req, res, next) => {
     }
     else
     {
-        const err = new Error("invalid code");
-        err.status = 'invalid code';
-        err.statusCode = 400;
-        next(err);
+        next(createError(400, "invalid code"));
         throw "invalid code";
     }
 
@@ -159,10 +154,7 @@ router.post('/login', async (req, res, next) => {
                 }
                 else
                 {
-                    const err = new Error("Not registered");
-                    err.status = 'You are not registered. Register first. OR your email is not public in github';
-                    err.statusCode = 300;
-                    next(err);
+                    next(createError(301, "You are not registered yet. Please register first via github"));
                     throw "not registered";
                 }
             }
@@ -171,10 +163,7 @@ router.post('/login', async (req, res, next) => {
         }
         else
         {
-            const err = new Error("invalid code");
-            err.status = 'invalid code';
-            err.statusCode = 400;
-            next(err);
+            next(createError(400, "Invalid code"));
             throw "invalid code";
         }
     }

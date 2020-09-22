@@ -40,7 +40,7 @@ const HiveLog = () => {
                     localStorage.setItem("HiveflixUsername", axiosResponse.data.username);
                     localStorage.setItem("HiveflixProfilePicture", axiosResponse.data.profilePicture);
                     localStorage.setItem("HiveflixId", axiosResponse.data.id);
-                    history.push('/');
+                    window.location.replace("http://localhost:3000/home");
                 }
                 else
                     history.push('/');

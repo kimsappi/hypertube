@@ -64,7 +64,7 @@ const GithubLog = () => {
         {
             console.log(err.response);
             alert(err.response.data.message);
-            window.location.replace("http://localhost:3000/home");
+            //window.location.replace("http://localhost:3000/home");
         }
 
             

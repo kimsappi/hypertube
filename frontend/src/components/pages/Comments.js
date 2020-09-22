@@ -98,8 +98,10 @@ const Comments = ({ movieId }) =>
 					sender={comment.user}
 					message={comment.comment}
 					created={timeSinceCreated(comment.time)}
-					key={comment._id}
+					commentId={comment._id}
 					index={index}
+					render={render}
+					setRender={setRender}
 				/>
 			))}
 		</Fragment>
