@@ -38,9 +38,7 @@ const App = () =>
 		profilePicture: localStorage.getItem("HiveflixProfilePicture"),
 		config: {
 			headers: {
-				'authorization': "Bearer " + localStorage.getItem("HiveflixToken"),
-				"x-rapidapi-host": "imdb8.p.rapidapi.com",
-				"x-rapidapi-key": "e1d70abcdfmsh47c075d344167e6p12a880jsn7dcdcaa36c45"
+				'authorization': "Bearer " + localStorage.getItem("HiveflixToken")
 			},
 		},
 	};

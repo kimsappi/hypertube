@@ -192,14 +192,13 @@ hr {
 	height: 345px;
 	border: 3px solid #000;
 	transition: transform .3s;
-	margin: 2px;
+	margin: 0.5rem;
 	box-shadow: 0 0 5px #000;
 	/* line-height: 0; */
 	color: #fff;
 }
 
 .movie-item:hover {
-	z-index: 2;
 	transform: scale(1.25);
 	border: 3px solid #ffc107;
 	/* box-shadow: 0 0 10px #aaa; */
@@ -261,14 +260,6 @@ hr {
 	text-shadow: 5px 5px 10px #333;
 }
 
-.search-bar {
-	max-width: 500px;
-	min-width: 230px;
-	width: 80%;
-	margin: 1rem auto 0 auto;
-	text-align:	center;
-}
-
 #overlay {
 	position: fixed; /* Sit on top of the page content */
 	/* display: none; Hidden by default */
@@ -293,4 +284,11 @@ hr {
 	justify-content: center;
 	align-items: center;
 	align-content: center;
+}
+
+.search-form {
+	display: flex;
+	flex-wrap: wrap-reverse;
+	justify-content: center;
+	align-items: center;
 }
