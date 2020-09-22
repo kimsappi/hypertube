@@ -11,6 +11,7 @@ import DispatchContext from './context/DispatchContext';
 import HeaderLoggedIn from './components/layout/HeaderLoggedIn';
 import HeaderLoggedOut from './components/layout/HeaderLoggedOut';
 import Home from './components/pages/Home';
+import Search from './components/pages/Search';
 import MyList from './components/pages/MyList';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
@@ -91,6 +92,7 @@ const App = () =>
 						<Route exact path='/github/:action' component={GithubLog} />
 
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
+						<Route exact path='/search' component={initialState.loggedIn ? Search : Login} />
 						<Route exact path='/mylist' component={initialState.loggedIn ? MyList : Login} />
 						<Route exact path='/cinema/:magnet' component={initialState.loggedIn ? Cinema : Login} />
 						<Route exact path='/profile/:id' component={initialState.loggedIn ? Profile : Login} />

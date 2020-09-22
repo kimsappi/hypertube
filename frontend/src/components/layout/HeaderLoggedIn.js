@@ -21,6 +21,11 @@ const HeaderLoggedIn = () =>
 						</NavLink>
 					</li>
 					<li>
+						<NavLink to='/search' alt='Search' title='Search'>
+							<i className="fas fa-search color-primary"></i> Search
+						</NavLink>
+					</li>
+					<li>
 						<NavLink to='/mylist' alt='My List' title='My List'>
 							<i className="fas fa-images color-primary"></i> My List
 						</NavLink>

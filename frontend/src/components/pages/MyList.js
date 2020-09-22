@@ -37,7 +37,7 @@ const MyList = () =>
 
 	return (
 		<Fragment>
-			<h2 className="center bg-black100 py-4">My List</h2>
+			<h2 className="center bg-black100 py-2">My List</h2>
 			{loading && <div className="loading"></div>}
 			{!loading && (
 				<Fragment>
