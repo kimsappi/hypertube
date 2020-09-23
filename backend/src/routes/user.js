@@ -13,7 +13,7 @@ const upload = multer({dest: __dirname + '/../../tmp/'});
 router.get('/me/', authenticationMiddleware, async (req, res) => {
 	try {
 		const userData = await User.findById(req.user.id,
-			'username firstName lastName email password profilePicture'
+			'username firstName lastName email password profilePicture language'
 		);
 		res.json(userData);
 	} catch(err) {
@@ -69,7 +69,8 @@ router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
 			return res.status(200).json({
 				email: result.email,
 				firstName: result.firstName,
-				lastName: result.lastName
+				lastName: result.lastName,
+				language: result.language
 			});
 	} catch(err) {
 		Logger.error(err);

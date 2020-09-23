@@ -38,10 +38,11 @@ router.post('/login', async (req, res, next) => {
       username: data.username,
       token,
       profilePicture: data.profilePicture || null,
-	  id: data.id,
-	  mute: data.mute,
-	  watched: data.watched,
-	  myList: data.myList
+      id: data.id,
+      mute: data.mute,
+      watched: data.watched,
+      myList: data.myList,
+      language: data.language
     });
   } catch(err) {
     Logger.error(err);

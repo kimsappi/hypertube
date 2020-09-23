@@ -57,6 +57,7 @@ const Login = () =>
 					localStorage.setItem("HiveflixMute", response.data.mute);
 					localStorage.setItem("HiveflixWatched", JSON.stringify(response.data.watched));
 					localStorage.setItem("HiveflixMyList", JSON.stringify(response.data.myList));
+					localStorage.setItem("HiveflixLanguage", response.data.language);
 
 					globalDispatch({ type: "login" });
 				}
