@@ -2,27 +2,27 @@ export default {
   SERVER_URL: 'http://localhost:5000',
   languages: [
     {
-      shorthand: 'en',
+      shorthand: 'eng',
       display: 'English'
     },
     {
-      shorthand: 'fi',
+      shorthand: 'fin',
       display: 'Finnish'
     },
     {
-      shorthand: 'fr',
+      shorthand: 'fre',
       display: 'French'
     },
     {
-      shorthand: 'es',
+      shorthand: 'spa',
       display: 'Spanish'
     },
     {
-      shorthand: 'it',
+      shorthand: 'ita',
       display: 'Italian'
     },
     {
-      shorthand: 'de',
+      shorthand: 'ger',
       display: 'German'
     },
   ]
