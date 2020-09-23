@@ -72,19 +72,21 @@ router.post('/register', async (req, res, next) => {
 
             nameArray = resultTwo.data.name.split(' ');
 
-            const newUser = new User({
+            const newUser = {
                 username: name,
                 firstName: nameArray[0],
                 lastName: nameArray[nameArray.length - 1],
                 password: 'tempPass',
                 oauth: {provider: 'github', email: resultTwo.data.id}
-            })
+            };
 
             const newUserWithEmail = resultTwo.data.email ?
                 {...newUser, email: resultTwo.data.email} :
                 newUser;
 
-            const saveResult = await newUserWithEmail.save();
+            const newUserModel = new User(newUserWithEmail);
+
+            const saveResult = await newUserModel.save();
 
             console.log(saveResult);
 
