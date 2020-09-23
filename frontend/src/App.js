@@ -110,7 +110,7 @@ const App = () =>
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
 						<Route exact path='/search' component={initialState.loggedIn ? Search : Login} />
 						<Route exact path='/mylist' component={initialState.loggedIn ? MyList : Login} />
-						<Route exact path='/cinema/:magnet/:imdb' component={initialState.loggedIn ? Cinema : Login} />
+						<Route exact path='/cinema/:magnet/:imdb/:actualImdb' component={initialState.loggedIn ? Cinema : Login} />
 						<Route exact path='/profile/:id' component={initialState.loggedIn ? Profile : Login} />
 						<Route exact path='/login' component={initialState.loggedIn ? Home : Login} />
 						<Route exact path='/register' component={initialState.loggedIn ? Home : Register} />

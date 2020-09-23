@@ -5,18 +5,43 @@ const fs = require('fs');
 const srt2vtt = require('srt2vtt');
 const glob = require('glob');
 
+const OS = require('opensubtitles-api');
+
 const { verifyToken } = require('../utils/auth');
 const movieListService = require('../services/movieLists');
 const Logger = require('../utils/logger');
 
+const config = require('../utils/config');
+
 const Movie = require('../models/Movie');
+
+const OpenSubtitles = new OS({
+  useragent: 'TemporaryUserAgent',
+  ssl: true,
+  username: config.openSubUser,
+  password: config.openSubPass
+});
 
 const router = express.Router();
 
-router.get('/start/:magnet/:token/:imdb', async (req, res) => {
-  const { magnet, token, imdb } = req.params;
+router.get('/start/:magnet/:token/:imdb/:actualImdb', async (req, res) => {
+  const { magnet, token, imdb, actualImdb } = req.params;
   console.log(imdb);
   console.log('start');
+
+  try {
+    const osRes = await OpenSubtitles.search({
+      imdbid: actualImdb,
+      sublanguageid: 'eng,fin'
+    });
+    console.log('osRes', osRes);
+    return res.status(200).json({sub: osRes.en.vtt, message: 'found'});
+  } catch(err) {
+    console.log(err);
+    return res.status(200).send("subtitles not found");
+  }
+
+
   const engine = torrentStream("magnet:?" + magnet, {
     tmp: "../public",
     path: "../public/" + imdb,
@@ -31,63 +56,63 @@ router.get('/start/:magnet/:token/:imdb', async (req, res) => {
       "udp://tracker.internetwarriors.net:1337"
     ],
   });
-let tries = 0;
-  engine.on('ready', () =>
-    {
-      engine.files.forEach(file =>
-        {
-          file.createReadStream();
+// let tries = 0;
+//   engine.on('ready', () =>
+//     {
+//       engine.files.forEach(file =>
+//         {
+//           file.createReadStream();
 
-        })
+//         })
 
-    })
-    engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
+//     })
+//     engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
     
-    engine.on('download', index => {
-      console.log("\033[36mpart " + index +  " downloaded and verified\033[0m"); 
-      // TAHAN VALIIN TEKSTITYSTEN TARKASTUS JA HAKU JA ALLA RES ANTAA URLIN TEKSTEIHIN.
+//     engine.on('download', index => {
+//       console.log("\033[36mpart " + index +  " downloaded and verified\033[0m"); 
+//       // TAHAN VALIIN TEKSTITYSTEN TARKASTUS JA HAKU JA ALLA RES ANTAA URLIN TEKSTEIHIN.
 
-      //add one to tries on every download. If subs not found within 10 first downloads, response that no subs.
-      tries++;
+//       //add one to tries on every download. If subs not found within 10 first downloads, response that no subs.
+//       tries++;
 
-      //search for srt files. If found, fun cb.
-      glob('../public/' + imdb + '/*/*.srt', {}, (err, files) => {
-        console.log("LOYTYI: ");
-        console.log(files);
-        if (files.length)
-        {
-          //moving the subtitle file to imdb-folder.
-          fs.rename(files[0], '../public/' + imdb + '/sub.srt', (err) => { if(err) console.log(err); });
+//       //search for srt files. If found, fun cb.
+//       glob('../public/' + imdb + '/**/*.srt', {}, (err, files) => {
+//         console.log("LOYTYI: ");
+//         console.log(files);
+//         if (files.length)
+//         {
+//           //moving the subtitle file to imdb-folder.
+//           fs.rename(files[0], '../public/' + imdb + '/sub.srt', (err) => { if(err) console.log(err); });
 
-          //convert srt2vtt. Timeout, that fs.rename has time to run..
-          setTimeout(() => {
-            var srtData = fs.readFileSync('../public/' + imdb + '/sub.srt');
+//           //convert srt2vtt. Timeout, that fs.rename has time to run..
+//           setTimeout(() => {
+//             var srtData = fs.readFileSync('../public/' + imdb + '/sub.srt');
           
-            srt2vtt(srtData, (err, vttData) => {
-              if (err) console.log(err);
-              fs.writeFileSync('../public/' + imdb + '/sub.vtt', vttData);
-            })
-            console.log("LOYTYYYY");
+//             srt2vtt(srtData, (err, vttData) => {
+//               if (err) console.log(err);
+//               fs.writeFileSync('../public/' + imdb + '/sub.vtt', vttData);
+//             })
+//             console.log("LOYTYYYY");
 
             
-          }, 1000);
+//           }, 1000);
 
-            engine.destroy();
-            console.log("jsut ennen sendia");
-            res.status(200).json({sub: imdb + '/sub.vtt', message: 'found'});
-            return;
-        }
-      })
+//             engine.destroy();
+//             console.log("jsut ennen sendia");
+//             res.status(200).json({sub: imdb + '/sub.vtt', message: 'found'});
+//             return;
+//         }
+//       })
 
-      if (tries === 20)
-      {
-        engine.destroy();
-        return res.status(200).send("subtitles not found");
-      }
-      console.log(tries);
-      //res.status(200).send("JEES");
+//       if (tries === 20)
+//       {
+//         engine.destroy();
+//         return res.status(200).send("subtitles not found");
+//       }
+//       console.log(tries);
+//       //res.status(200).send("JEES");
       
-  });
+//   });
     
 
 })
@@ -202,7 +227,7 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
     engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
 
     // // emitted everytime a piece has been downloaded and verified.
-	engine.on('download', index => {console.log("\033[36mpart " + index +  " downloaded and verified\033[0m");});
+	//engine.on('download', index => {console.log("\033[36mpart " + index +  " downloaded and verified\033[0m");});
 
     // emitted when all selected files have been completely downloaded.
     engine.on('idle', () => console.log("\033[0;32mall selected files have been completely downloaded\033[0m"));

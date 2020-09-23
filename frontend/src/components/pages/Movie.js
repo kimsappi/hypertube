@@ -15,6 +15,7 @@ const Movie = () =>
 	const globalState = useContext(StateContext);
 	const [movie, setMovie] = useState("");
 	const [loading, setLoading] = useState(true);
+	const [imdbId, setImdbId] = useState(null);
 	const { id } = useParams();
 
 	// const magnet = "xt=urn:btih:A7AF8A653A2624DEC763E8206C93884C4671B4DD&dn=South.Park.S23E07.HDTV.x264-SVA%5Bettv%5D&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce";
@@ -35,6 +36,8 @@ const Movie = () =>
 				console.log("movie.data", response.data.data.movie);
 				
 				setMovie(response.data.data.movie);
+				setImdbId(response.data.data.movie.imdb_code);
+				console.warn(response.data.data.movie.imdb_code)
 
 				setLoading(false);
 			}
@@ -89,7 +92,7 @@ const Movie = () =>
 									</Fragment>
 								)}
 							</div>
-							<Link className="center" to={"/cinema/xt=urn:btih:" + movie.torrents[0].hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id}>PLAY MOVIE</Link>
+							<Link className="center" to={"/cinema/xt=urn:btih:" + movie.torrents[0].hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id + '/' + imdbId}>PLAY MOVIE</Link>
 						</div>
 						<div className="movie-right-column">
 							<Comments movieId={id}/>

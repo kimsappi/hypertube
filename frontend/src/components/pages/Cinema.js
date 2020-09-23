@@ -7,7 +7,7 @@ import config from '../../config/config';
 
 const Cinema =  () =>
 {
-	const { magnet, title_long, imdb } = useParams();
+	const { magnet, title_long, imdb, actualImdb } = useParams();
 	const [status, setStatus] = useState("...");
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
@@ -40,13 +40,14 @@ console.log("IMDB:  ", imdb);
 	const resolution = "720p";
 	let subtitleUrl = 'asdasd';
 
-	useEffect(async () => {const res = await Axios.get(config.SERVER_URL + "/api/cinema/start/" + magnet + "/" + token + "/" + imdb); 
+	useEffect(async () => {const res = await Axios.get(config.SERVER_URL + "/api/cinema/start/" + magnet + "/" + token + "/" + imdb + '/' + actualImdb); 
 				console.log(res);
 					if (res.data == "subtitles not found" || res.data.message == "found")
 					{
 						if (res.data.message == 'found')
 						setTimeout(() => {
-							setSubtitles(config.SERVER_URL + "/" + res.data.sub);
+							//setSubtitles(config.SERVER_URL + "/" + res.data.sub);
+							setSubtitles(res.data.sub);
 							setWait(true);
 						}, 1000);
 						
