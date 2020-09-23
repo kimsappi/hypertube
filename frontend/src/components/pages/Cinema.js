@@ -40,7 +40,9 @@ console.log("IMDB:  ", imdb);
 	const resolution = "720p";
 	let subtitleUrl = 'asdasd';
 
-	useEffect(async () => {const res = await Axios.get(config.SERVER_URL + "/api/cinema/start/" + magnet + "/" + token + "/" + imdb); 
+	useEffect(() => {
+		(async () => {
+			const res = await Axios.get(config.SERVER_URL + "/api/cinema/start/" + magnet + "/" + token + "/" + imdb); 
 				console.log(res);
 					if (res.data == "subtitles not found" || res.data.message == "found")
 					{
@@ -56,8 +58,9 @@ console.log("IMDB:  ", imdb);
 							setWait(true);
 						}
 					}
-					console.log(res);}, 
-					[])
+		})()
+	}, 
+					[]);
 	
 
 	let count = setTimeout(() =>
