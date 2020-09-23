@@ -40,6 +40,9 @@ const HiveLog = () => {
                     localStorage.setItem("HiveflixUsername", axiosResponse.data.username);
                     localStorage.setItem("HiveflixProfilePicture", axiosResponse.data.profilePicture);
                     localStorage.setItem("HiveflixId", axiosResponse.data.id);
+                    localStorage.setItem("HiveflixWatched", JSON.stringify(axiosResponse.data.watched));
+                    localStorage.setItem("HiveflixMyList", JSON.stringify(axiosResponse.data.myList));
+                    localStorage.setItem("HiveflixLanguage", 'en');
                     window.location.replace("http://localhost:3000/home");
                 }
                 else
@@ -104,8 +107,9 @@ const HiveLog = () => {
                 localStorage.setItem("HiveflixUsername", passResponse.data.username);
                 localStorage.setItem("HiveflixProfilePicture", passResponse.data.profilePicture);
                 localStorage.setItem("HiveflixId", passResponse.data.id);
-                localStorage.setItem("HiveflixWatched", JSON.stringify(passResponse.data.watched));
-                localStorage.setItem("HiveflixMyList", JSON.stringify(passResponse.data.myList));
+                localStorage.setItem("HiveflixMyList", JSON.stringify([]));
+                localStorage.setItem("HiveflixWatched", JSON.stringify([]));
+                localStorage.setItem("HiveflixLanguage", 'en');
                 window.location.replace("http://localhost:3000/home");
             }
         }

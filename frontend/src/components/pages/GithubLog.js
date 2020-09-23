@@ -117,6 +117,9 @@ const GithubLog = () => {
             localStorage.setItem("HiveflixUsername", responseFinal.data.username);
             localStorage.setItem("HiveflixProfilePicture", responseFinal.data.profilePicture);
             localStorage.setItem("HiveflixId", responseFinal.data.id);
+            localStorage.setItem("HiveflixMyList", JSON.stringify([]));
+            localStorage.setItem("HiveflixWatched", JSON.stringify([]));
+            localStorage.setItem("HiveflixLanguage", 'en');
             window.location.replace("http://localhost:3000/home");
         }
         else
