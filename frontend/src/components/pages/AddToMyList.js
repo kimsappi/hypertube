@@ -48,6 +48,8 @@ const AddToMyList = ({id}) =>
 	{
 		try
 		{
+			await axios.delete(config.SERVER_URL + `/api/myList/${id}`, globalState.config);
+
 			for (let i = 0; globalState.myList[i]; i++)
 				if (globalState.myList[i] === id)
 				{

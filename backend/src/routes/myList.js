@@ -18,30 +18,36 @@ router.post('/', authenticationMiddleware, async (req, res, next) => {
 	else
 	  throw "Couldn't add to My List";
   } catch(err) {
-	Logger.error(err);
-	return res.status(400).json(false);
+		Logger.error(err);
+		return res.status(400).json(false);
   }
 });
 
 router.get('/', authenticationMiddleware, async (req, res, next) => {
   try {
-	const response = await movieListService.getMyList(req.user.id);
-	return res.status(200).json(response);
+		const response = await movieListService.getMyList(req.user.id);
+		return res.status(200).json(response);
   } catch(err) {
-	Logger.error(err);
-	return res.status(400).json([]);
+		Logger.error(err);
+		return res.status(400).json([]);
   }
 });
 
-// router.delete('/:id', authenticationMiddleware, async (req, res, next) => {
-// 	try
-// 	{
-// 		// ???
-// 	}
-// 	catch(err) {
-// 		console.error(err.message);
-// 	}
+router.delete('/:id', authenticationMiddleware, async (req, res, next) => {
+	try
+	{
+		const response = await movieListService.deleteFromList(
+			req.params.id,
+			req.user,
+			movieListService.Lists.myList
+		);
+		return res.status(200).json(response);
+	}
+	catch(err) {
+		Logger.error(err);
+		return res.status(400).json(false);
+	}
 
-// })
+})
 
 module.exports = router;

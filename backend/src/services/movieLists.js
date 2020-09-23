@@ -16,9 +16,25 @@ const addToList = async (id, user, listType) => {
     })
     .lean();
   if (res)
-    return true
+    return true;
   else
-    throw 'Something went wrong'
+    throw 'Something went wrong';
+};
+
+const deleteFromList = async (id, user, listType) => {
+  const valueToDelete = listType === Lists.myList ?
+    {myList: id} :
+    {watched: id};
+
+  const res = await User
+    .findByIdAndUpdate(user.id, {
+      $pull: valueToDelete
+    }, {new: true})
+    .lean();
+  if (res)
+    return true;
+  else
+    throw 'Something went wrong';
 };
 
 const getMyList = async id => {
@@ -34,5 +50,6 @@ const getMyList = async id => {
 module.exports = {
   addToList,
   getMyList,
+  deleteFromList,
   Lists
 };
