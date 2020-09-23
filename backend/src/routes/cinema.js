@@ -81,9 +81,8 @@ let tries = 0;
 
       if (tries === 20)
       {
-        console.log("WTF");
         engine.destroy();
-        return res.status(200).send("subtitles not fo");
+        return res.status(200).send("subtitles not found");
       }
       console.log(tries);
       //res.status(200).send("JEES");
