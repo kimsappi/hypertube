@@ -36,8 +36,8 @@ let tries = 0;
     {
       engine.files.forEach(file =>
         {
-          file.createReadStream();
-
+          if (file.name.includes('.srt'))
+            file.select();
         })
 
     })
