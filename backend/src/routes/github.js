@@ -149,7 +149,9 @@ router.post('/login', async (req, res, next) => {
                         username: confirm.username,
                         token,
                         profilePicture: confirm.profilePicture || null,
-                        id: confirm._id
+                        id: confirm._id,
+                        watched: confirm.watched,
+                        myList: confirm.myList
                     });
                 }
                 else
