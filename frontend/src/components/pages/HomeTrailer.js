@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import ReactPlayer from "react-player";
 import axios from "axios";
-
+import StateContext from "../../context/StateContext";
 const HomeTrailer = ({ id }) =>
 {
 	const [movie, setMovie] = useState("");
@@ -41,7 +41,7 @@ const HomeTrailer = ({ id }) =>
 							loop={true}
 							// light={true}
 							// playIcon={''}
-							volume={0}
+							muted={true}
 							controls={false}
 							url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=7"}
 						/> :

@@ -1,13 +1,16 @@
-import React, { useEffect, useState, useRef, Fragment } from 'react';
+import React, { useEffect, useState, useRef, useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import ReactPlayer from "react-player";
+
+import StateContext from "../../context/StateContext";
 
 import imdbLogo from "../../images/imdb_logo.png"
 // import metacriticLogo from "../../images/metacritic_logo.svg"
 
 const MovieItem = ({ movie }) =>
 {
+	const globalState = useContext(StateContext);
 	const [mouseHover, setMouseHover] = useState(false);
 	const [movieData, setMovieData] = useState(null);
 	const isInitialMount = useRef(true);
@@ -72,8 +75,7 @@ const MovieItem = ({ movie }) =>
 									height="120px"
 									playing={true}
 									loop={true}
-									// volume={0}
-									controls={false}
+									muted={globalState.mute}
 									url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=7"}
 									config={{
 										youtube: {

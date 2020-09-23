@@ -1,3 +1,6 @@
 {
-  "TOKEN_SECRET": "123"
+  "TOKEN_SECRET": "123",
+  "languages": [
+    "en", "fi", "fr", "es", "it", "de"
+  ]
 }

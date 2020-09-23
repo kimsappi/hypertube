@@ -38,15 +38,15 @@ router.post('/register', async (req, res, next) => {
         if (resultTwo.status === 200)
         {
             
-            if (resultTwo.data.login === null || resultTwo.data.email === null)
+            if (resultTwo.data.login === null)
             {
-                console.log("username or email not found");
+                console.log("username not found");
                 //return res.status(300).json({err: "email or username not found from github"});
             }
             
-            const findEmail = await User.findOne({email: resultTwo.data.email}, 'email');
+            const findId = await User.findOne({oauth: {$eq: {provider: 'github', email: resultTwo.data.id}}}, 'username');
             
-            if (findEmail !== null)
+            if (findId !== null)
             {
                 next(createError(400, "The email given is already taken by someone"));
                 throw "email taken";
@@ -77,11 +77,14 @@ router.post('/register', async (req, res, next) => {
                 firstName: nameArray[0],
                 lastName: nameArray[nameArray.length - 1],
                 password: 'tempPass',
-                email: resultTwo.data.email,
-                oauth: {provider: 'github', email: resultTwo.data.email}
+                oauth: {provider: 'github', email: resultTwo.data.id}
             })
 
-            const saveResult = await newUser.save();
+            const newUserWithEmail = resultTwo.data.email ?
+                {...newUser, email: resultTwo.data.email} :
+                newUser;
+
+            const saveResult = await newUserWithEmail.save();
 
             console.log(saveResult);
 
@@ -138,7 +141,7 @@ router.post('/login', async (req, res, next) => {
             if (loginResultTwo.status === 200)
             {
                 var confirm = await User.findOne({
-                    "oauth.provider": "github", "oauth.email": loginResultTwo.data.email
+                    "oauth.provider": "github", "oauth.email": loginResultTwo.data.id
                 })
                 console.log(confirm);
                 if (confirm !== null)
@@ -149,7 +152,9 @@ router.post('/login', async (req, res, next) => {
                         username: confirm.username,
                         token,
                         profilePicture: confirm.profilePicture || null,
-                        id: confirm._id
+                        id: confirm._id,
+                        watched: confirm.watched,
+                        myList: confirm.myList
                     });
                 }
                 else

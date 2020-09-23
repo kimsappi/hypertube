@@ -36,6 +36,9 @@ const App = () =>
 		token: localStorage.getItem("HiveflixToken"),
 		username: localStorage.getItem("HiveflixUsername"),
 		profilePicture: localStorage.getItem("HiveflixProfilePicture"),
+		mute: localStorage.getItem("HiveflixMute") === "true" ? true : false,
+		watched: JSON.parse(localStorage.getItem("HiveflixWatched")),
+		myList: JSON.parse(localStorage.getItem("HiveflixMyList")),
 		config: {
 			headers: {
 				'authorization': "Bearer " + localStorage.getItem("HiveflixToken")
@@ -53,25 +56,40 @@ const App = () =>
 				draft.token = localStorage.getItem("HiveflixToken");
 				draft.username = localStorage.getItem("HiveflixUsername");
 				draft.profilePicture = localStorage.getItem("HiveflixProfilePicture");
+				draft.mute = localStorage.getItem("HiveflixMute") === "true" ? true : false;
+				draft.watched = JSON.parse(localStorage.getItem("HiveflixWatched"));
+				draft.myList = JSON.parse(localStorage.getItem("HiveflixMyList"));
 				draft.config = {
 					headers: {
 						'authorization': "Bearer " + localStorage.getItem("HiveflixToken"),
-						"x-rapidapi-host": "imdb8.p.rapidapi.com",
-						"x-rapidapi-key": "e1d70abcdfmsh47c075d344167e6p12a880jsn7dcdcaa36c45"
 					},
 				};
 				return;
 			case "logout":
 				draft.loggedIn = false;
 				localStorage.removeItem("HiveflixId");
+				localStorage.removeItem("HiveflixMute");
 				localStorage.removeItem("HiveflixToken");
 				localStorage.removeItem("HiveflixUsername");
 				localStorage.removeItem("HiveflixProfilePicture");
+				localStorage.removeItem("HiveflixWatched");
+				localStorage.removeItem("HiveflixMyList");
 				return;
 			case "changeProfilePicture":
 				draft.profilePicture = action.value;
 				localStorage.setItem("HiveflixProfilePicture", action.value);
-
+				return;
+			case "toggleMute":
+				draft.mute = action.value;
+				localStorage.setItem("HiveflixMute", action.value);
+				return;
+			case "addToMyList":
+				draft.myList.push(action.value);
+				localStorage.setItem("HiveflixMyList", JSON.stringify(draft.myList));
+				return;
+			case "removeFromMyList":
+				draft.myList.splice(action.value, 1);
+				localStorage.setItem("HiveflixMyList", JSON.stringify(draft.myList));
 				return;
 			default:
 				// without this there's an error

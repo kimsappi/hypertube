@@ -104,6 +104,8 @@ const HiveLog = () => {
                 localStorage.setItem("HiveflixUsername", passResponse.data.username);
                 localStorage.setItem("HiveflixProfilePicture", passResponse.data.profilePicture);
                 localStorage.setItem("HiveflixId", passResponse.data.id);
+                localStorage.setItem("HiveflixWatched", JSON.stringify(passResponse.data.watched));
+                localStorage.setItem("HiveflixMyList", JSON.stringify(passResponse.data.myList));
                 window.location.replace("http://localhost:3000/home");
             }
         }

@@ -9,6 +9,10 @@ import DispatchContext from '../../context/DispatchContext';
 
 import ProfilePicture from "../ProfilePicture";
 
+const LanguageOption = ({lang}) => (
+		<option value={lang.shorthand}>{lang.display}</option>
+);
+
 const ProfileMy = () =>
 {
 	const globalState = useContext(StateContext);
@@ -137,6 +141,13 @@ const ProfileMy = () =>
 			setUserData(tmp);
 	}
 
+	const handleLanguage = event => {
+		let tmp = clone(userData);
+		tmp.language = event.target.value;
+
+		setUserData(tmp);
+	};
+
 	const handleSubmit = async (event) =>
 	{
 		event.preventDefault();
@@ -195,6 +206,11 @@ const ProfileMy = () =>
 		return false;
 	}
 
+	const handleMute = () =>
+	{
+		globalDispatch({ type: "toggleMute", value: !globalState.mute });
+	}
+
 	return (
 		<Fragment>
 			{loading && <div className="loading"></div>}
@@ -236,6 +252,16 @@ const ProfileMy = () =>
 								<td>
 									<input type="text" value={userData.lastName} onChange={handleLastName} required={true}/>
 								</td>															
+							</tr>
+							<tr>
+								<td className="right bold nowrap">
+									Language:
+								</td>
+								<td>
+									<select name="language" id="language" value={userData.language} onChange={handleLanguage}>
+										{config.languages.map(lang => <LanguageOption lang={lang} key={lang.shorthand} />)}
+									</select>
+								</td>
 							</tr>
 							<tr>
 								<td className="right bold nowrap">  
@@ -290,6 +316,8 @@ const ProfileMy = () =>
 						</tbody>
 					</table>
 				</form>
+				<input type="checkbox" onChange={handleMute}/>
+				
 			</Fragment>
 			)}
 		</Fragment>

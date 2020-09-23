@@ -49,10 +49,16 @@ const Login = () =>
 
 				if (response.data.message === "login success")
 				{
+					console.log(response.data.watched, response.data.myList)
 					localStorage.setItem("HiveflixToken", response.data.token);
 					localStorage.setItem("HiveflixUsername", response.data.username);
 					localStorage.setItem("HiveflixProfilePicture", response.data.profilePicture);
 					localStorage.setItem("HiveflixId", response.data.id);
+					localStorage.setItem("HiveflixMute", response.data.mute);
+					localStorage.setItem("HiveflixWatched", JSON.stringify(response.data.watched));
+					localStorage.setItem("HiveflixMyList", JSON.stringify(response.data.myList));
+					localStorage.setItem("HiveflixLanguage", response.data.language);
+
 					globalDispatch({ type: "login" });
 				}
 				else if (response.data.message === "email not verified")

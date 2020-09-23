@@ -1,7 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useParams, Link } from 'react-router-dom';
 import axios from "axios";
 import ReactPlayer from "react-player";
+
+import StateContext from "../../context/StateContext";
 
 import Comments from "./Comments";
 import AddToMyList from './AddToMyList';
@@ -10,6 +12,7 @@ import image from "../../images/profile.jpg";
 
 const Movie = () =>
 {
+	const globalState = useContext(StateContext);
 	const [movie, setMovie] = useState("");
 	const [loading, setLoading] = useState(true);
 	const { id } = useParams();
@@ -57,11 +60,11 @@ const Movie = () =>
 								width="100%"
 								playing={true}
 								loop={true}
-								volume={1}
-								muted={true}
+								muted={globalState.mute}
 								controls={true}
 								url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=10"}
 							/>}
+							<AddToMyList id={id} />
 							<div className="p-5">
 								<h1 className="color-white">{movie.title_long}</h1>
 								<div className="small color-black70 my-2">{movie.genres.map(genre => genre.toUpperCase(genre) + " ")}</div>
@@ -89,7 +92,6 @@ const Movie = () =>
 							<Link className="center" to={"/cinema/xt=urn:btih:" + movie.torrents[0].hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id}>PLAY MOVIE</Link>
 						</div>
 						<div className="movie-right-column">
-							<AddToMyList id={id} />
 							<Comments movieId={id}/>
 						</div>
 					</div>

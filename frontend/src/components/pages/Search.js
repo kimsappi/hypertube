@@ -43,11 +43,15 @@ const Search = () =>
 						{ cancelToken: source.token }
 					);
 
-					// https://yts.mx/api/v2/list_movies.json?page=1&genre=all&sort_by=year&minimum_rating=5&query_term=
-
 					setMovieCount(response.data.data.movie_count);
 					setMovies(response.data.data.movies);
 					setCurrentPage(2);
+
+					// check if has more items
+					if (response.data.data.movie_count > 20) 
+						setHasMoreItems(true);
+					else
+						setHasMoreItems(false);
 					setLoading(false);
 				}
 				catch (err)
@@ -57,7 +61,7 @@ const Search = () =>
 					console.error(err.message);
 				}
 			})();
-		}, 700);
+		}, 500);
 		return () =>
 		{
 			clearTimeout(timer);
@@ -174,9 +178,6 @@ const Search = () =>
 						value={sortBy}
 						onChange={(event) => setSortBy(event.target.value)}
 					>
-						{/* <option value="date_added">Latest</option>
-						<option value="peers">Peers</option>
-						<option value="seeds">Seeds</option> */}
 						<option value="download_count">Downloads</option>
 						<option value="rating">Rating</option>
 						<option value="like_count">Likes</option>
@@ -196,7 +197,7 @@ const Search = () =>
 				{loading && <div className="loading"></div>}
 				{!loading && (
 					<Fragment>
-						<div className="center my-4">{movieCount} results</div>
+						<h4 className="center my-4">{movieCount} {movieCount === 1 ? "result" : "results"}</h4>
 						<div className="movie-items-container">
 							{typeof movies !== "undefined" && movies.map(movie => (
 								<Fragment key={movie.imdb_code}>

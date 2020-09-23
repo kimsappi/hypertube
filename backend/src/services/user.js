@@ -6,6 +6,7 @@ const { validatePassword,
   validateEmail } = require('../utils/validateUserData');
 
 const updateUserData = async data => {
+  console.log(data)
   try {
     const result = await User.findByIdAndUpdate(data.id, data, {
       new: true,
@@ -21,7 +22,8 @@ const omitExtraData = data => ({
   id: data._id,
   firstName: data.firstName,
   lastName: data.lastName,
-  email: data.email
+  email: data.email,
+  language: data.language
 });
 
 const updateProfile = async data => {

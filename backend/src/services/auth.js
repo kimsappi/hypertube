@@ -33,7 +33,7 @@ const register = async data => {
 const login = async data => {
   const user = await User.findOne({
     username: data.username
-  }, 'username emailVerification profilePicture password');
+  }, 'username emailVerification profilePicture mute password watched myList');
 
   if (!user || !await bcrypt.compare(data.password, user.password))
     throw 'invalid username or password';
@@ -42,7 +42,10 @@ const login = async data => {
   return {
     username: user.username,
     profilePicture: user.profilePicture,
-    id: user._id
+	id: user._id,
+	mute: user.mute,
+	watched: user.watched,
+	myList: user.myList
   };
 };
 
