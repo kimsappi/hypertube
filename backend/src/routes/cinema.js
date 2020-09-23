@@ -15,6 +15,7 @@ const router = express.Router();
 
 router.get('/start/:magnet/:token/:imdb', async (req, res) => {
   const { magnet, token, imdb } = req.params;
+  let retSubs = [];
   console.log(imdb);
   console.log('start');
   const engine = torrentStream("magnet:?" + magnet, {
@@ -42,8 +43,10 @@ let tries = 0;
 
     })
     engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
+
+    engine.on('download', () => console.log("\033[35mmetadata has been downloaded\033[0m"));
     
-    engine.on('download', index => {
+    engine.on('idle', index => {
       console.log("\033[36mpart " + index +  " downloaded and verified\033[0m"); 
       // TAHAN VALIIN TEKSTITYSTEN TARKASTUS JA HAKU JA ALLA RES ANTAA URLIN TEKSTEIHIN.
 
@@ -51,33 +54,63 @@ let tries = 0;
       tries++;
 
       //search for srt files. If found, fun cb.
-      glob('../public/' + imdb + '/*/*.srt', {}, (err, files) => {
-        console.log("LOYTYI: ");
-        console.log(files);
-        if (files.length)
-        {
-          //moving the subtitle file to imdb-folder.
-          fs.rename(files[0], '../public/' + imdb + '/sub.srt', (err) => { if(err) console.log(err); });
-
-          //convert srt2vtt. Timeout, that fs.rename has time to run..
-          setTimeout(() => {
-            var srtData = fs.readFileSync('../public/' + imdb + '/sub.srt');
-          
-            srt2vtt(srtData, (err, vttData) => {
-              if (err) console.log(err);
-              fs.writeFileSync('../public/' + imdb + '/sub.vtt', vttData);
+   
+        glob('../public/' + imdb + '/**/*.srt', {}, (err, files) => {
+          console.log("LOYTYI: ");
+          console.log(files);
+          if (files.length)
+          {
+            //moving the subtitle file to imdb-folder.
+            files.forEach((file) => {
+              var fileName = file.split('.');
+              fs.rename(file, '../public/' + imdb + '/sub.' + fileName[fileName.length - 2] + '.srt', (err) => { if(err) console.log(err); });
             })
-            console.log("LOYTYYYY");
+            //fs.rename(files[0], '../public/' + imdb + '/sub.srt', (err) => { if(err) console.log(err); });
+
+            setTimeout(() => {
+              
+            glob('../public/' + imdb + '/*.srt', {}, (err, files) => {
+              console.log("FILEESS: ", files);
+              if (err)
+                console.log("ERROR", err);
+              files.forEach((file) => {
+                let lang = file.split('/');
+                lang = lang[lang.length - 1].split('.');
+                var srtData = fs.readFileSync(file);
+                srt2vtt(srtData, (err, vttData) => {
+                  fs.writeFileSync('../public/' + imdb + '/sub.' + lang[lang.length - 2] + '.vtt', vttData);
+
+                  retSubs.push(imdb + '/sub.' + lang[lang.length - 2] + '.vtt');
+                })
+              })
+              console.log("RETURNATAAN: ", retSubs);
+              console.log("jsut ennen sendia: ", retSubs);
+              res.status(200).json({sub: retSubs, message: 'found'});
+              engine.destroy();
+              return;
+            })
 
             
-          }, 1000);
+            
 
-            engine.destroy();
-            console.log("jsut ennen sendia");
-            res.status(200).json({sub: imdb + '/sub.vtt', message: 'found'});
-            return;
-        }
-      })
+          }, 2000)
+            //convert srt2vtt. Timeout, that fs.rename has time to run..
+            // setTimeout(() => {
+            //   var srtData = fs.readFileSync('../public/' + imdb + '/sub.srt');
+            
+            //   srt2vtt(srtData, (err, vttData) => {
+            //     if (err) console.log(err);
+            //     fs.writeFileSync('../public/' + imdb + '/sub.vtt', vttData);
+            //   })
+            //   console.log("LOYTYYYY");
+
+              
+            // }, 1000);
+
+              
+          }
+        })
+      
 
       if (tries === 20)
       {

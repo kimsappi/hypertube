@@ -13,7 +13,7 @@ const Cinema =  () =>
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
 	const [totalSeconds, setTotalSeconds] = useState(0);
 	const [waitForIt, setWait] = useState(false);
-	const [subtitles, setSubtitles] = useState('test');
+	const [subtitles, setSubtitles] = useState([]);
 	
 	const [movieReady, setMovieReady] = useState(false);
 	const [timeLeft, setTimeLeft] = useState(15);
@@ -34,12 +34,12 @@ const Cinema =  () =>
 	const onBuffer = () => setStatus("BUFFERING");
 	const onEnded = () => setStatus("VIDEO END");
 	const onError = () => setStatus("ERROR");
-console.log("PARAM1:", magnet);
-console.log("IMDB:  ", imdb);
+// console.log("PARAM1:", magnet);
+// console.log("IMDB:  ", imdb);
 	const language = "en";
 	const resolution = "720p";
 	let subtitleUrl = 'asdasd';
-
+	let subtitleFinal = [];
 	useEffect(() => {
 		(async () => {
 			const res = await Axios.get(config.SERVER_URL + "/api/cinema/start/" + magnet + "/" + token + "/" + imdb); 
@@ -47,10 +47,27 @@ console.log("IMDB:  ", imdb);
 					if (res.data == "subtitles not found" || res.data.message == "found")
 					{
 						if (res.data.message == 'found')
+						{
 						setTimeout(() => {
-							setSubtitles(config.SERVER_URL + "/" + res.data.sub);
+							
+							res.data.sub.forEach((subtitle) => {
+								let lang = subtitle.split('.');
+								subtitleFinal.push({
+									kind: 'subtitles',
+									src: config.SERVER_URL + "/" + subtitle,
+									srcLang: lang[lang.length - 2]
+								})
+							})
+
+							console.log(subtitleFinal);
+							setSubtitles(subtitleFinal);
 							setWait(true);
 						}, 1000);
+
+						
+
+
+						}
 						
 						if (res.data == 'subtitles not found')
 						{
@@ -85,7 +102,7 @@ console.log("IMDB:  ", imdb);
 		
 	}, [waitForIt])
 
-console.log("WAITFOR: ", waitForIt);
+// console.log("WAITFOR: ", waitForIt);
 	return (
 		
 		<Fragment>
@@ -113,9 +130,7 @@ console.log("WAITFOR: ", waitForIt);
 							attributes: {
 								crossOrigin: 'true'
 							},
-							tracks: [
-							{ kind: 'subtitles', src: subtitles, srcLang: language, default: true } 
-							]
+							tracks: subtitles
 							}
 						}
 					}
