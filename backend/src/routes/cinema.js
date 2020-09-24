@@ -93,6 +93,7 @@ let tries = 0;
               console.log("RETURNATAAN: ", retSubs);
               console.log("jsut ennen sendia: ", retSubs);
 
+              engine.destroy();
               if (res.headersSent)
                 return;
               return res.status(200).json({sub: retSubs, message: 'found'});
