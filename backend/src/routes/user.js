@@ -88,4 +88,25 @@ router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
 	}
 });
 
+router.post('/watched', authenticationMiddleware, async (req, res) => {
+	console.log("WATCHED");
+	console.log(req.body.imdb);
+	console.log(req.body.percent);
+
+	if (!req.user.username)
+		res.json(null);
+	
+	console.log(req.user);
+
+	const imdb = req.body.imdb;
+	const response = await User.findByIdAndUpdate(req.user.id, {
+		$addToSet: {watched: {[req.body.imdb]: req.body.percent}}
+	})
+
+	console.log(response);
+
+	res.status(201).send("jees");
+
+})
+
 module.exports = router;

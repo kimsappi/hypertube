@@ -1,12 +1,14 @@
 import Axios from 'axios';
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import ReactPlayer from "react-player";
+import StateContext from "../../context/StateContext";
 
 import config from '../../config/config';
 
 const Cinema =  () =>
 {
+	const globalState = useContext(StateContext);
 	const { magnet, title_long, imdb } = useParams();
 	const [status, setStatus] = useState("...");
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
@@ -80,8 +82,21 @@ const Cinema =  () =>
 						}
 					}
 		})()
-	}, 
-					[]);
+
+		return () => {
+			let test = secondsPlayed;
+
+			let percent = (secondsPlayed / totalSeconds) * 100;
+			Axios.post(config.SERVER_URL + '/api/users/watched',
+			{
+				imdb,
+				percent
+			}, globalState.config)
+			//alert('secs: ' + secondsPlayed + 'total: ' + totalSeconds + 'percent: ' + percent + 'test: ' + test);
+		}
+
+
+	}, []);
 	
 
 	let count = setTimeout(() =>

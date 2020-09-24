@@ -147,16 +147,6 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
     if (!user)
       return res.status(401).json('auth error');
 
-    // Add movie to user's watched movies
-    try {
-      movieListService.addToList(
-        magnet,
-        {...user, id: user.id},
-        movieListService.Lists.watched
-      );
-    } catch(err) {
-      Logger.error(err);
-    }
 
     // Saving movie into database or editing its lastViewed
     try {
