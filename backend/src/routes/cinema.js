@@ -35,10 +35,14 @@ router.get('/start/:magnet/:token/:imdb', async (req, res) => {
 let tries = 0;
   engine.on('ready', () =>
     {
+      console.log("READY");
       engine.files.forEach(file =>
         {
           if (file.name.includes('.srt'))
+          {
             file.select();
+            console.log("SELECTED FILE:", file.name);
+          }
         })
 
     })
@@ -51,12 +55,16 @@ let tries = 0;
       // TAHAN VALIIN TEKSTITYSTEN TARKASTUS JA HAKU JA ALLA RES ANTAA URLIN TEKSTEIHIN.
 
       //search for srt files. If found, fun cb.
+
       setTimeout(() => {
+
         glob('../public/' + imdb + '/**/*.srt', {}, (err, files) => {
           console.log("LOYTYI: ");
           console.log(files);
+
           if (files.length)
           {
+
             //moving the subtitle file to imdb-folder.
             files.forEach((file) => {
               const filePath = file.split('/');
@@ -84,9 +92,11 @@ let tries = 0;
               })
               console.log("RETURNATAAN: ", retSubs);
               console.log("jsut ennen sendia: ", retSubs);
-              res.status(200).json({sub: retSubs, message: 'found'});
-              engine.destroy();
-              return;
+
+              if (res.headersSent)
+                return;
+              return res.status(200).json({sub: retSubs, message: 'found'});
+              
             })
 
             
