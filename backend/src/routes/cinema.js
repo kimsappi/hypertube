@@ -46,12 +46,9 @@ let tries = 0;
 
     engine.on('download', () => console.log("\033[35mmetadata has been downloaded\033[0m"));
     
-    engine.on('idle', index => {
-      console.log("\033[36mpart " + index +  " downloaded and verified\033[0m"); 
+    engine.on('idle', () => {
+      console.log("\033[36mAll subs downloaded\033[0m"); 
       // TAHAN VALIIN TEKSTITYSTEN TARKASTUS JA HAKU JA ALLA RES ANTAA URLIN TEKSTEIHIN.
-
-      //add one to tries on every download. If subs not found within 10 first downloads, response that no subs.
-      tries++;
 
       //search for srt files. If found, fun cb.
    
@@ -111,15 +108,12 @@ let tries = 0;
 
               
           }
+          else {
+            engine.destroy();
+            return res.status(200).send("subtitles not found");
+          }
         })
       
-
-      if (tries === 20)
-      {
-        engine.destroy();
-        return res.status(200).send("subtitles not found");
-      }
-      console.log(tries);
       //res.status(200).send("JEES");
       
   });
