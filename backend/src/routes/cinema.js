@@ -120,7 +120,8 @@ let tries = 0;
               
           }
           else {
-            engine.destroy();
+            engine.destroy()
+
             return res.status(200).send("subtitles not found");
           }
         })
