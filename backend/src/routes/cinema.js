@@ -54,7 +54,7 @@ let tries = 0;
       tries++;
 
       //search for srt files. If found, fun cb.
-   
+      setTimeout(() => {
         glob('../public/' + imdb + '/**/*.srt', {}, (err, files) => {
           console.log("LOYTYI: ");
           console.log(files);
@@ -110,6 +110,8 @@ let tries = 0;
               
           }
         })
+      }, 500);
+      
       
 
       if (tries === 20)
