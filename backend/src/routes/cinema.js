@@ -61,7 +61,7 @@ let tries = 0;
             files.forEach((file) => {
               const filePath = file.split('/');
               const fileName = filePath[filePath.length - 1].split('.');
-              const langIdentifier = fileName.length === 3 ? fileName[fileName.length - 2] : 'eng';
+              const langIdentifier = fileName.length === 3 && fileName[1].length === 3 ? fileName[fileName.length - 2] : 'eng';
               fs.rename(file, '../public/' + imdb + '/sub.' + langIdentifier + '.srt', (err) => { if(err) console.log(err); });
             })
             //fs.rename(files[0], '../public/' + imdb + '/sub.srt', (err) => { if(err) console.log(err); });
@@ -176,6 +176,11 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
           "udp://tracker.internetwarriors.net:1337"
         ],
       });
+
+    // Experimental unnecessary engine destroyer
+    res.on('close', () => {
+      engine.destroy();
+    });
     
     // emitted when the engine is ready to be used. 
     engine.on('ready', () =>
@@ -233,10 +238,14 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
     engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
 
     // // emitted everytime a piece has been downloaded and verified.
-	engine.on('download', index => {console.log("\033[36mpart " + index +  " downloaded and verified\033[0m");});
+	  engine.on('download', index => {console.log("\033[36mpart " + index +  " downloaded and verified\033[0m");});
 
     // emitted when all selected files have been completely downloaded.
-    engine.on('idle', () => console.log("\033[0;32mall selected files have been completely downloaded\033[0m"));
+    engine.on('idle', () => {
+      console.log("\033[0;32mall selected files have been completely downloaded\033[0m");
+      // This will prevent the streaming of the very last couple of seconds in Top Gun
+      //engine.destroy();
+    });
 
     // kill the stream somehow?
 
