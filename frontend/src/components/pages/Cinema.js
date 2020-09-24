@@ -33,7 +33,11 @@ const Cinema =  () =>
 	const onPause = () => setStatus("PAUSE");
 	const onBuffer = () => setStatus("BUFFERING");
 	const onEnded = () => setStatus("VIDEO END");
-	const onError = () => setStatus("ERROR");
+	const onError = err => {
+		const errorMsg = err.message.includes('interact with the document') ?
+			'Put me in coach, I\'m ready to play' : 'ERROR';
+		setStatus(errorMsg);
+	};
 // console.log("PARAM1:", magnet);
 // console.log("IMDB:  ", imdb);
 	const language = "en";
