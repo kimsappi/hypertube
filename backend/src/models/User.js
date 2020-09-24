@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   oauth: Array,
   emailVerification: String,
   profilePicture: String,
-  language: {type: String, default: 'en', enum: config.languages},
+  language: {type: String, default: 'eng', enum: config.languages},
   mute: {type: Boolean, default: false},
 
   watched: Array,
