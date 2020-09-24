@@ -102,7 +102,7 @@ let tries = 0;
             
             
 
-          }, 2000)
+          }, 500)
             //convert srt2vtt. Timeout, that fs.rename has time to run..
             // setTimeout(() => {
             //   var srtData = fs.readFileSync('../public/' + imdb + '/sub.srt');
@@ -195,54 +195,36 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
     // emitted when the engine is ready to be used. 
     engine.on('ready', () =>
     {
+      let file = null;
       // STREAM
-      engine.files.forEach(file =>
-      {
-		// // check video file type and store into a variable
-		// if (file.name.includes(".srt"))
-		// {
-		// 	// find out language
+      engine.files.forEach(currentFile => {
+        if (!file || currentFile.length > file.length)
+          file = currentFile;
+      });
 
-		// 	const language = "en";
+      const range = req.headers.range;
 
-		// 	const split = file.path.split("/");
+      console.log(range);
 
-		// 	fs.createReadStream(__dirname + "/../../public/" + file.path)
-		// 		.pipe(srt2vtt())
-		// 		.pipe(fs.createWriteStream("../public/" + split[0] + "/" + "subs." + language + ".vtt"));
-		// }
+      const pos = range ? range.replace(/bytes=/, '').split('-') : null;
+      const start = pos ? parseInt(pos[0], 10) : 0;
+      const end = (pos && pos[1]) ? parseInt(pos[1], 10) : file.length - 1;
 
-        if (file.name.includes('mp4'))
-        {
-          const range = req.headers.range;
-
-          console.log(range);
-
-          const pos = range ? range.replace(/bytes=/, '').split('-') : null;
-          const start = pos ? parseInt(pos[0], 10) : 0;
-          const end = (pos && pos[1]) ? parseInt(pos[1], 10) : file.length - 1;
-
-          res.writeHead(206, {
-            'Accept-Ranges': 'bytes',
-            'Content-Range': `bytes ${start}-${end}/${file.length}`,
-            'Content-Length': end - start + 1,
-            'Content-Type': 'video/mp4'
-          });
-          
-          file.createReadStream({
-            start: start,
-            end: end
-          })
-            .pipe(res);
-          
-          
-		    }
-        else
-        {
-          file.createReadStream();
-        }
-	  });
-    });
+      res.writeHead(206, {
+        'Accept-Ranges': 'bytes',
+        'Content-Range': `bytes ${start}-${end}/${file.length}`,
+        'Content-Length': end - start + 1,
+        'Content-Type': 'video/mp4'
+      });
+      
+      file.createReadStream({
+        start: start,
+        end: end
+      })
+        .pipe(res);
+        
+        
+    })
 
     // emitted when the metadata has been fetched.
     engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
