@@ -61,7 +61,7 @@ let tries = 0;
             files.forEach((file) => {
               const filePath = file.split('/');
               const fileName = filePath[filePath.length - 1].split('.');
-              const langIdentifier = fileName.length === 3 && fileName[1].length === 3 ? fileName[fileName.length - 2] : 'eng';
+              const langIdentifier = fileName.length === 3 && fileName[1].length === 3 ? fileName[fileName.length - 2] : fileName.length === 2 && fileName[0].length <= 3 ? fileName[fileName.length - 2] : 'eng';
               fs.rename(file, '../public/' + imdb + '/sub.' + langIdentifier + '.srt', (err) => { if(err) console.log(err); });
             })
             //fs.rename(files[0], '../public/' + imdb + '/sub.srt', (err) => { if(err) console.log(err); });
