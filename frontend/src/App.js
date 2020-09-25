@@ -92,6 +92,9 @@ const App = () =>
 				draft.myList.splice(action.value, 1);
 				localStorage.setItem("HiveflixMyList", JSON.stringify(draft.myList));
 				return;
+			case "updateWatched":
+				draft.watched = action.value;
+				localStorage.setItem("HiveflixWatched", JSON.stringify(action.value));
 			default:
 				// without this there's an error
 		}

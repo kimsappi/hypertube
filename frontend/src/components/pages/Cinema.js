@@ -3,13 +3,17 @@ import React, { useState, Fragment, useEffect, useContext, useRef } from "react"
 import { useParams } from 'react-router-dom';
 import ReactPlayer from "react-player";
 import StateContext from "../../context/StateContext";
+import DispatchContext from "../../context/DispatchContext";
 
 import config from '../../config/config';
 
 const Cinema =  () =>
 {
 	const playerRef = useRef(null);
+
 	const globalState = useContext(StateContext);
+	const globalDispatch = useContext(DispatchContext);
+
 	const { magnet, title_long, imdb } = useParams();
 	const [status, setStatus] = useState("...");
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
@@ -100,6 +104,9 @@ const Cinema =  () =>
 				percent
 			}, globalState.config)
 			//alert('secs: ' + secondsPlayed + 'total: ' + totalSeconds + 'percent: ' + percent + 'test: ' + test);
+			const oldWatched = globalState.watched;
+			const newWatched = {...oldWatched, [imdb]: percent};
+			globalDispatch({type: 'updateWatched', value: newWatched});
 		}
 
 
