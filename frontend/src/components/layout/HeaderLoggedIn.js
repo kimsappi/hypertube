@@ -30,6 +30,11 @@ const HeaderLoggedIn = () =>
 							<i className="fas fa-images color-primary"></i> My List
 						</NavLink>
 					</li>
+					<li>
+						<NavLink to='/watched' alt='My List' title='Watched'>
+							<i className="fas fa-images color-primary"></i> Watched
+						</NavLink>
+					</li>
 				</ul>
 				<ul>
 					<li>

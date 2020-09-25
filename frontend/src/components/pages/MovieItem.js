@@ -8,7 +8,25 @@ import StateContext from "../../context/StateContext";
 import imdbLogo from "../../images/imdb_logo.png"
 // import metacriticLogo from "../../images/metacritic_logo.svg"
 
-const MovieItem = ({ movie }) =>
+const PercentageBar = ({ percentage }) => {
+	const style = {
+		position: 'absolute',
+		bottom: '0',
+		left: '0',
+		height: '7px',
+		backgroundColor: 'red',
+		width: `${percentage}%`
+	};
+	
+	if (!percentage)
+		return '';
+	
+	return (
+		<div style={style}></div>
+	);
+};
+
+const MovieItem = ({ movie, percentage }) =>
 {
 	const globalState = useContext(StateContext);
 	const [mouseHover, setMouseHover] = useState(false);
@@ -54,7 +72,7 @@ const MovieItem = ({ movie }) =>
 
 	return (
 		<Link to={"/movie/" + movie.id} style={{ textDecoration: 'none' }}>
-		<div className="movie-item" style={{backgroundImage: `url(${movie.medium_cover_image})`}} onMouseEnter={() => setMouseHover(true)} onMouseLeave={() => setMouseHover(false)}>
+		<div className="movie-item" style={{backgroundImage: `url(${movie.medium_cover_image})`, position: 'relative'}} onMouseEnter={() => setMouseHover(true)} onMouseLeave={() => setMouseHover(false)}>
 			{mouseHover && (
 				<Fragment>
 					<div className="test">
@@ -88,6 +106,7 @@ const MovieItem = ({ movie }) =>
 					</div>
 				</Fragment>
 			)}
+			<PercentageBar percentage={percentage} />
 		</div>
 		</Link>
 	)

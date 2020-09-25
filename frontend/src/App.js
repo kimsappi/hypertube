@@ -13,6 +13,7 @@ import HeaderLoggedOut from './components/layout/HeaderLoggedOut';
 import Home from './components/pages/Home';
 import Search from './components/pages/Search';
 import MyList from './components/pages/MyList';
+import Watched from './components/pages/Watched';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Movie from './components/pages/Movie';
@@ -110,6 +111,7 @@ const App = () =>
 						<Route exact path='/movie/:id' component={initialState.loggedIn ? Movie : Login} />
 						<Route exact path='/search' component={initialState.loggedIn ? Search : Login} />
 						<Route exact path='/mylist' component={initialState.loggedIn ? MyList : Login} />
+						<Route exact path='/watched' component={initialState.loggedIn ? Watched : Login} />
 						<Route exact path='/cinema/:magnet/:imdb' component={initialState.loggedIn ? Cinema : Login} />
 						<Route exact path='/profile/:id' component={initialState.loggedIn ? Profile : Login} />
 						<Route exact path='/login' component={initialState.loggedIn ? Home : Login} />
