@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import React, { useState, Fragment, useEffect, useContext } from "react";
+import React, { useState, Fragment, useEffect, useContext, useRef } from "react";
 import { useParams } from 'react-router-dom';
 import ReactPlayer from "react-player";
 import StateContext from "../../context/StateContext";
@@ -8,6 +8,7 @@ import config from '../../config/config';
 
 const Cinema =  () =>
 {
+	const playerRef = useRef(null);
 	const globalState = useContext(StateContext);
 	const { magnet, title_long, imdb } = useParams();
 	const [status, setStatus] = useState("...");
@@ -83,6 +84,7 @@ const Cinema =  () =>
 					}
 		})()
 
+		console.error(playerRef)
 		return () => {
 			// Player didn't load yet
 			if (!document.querySelector('video'))
@@ -133,12 +135,13 @@ const Cinema =  () =>
 			<div className="flex-center p-4 bg-black100">
 			{waitForIt === true ? 
 				<ReactPlayer
+					ref={playerRef}
 					width="100%"
 					height="500px"
 					playing={true}
 					controls={true}
 					pip={false}
-					onReady={() => setMovieReady(true)}
+					onReady={() => {if (!movieReady) playerRef.current.seekTo(1000); setMovieReady(true);}}
 					onStart={onStart}
 					onPlay={onPlay}
 					onProgress={onProgress}
