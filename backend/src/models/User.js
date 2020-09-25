@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   language: {type: String, default: 'eng', enum: config.languages},
   mute: {type: Boolean, default: false},
 
-  watched: Array,
+  watched: Object,
   myList: Array,
 });
 

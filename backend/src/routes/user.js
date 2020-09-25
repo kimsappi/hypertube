@@ -100,7 +100,7 @@ router.post('/watched', authenticationMiddleware, async (req, res) => {
 
 	const imdb = req.body.imdb;
 	const response = await User.findByIdAndUpdate(req.user.id, {
-		$addToSet: {watched: {[req.body.imdb]: req.body.percent}}
+		$set: {watched: {[req.body.imdb]: req.body.percent}}
 	})
 
 	console.log(response);
