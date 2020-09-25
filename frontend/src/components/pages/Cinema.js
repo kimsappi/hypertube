@@ -84,9 +84,14 @@ const Cinema =  () =>
 		})()
 
 		return () => {
-			let test = secondsPlayed;
+			// Player didn't load yet
+			if (!document.querySelector('video'))
+				return;
 
-			let percent = (secondsPlayed / totalSeconds) * 100;
+			const played = document.querySelector('video').currentTime;
+			const runtime = document.querySelector('video').duration;
+
+			const percent = (played / runtime) * 100;
 			Axios.post(config.SERVER_URL + '/api/users/watched',
 			{
 				imdb,
