@@ -29,8 +29,7 @@ const Watched = () =>
           console.log(idList[i])
 					const res = await axios.get("https://yts.mx/api/v2/movie_details.json?movie_id=" + idList[i][0]);
 					list.push({
-            movie: res.data.data.movie,
-            percentage: idList[i][1]
+            movie: res.data.data.movie
           });
 				}
 
@@ -51,7 +50,7 @@ const Watched = () =>
 			{!loading && (
 				<div className="movie-items-container">
 					{myList.length ? myList.map (movie => (
-              <MovieItem movie={movie.movie} percentage={movie.percentage} key={movie.movie.imdb_code}/>
+              <MovieItem movie={movie.movie} key={movie.movie.imdb_code}/>
 						)
 					) :
 					<div className="mt-4">You haven't watched anything yet.</div>}

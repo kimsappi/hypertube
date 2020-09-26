@@ -26,12 +26,14 @@ const PercentageBar = ({ percentage }) => {
 	);
 };
 
-const MovieItem = ({ movie, percentage }) =>
+const MovieItem = ({ movie }) =>
 {
 	const globalState = useContext(StateContext);
 	const [mouseHover, setMouseHover] = useState(false);
 	const [movieData, setMovieData] = useState(null);
 	const isInitialMount = useRef(true);
+
+	const percentage = globalState.watched[movie.id] || 0;
 
 	useEffect(() =>
 	{
