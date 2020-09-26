@@ -27,13 +27,19 @@ const Cinema =  () =>
 
 	const token = localStorage.getItem("HiveflixToken");
 
+	const previouslyWatchedPercentage = globalState.watched[imdb] && globalState.watched < 95 ?
+		globalState.watched[imdb] : 0;
+
 	const onProgress = ({ playedSeconds, loadedSeconds }) =>
 	{
 		setSecondsPlayed(playedSeconds);
 		setSecondsLoaded(loadedSeconds);
 	}
 
-	const onDuration = (duration) => setTotalSeconds(duration);
+	const onDuration = (duration) => {
+		setTotalSeconds(duration);
+		playerRef.current.seekTo(previouslyWatchedPercentage * duration / 100);
+	};
 
 	const onStart = () => setStatus("START");
 	const onPlay = () => setStatus("PLAY");
@@ -148,7 +154,7 @@ const Cinema =  () =>
 					playing={true}
 					controls={true}
 					pip={false}
-					onReady={() => {if (!movieReady) playerRef.current.seekTo(1000); setMovieReady(true);}}
+					onReady={() => {setMovieReady(true);}}
 					onStart={onStart}
 					onPlay={onPlay}
 					onProgress={onProgress}
