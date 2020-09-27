@@ -2,7 +2,21 @@ const express = require('express');
 const torrentStream = require('torrent-stream');
 
 const fs = require('fs');
-const srt2vtt = require('srt2vtt');
+var https = require('https');
+const parse5 = require('parse5');
+const unzipper = require('unzipper');
+
+// const srt2vtt = require('srt2vtt');
+const srt2vtt = require('srt-to-vtt')
+
+const OS = require('opensubtitles-api');
+const OpenSubtitles = new OS({
+	useragent:'TemporaryUserAgent',
+	username: 'asdhypertube',
+	password: 'asdASD123',
+	ssl: true
+});
+
 const glob = require('glob');
 
 const { verifyToken } = require('../utils/auth');
@@ -12,6 +26,207 @@ const Logger = require('../utils/logger');
 const Movie = require('../models/Movie');
 
 const router = express.Router();
+
+// SSE START ************************************************************
+
+router.get("/secret/:magnet/:id/:imdb", (req,res) =>
+{
+	const { magnet, id, imdb } = req.params;
+
+	// create SSE connection
+	const headers = {
+		'Content-Type': 'text/event-stream',
+		'Connection': 'keep-alive',
+		'Cache-Control': 'no-cache',
+		'Transfer-Encoding': 'compress'
+	};
+	res.writeHead(200, headers);
+
+	// start torrent-stream engine
+	const engine = torrentStream("magnet:?" + magnet, {
+		connections: 100,     // Max amount of peers to be connected to.
+		uploads: 1,          // Number of upload slots.
+		tmp: "../public",
+		path: "../public/" + id,
+		trackers: [
+			"udp://glotorrents.pw:6969/announce",
+			"udp://tracker.opentrackr.org:1337/announce",
+			"udp://torrent.gresille.org:80/announce",
+			"udp://tracker.openbittorrent.com:80",
+			"udp://tracker.coppersurfer.tk:6969",
+			"udp://tracker.leechers-paradise.org:6969",
+			"udp://p4p.arenabg.ch:1337",
+			"udp://tracker.internetwarriors.net:1337"
+		],
+	});
+
+	// emitted when the metadata has been fetched.
+	engine.on('torrent', () =>
+	{
+		res.write(`data: { "type": 0 }\n\n`);
+	});
+
+	// emitted when the engine is ready to be used.
+	engine.on('ready', () =>
+	{
+		// iterate all files and send srt-file names and sizes to client
+		engine.files.forEach(file =>
+		{
+			if (file.name.includes(".srt"))
+			{
+				res.write(`data: { "type": 1, "name": "${file.name}", "size": ${file.length} }\n\n`);
+				file.select();			
+			}
+		})
+	});
+
+	// emitted everytime a piece has been downloaded and verified.
+	engine.on('download', index =>
+	{
+		res.write(`data: { "type": 2, "downloaded": ${engine.swarm.downloaded} }\n\n`);
+		console.log("\033[36mpart " + index +	" downloaded and verified\033[0m")
+	})
+
+	// emitted when all selected files have been completely downloaded.
+	engine.on('idle', async () =>
+	{
+		engine.files.forEach(file =>
+		{
+			if (file.name.includes(".srt"))
+			{
+				const path = __dirname + "/../../public/" + id + "/" + file.path;
+				const pathNew = "../public/" + id + "/" + renameSubtitle(file);
+				
+				if (fs.existsSync(path) && !fs.existsSync(pathNew))
+				{
+					fs.createReadStream(path)
+						.pipe(srt2vtt())
+						.pipe(fs.createWriteStream(pathNew));
+				}
+			}
+		});
+
+		if (!fs.existsSync(__dirname + "/../../public/" + id + "/subs.eng.vtt"))
+		{
+			res.write(`data: { "type": 1, "name": "yifysubtitles.org: subs.en.vtt", "size": 0 }\n\n`);
+
+			// download yifysubtitles html file and save it on server
+			const url = "https://yifysubtitles.org/movie-imdb/" + imdb;
+			const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/tmp.html");
+			https.get(url, (response) => {
+				response.pipe(file)
+			})
+
+			setTimeout(() =>
+			{
+				try
+				{
+					// read data from html file
+					var data = fs.readFileSync(__dirname + "/../../public/" + id + "/tmp.html", 'utf8');
+					const document = parse5.parse(data);
+
+					// take tbody section from html
+					const tbody = document.childNodes[1].childNodes[2].childNodes[9].childNodes[9].childNodes[6].childNodes[1].childNodes[3];
+
+					// remove all rows where language is not "English"
+					for (let i = 1; tbody.childNodes[i]; i += 2)
+					{
+						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== "English")
+						{
+							tbody.childNodes.splice(i - 1, 2);
+							i -= 2;
+						}
+					}
+
+					// remove unused "text" rows from object
+					for (let i = 0; tbody.childNodes[i]; i++)
+						tbody.childNodes.splice(i, 1);
+
+					// sort rows (most likes at the top)
+					tbody.childNodes.sort((a, b) => {
+						b.childNodes[1].childNodes[0].childNodes[0].value - a.childNodes[1].childNodes[0].childNodes[0].value;
+					});
+
+					// download subtitle zip-file and save it on server (currently uses hardcoded english subtitle)
+					if (tbody.childNodes.length > 0)
+					{
+						const url = "https://yifysubtitles.org" + tbody.childNodes[0].childNodes[5].childNodes[1].attrs[0].value.replace("subtitles/", "subtitle/") + ".zip";
+						https.get(url, (response) => {
+							if (response.statusCode !== 404)
+							{
+								// pipe html document to zip file
+								const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/subs.zip");
+								response.pipe(file)
+
+								// unzip the first file inside the zip-file
+								setTimeout(() => {
+									fs.createReadStream(__dirname + "/../../public/" + id + "/subs.zip")
+										.pipe(unzipper.ParseOne())
+										.pipe(fs.createWriteStream(__dirname + "/../../public/" + id + "/subs.eng.srt"));
+								}, 1000);
+			
+								// convert srt-file to vtt subtitle file
+								setTimeout(() => {
+									const path = __dirname + "/../../public/" + id + "/subs.eng.srt";
+									const pathNew = __dirname + "/../../public/" + id + "/subs.eng.vtt";
+									
+									fs.createReadStream(path)
+										.pipe(srt2vtt())
+										.pipe(fs.createWriteStream(pathNew));
+								}, 2000);
+							}
+						})
+					}
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
+			}, 1000);
+		}
+
+		setTimeout(() =>
+		{
+			// start downloading movie
+			engine.files.forEach(file =>
+				{
+					if (file.name.includes(".mp4"))
+					{
+						file.select();
+						res.write(`data: { "type": 3, "name": "${file.name}", "size": ${file.length} }\n\n`);
+					}
+				});	
+		}, 3000);
+
+		setTimeout(() => {
+			engine.destroy(() => console.log("engine destroyed!"));
+			// engine.remove(() => console.log("engine removed!"));
+		}, 6000);
+	})
+
+
+	// convert subtitle file name to correct format "subs.[language].vtt"
+	function renameSubtitle(file)
+	{
+		if (file.name.includes("YTS") || file.name.includes("YIFY"))
+			return ("subs.eng.vtt");
+		else
+		{
+			const tmp = file.name.split(".");
+			return ("subs." + tmp[tmp.length - 2] + ".vtt");
+		}
+	}
+
+	// when client or server timeout closes connection
+	req.on('close', () =>
+	{
+		engine.destroy(() => console.log("engine destroyed!"));
+		// engine.remove(() => console.log("engine removed!"));
+		// res.end();
+	});
+})
+
+// SSE END ****************************************************************
 
 router.get('/start/:magnet/:token/:imdb', async (req, res) => {
   const { magnet, token, imdb } = req.params;

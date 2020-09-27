@@ -299,3 +299,31 @@ hr {
 	border: none;
 	color: var(--error);
 } */
+
+.cinema-container {
+	display: flex;
+}
+
+.cinema-info {
+	display: inline-block;
+	background-color: rgba(22, 22, 22, .9);
+	border-radius: 0.5rem;
+	border: 1px solid #666;
+	margin: 0.5rem;
+	padding: 2rem;
+	white-space: nowrap;
+}
+.cinema-info-table {
+	font-size: 0.75rem;
+	line-height: 1;
+}
+
+.loading-bar-outer {
+	width: 100%;
+	border: 1px solid #fff;
+	height: 10px;
+}
+
+.loading-bar-inner {
+	background-color: #28a745;
+}
