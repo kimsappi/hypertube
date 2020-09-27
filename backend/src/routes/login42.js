@@ -51,7 +51,9 @@ router.post('/login', async (req, res, next)  => {
                 profilePicture: confirm.profilePicture || null,
                 id: confirm._id,
                 watched: confirm.watched,
-                myList: confirm.myList
+                myList: confirm.myList,
+                language: confirm.language,
+                mute: confirm.mute
             });
         }
         else

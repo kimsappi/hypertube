@@ -57,8 +57,10 @@ const GithubLog = () => {
                 localStorage.setItem("HiveflixUsername", loginResponse.data.username);
                 localStorage.setItem("HiveflixProfilePicture", loginResponse.data.profilePicture);
                 localStorage.setItem("HiveflixId", loginResponse.data.id);
-                localStorage.setItem("HiveflixWatched", JSON.stringify(loginResponse.data.watched));
+                localStorage.setItem("HiveflixWatched", JSON.stringify(loginResponse.data.watched || {}));
                 localStorage.setItem("HiveflixMyList", JSON.stringify(loginResponse.data.myList));
+                localStorage.setItem("HiveflixLanguage", loginResponse.data.language);
+                localStorage.setItem("HiveflixMute", loginResponse.data.mute);
                 window.location.replace("http://localhost:3000/home");
             }
         }
@@ -118,8 +120,8 @@ const GithubLog = () => {
             localStorage.setItem("HiveflixProfilePicture", responseFinal.data.profilePicture);
             localStorage.setItem("HiveflixId", responseFinal.data.id);
             localStorage.setItem("HiveflixMyList", JSON.stringify([]));
-            localStorage.setItem("HiveflixWatched", JSON.stringify([]));
-            localStorage.setItem("HiveflixLanguage", 'en');
+            localStorage.setItem("HiveflixWatched", JSON.stringify({}));
+            localStorage.setItem("HiveflixLanguage", 'eng');
             window.location.replace("http://localhost:3000/home");
         }
         else

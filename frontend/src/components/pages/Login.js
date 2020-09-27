@@ -55,7 +55,7 @@ const Login = () =>
 					localStorage.setItem("HiveflixProfilePicture", response.data.profilePicture);
 					localStorage.setItem("HiveflixId", response.data.id);
 					localStorage.setItem("HiveflixMute", response.data.mute);
-					localStorage.setItem("HiveflixWatched", JSON.stringify(response.data.watched));
+					localStorage.setItem("HiveflixWatched", JSON.stringify(response.data.watched || {}));
 					localStorage.setItem("HiveflixMyList", JSON.stringify(response.data.myList));
 					localStorage.setItem("HiveflixLanguage", response.data.language);
 
