@@ -28,17 +28,21 @@ const ProfileMy = () =>
 	const [loading, setLoading] = useState(true);
 	const [originalUserData, setOriginalUserData] = useState();
 
+	const getAndSetData = async () => {
+		const response = await axios.get(config.SERVER_URL + "/api/users/me/", globalState.config);
+
+		setUserData(response.data);
+		setOriginalUserData(response.data);
+		localStorage.setItem("HiveflixLanguage", response.data.language);
+	};
+
 	useEffect(() =>
 	{
 		(async () =>
 		{
 			try
 			{
-				const response = await axios.get(config.SERVER_URL + "/api/users/me/", globalState.config);
-
-				setUserData(response.data);
-				setOriginalUserData(response.data);
-				console.log(response.data);
+				await getAndSetData();
 				setLoading(false);
 			}
 			catch (err)
@@ -167,7 +171,8 @@ const ProfileMy = () =>
 					...userDataSansPasswords
 				} = userData;
 				setOriginalUserData(userDataSansPasswords);
-				setUserData(userDataSansPasswords)
+				setUserData(userDataSansPasswords);
+				await getAndSetData();
 			}
 			catch (err)
 			{
