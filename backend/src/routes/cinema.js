@@ -6,7 +6,7 @@ var https = require('https');
 const parse5 = require('parse5');
 const unzipper = require('unzipper');
 
-const srt2vtt = require('srt2vtt');
+// const srt2vtt = require('srt2vtt');
 const srttovtt = require('srt-to-vtt')
 
 const OS = require('opensubtitles-api');
@@ -61,21 +61,18 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 	});
 
 	// emitted when the metadata has been fetched.
-	engine.on('torrent', () =>
-	{
-		res.write(`data: { "type": 0 }\n\n`);
-	});
+	engine.on('torrent', () => res.write(`data: { "kind": "metadata" }\n\n`));
 
 	// emitted when the engine is ready to be used.
 	engine.on('ready', () =>
 	{
-		// iterate all files and send srt-file names and sizes to client
+		// iterate all files and send srt-file data to client
 		engine.files.forEach(file =>
 		{
 			if (file.name.includes(".srt"))
 			{
-				res.write(`data: { "type": 1, "name": "${file.name}", "size": ${file.length} }\n\n`);
-				file.select();			
+				res.write(`data: { "kind": "subtitles", "name": "${file.name}", "size": ${file.length} }\n\n`);	
+				file.select();
 			}
 		})
 	});
@@ -83,7 +80,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 	// emitted everytime a piece has been downloaded and verified.
 	engine.on('download', index =>
 	{
-		res.write(`data: { "type": 2, "downloaded": ${engine.swarm.downloaded} }\n\n`);
+		res.write(`data: { "kind": "downloaded": ${engine.swarm.downloaded} }\n\n`);
 		console.log("\033[36mpart " + index +	" downloaded and verified\033[0m")
 	})
 
@@ -95,20 +92,29 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 			if (file.name.includes(".srt"))
 			{
 				const path = __dirname + "/../../public/" + id + "/" + file.path;
-				const pathNew = "../public/" + id + "/" + renameSubtitle(file);
+				const newName = renameSubtitle(file);
+				const pathNew = "../public/" + id + "/" + newName;
 				
 				if (fs.existsSync(path) && !fs.existsSync(pathNew))
 				{
 					fs.createReadStream(path)
 						.pipe(srttovtt())
 						.pipe(fs.createWriteStream(pathNew));
+
+					const tmp = newName.split(".");
+					const language = tmp[1];
+					res.write(`data: { "kind": "converted",  "src": "http://localhost:5000/${newName}", "srcLang": "${language}", "name": "${newName}", "size": ${file.length} }\n\n`);
 				}
 			}
 		});
 
+		// kind: 'subtitles',
+		// src: config.SERVER_URL + "/" + subtitle,
+		// srcLang: lang[lang.length - 2]
+
 		if (!fs.existsSync(__dirname + "/../../public/" + id + "/subs.eng.vtt"))
 		{
-			res.write(`data: { "type": 1, "name": "yifysubtitles.org: subs.en.vtt", "size": 0 }\n\n`);
+			res.write(`data: { "kind": "subtitles", "name": "downloading from yifysubtitles.org", "size": 0 }\n\n`);
 
 			// download yifysubtitles html file and save it on server
 			const url = "https://yifysubtitles.org/movie-imdb/" + imdb;
@@ -193,7 +199,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 					if (file.name.includes(".mp4"))
 					{
 						file.select();
-						res.write(`data: { "type": 3, "name": "${file.name}", "size": ${file.length} }\n\n`);
+						res.write(`data: { "kind": "movie", "name": "${file.name}", "size": ${file.length} }\n\n`);
 					}
 				});	
 		}, 3000);
@@ -206,7 +212,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 
 
 	// convert subtitle file name to correct format "subs.[language].vtt"
-	function renameSubtitle(file)
+	const renameSubtitle = (file) =>
 	{
 		if (file.name.includes("YTS") || file.name.includes("YIFY"))
 			return ("subs.eng.vtt");
