@@ -6,8 +6,8 @@ var https = require('https');
 const parse5 = require('parse5');
 const unzipper = require('unzipper');
 
-// const srt2vtt = require('srt2vtt');
-const srt2vtt = require('srt-to-vtt')
+const srt2vtt = require('srt2vtt');
+const srttovtt = require('srt-to-vtt')
 
 const OS = require('opensubtitles-api');
 const OpenSubtitles = new OS({
@@ -100,7 +100,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 				if (fs.existsSync(path) && !fs.existsSync(pathNew))
 				{
 					fs.createReadStream(path)
-						.pipe(srt2vtt())
+						.pipe(srttovtt())
 						.pipe(fs.createWriteStream(pathNew));
 				}
 			}
@@ -171,7 +171,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 									const pathNew = __dirname + "/../../public/" + id + "/subs.eng.vtt";
 									
 									fs.createReadStream(path)
-										.pipe(srt2vtt())
+										.pipe(srttovtt())
 										.pipe(fs.createWriteStream(pathNew));
 								}, 2000);
 							}
