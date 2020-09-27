@@ -72,7 +72,8 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 			if (file.name.includes(".srt"))
 			{
 				res.write(`data: { "kind": "subtitles", "name": "${file.name}", "size": ${file.length} }\n\n`);	
-				file.select();
+				// file.select();
+				file.createReadStream();
 			}
 		})
 	});
@@ -87,12 +88,15 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 	// emitted when all selected files have been completely downloaded.
 	engine.on('idle', async () =>
 	{
-		engine.files.forEach(file =>
+		console.log("idle activated");
+
+		engine.files.forEach(async file =>
 		{
-			if (file.name.includes(".srt"))
+			// create subtitle vtt-file if it does not already exist
+			if (file.name.includes(".srt") && !subtitleAlreadyExists(file))
 			{
 				const path = __dirname + "/../../public/" + id + "/" + file.path;
-				const newName = renameSubtitle(file);
+				const newName = await renameSubtitle(file);
 				const pathNew = "../public/" + id + "/" + newName;
 				
 				if (fs.existsSync(path) && !fs.existsSync(pathNew))
@@ -100,21 +104,18 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 					fs.createReadStream(path)
 						.pipe(srttovtt())
 						.pipe(fs.createWriteStream(pathNew));
-
-					const tmp = newName.split(".");
-					const language = tmp[1];
-					res.write(`data: { "kind": "converted",  "src": "http://localhost:5000/${newName}", "srcLang": "${language}", "name": "${newName}", "size": ${file.length} }\n\n`);
 				}
+
+				const tmp = newName.split(".");
+				const language = tmp[1];
+				res.write(`data: { "kind": "converted", "language": "${language}", "name": "${newName}", "default": ${language === "eng" ? 1 : 0} }\n\n`);
 			}
 		});
 
-		// kind: 'subtitles',
-		// src: config.SERVER_URL + "/" + subtitle,
-		// srcLang: lang[lang.length - 2]
-
+		// if there are no english subtitles, attempt to download them
 		if (!fs.existsSync(__dirname + "/../../public/" + id + "/subs.eng.vtt"))
 		{
-			res.write(`data: { "kind": "subtitles", "name": "downloading from yifysubtitles.org", "size": 0 }\n\n`);
+			res.write(`data: { "kind": "subtitles", "name": "yifysubtitles.org", "size": 0 }\n\n`);
 
 			// download yifysubtitles html file and save it on server
 			const url = "https://yifysubtitles.org/movie-imdb/" + imdb;
@@ -160,6 +161,8 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 						https.get(url, (response) => {
 							if (response.statusCode !== 404)
 							{
+								res.write(`data: { "kind": "converted", "language": "eng", "name": "subs.eng.vtt", "default": 1 }\n\n`);
+
 								// pipe html document to zip file
 								const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/subs.zip");
 								response.pipe(file)
@@ -198,11 +201,11 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 				{
 					if (file.name.includes(".mp4"))
 					{
-						file.select();
+						// file.select();
 						res.write(`data: { "kind": "movie", "name": "${file.name}", "size": ${file.length} }\n\n`);
 					}
 				});	
-		}, 3000);
+		}, 5000);
 
 		setTimeout(() => {
 			engine.destroy(() => console.log("engine destroyed!"));
@@ -212,7 +215,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 
 
 	// convert subtitle file name to correct format "subs.[language].vtt"
-	const renameSubtitle = (file) =>
+	const renameSubtitle = async (file) =>
 	{
 		if (file.name.includes("YTS") || file.name.includes("YIFY"))
 			return ("subs.eng.vtt");
@@ -221,6 +224,16 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 			const tmp = file.name.split(".");
 			return ("subs." + tmp[tmp.length - 2] + ".vtt");
 		}
+	}
+
+	// return true if file already exists on server, otherwise return false
+	const subtitleAlreadyExists = async (file) =>
+	{
+		const renamed = renameSubtitle(file);
+		
+		if (fs.existsSync(__dirname + "/../../public/" + id + "/" + renamed))
+			return true;
+		return false;
 	}
 
 	// when client or server timeout closes connection

@@ -31,10 +31,10 @@ const CinemaAlt = () =>
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
 	const [totalSeconds, setTotalSeconds] = useState(0);
 
-	const [timeLeft, setTimeLeft] = useState(20);
+	const [timeLeft, setTimeLeft] = useState(30);
 	
-	const language = "eng";
-	const subtitleUrl = `${config.SERVER_URL}/${id}/subs.${language}.vtt`;
+	// const language = "eng";
+	// const subtitleUrl = `${config.SERVER_URL}/${id}/subs.${language}.vtt`;
 
 	const token = localStorage.getItem("HiveflixToken");
 	const videoUrl = `${config.SERVER_URL}/api/cinema/${magnet}/${token}/${id}`;
@@ -73,11 +73,20 @@ const CinemaAlt = () =>
 					{
 						status.current = 2;
 						let tmp = subtitleDataConverted;
-						tmp.push(data);
+						tmp.push({
+							kind: "subtitles",
+							name: data.name,
+							src: config.SERVER_URL + "/" + id + "/" + data.name,
+							srcLang: data.language,
+							default: Boolean(data.default)
+						})
 						setSubtitleDataConverted(tmp);
 					}
 					else if (data.kind === "movie")
 					{
+						let tmp = subtitleDataConverted;
+						console.log("all subtitles", tmp);
+
 						status.current = 3;
 						setMovieName(data.name);
 						setMovieSize(data.size);		
@@ -119,7 +128,7 @@ const CinemaAlt = () =>
 		else
 		{
 			clearTimeout(count);
-			setTimeLeft("Oh snap, downloading is taking longer than usual")
+			setTimeLeft("Oh snap, this is taking way too long")
 		}
 	}, 1000);
 
@@ -160,15 +169,15 @@ const CinemaAlt = () =>
 										<td>{subtitleCount++}.</td>
 										<td>{file.name}</td>
 										<td>{Math.round(file.size / 1000)} KB</td>
-										<td className="pl-1">{status.current > 2 ?
+										<td className="pl-1">{status.current > 1 ?
 											<i className="far fa-check-square color-success"></i> :
 											<i className="far fa-square color-black50"></i>}</td>
 									</tr>
 								)}
 							</tbody>
 						</table>
-						<div className={status.current > 2 ? "center mb-2 color-success" : "center mb-2"}>
-							Downloaded: {status.current > 2 ? 100 : Math.round((subtitleDownloaded / subtitleSize) * 100)} %
+						<div className={status.current > 1 ? "center mb-2 color-success" : "center mb-2"}>
+							Downloaded: {status.current > 1 ? 100 : Math.round((subtitleDownloaded / subtitleSize) * 100)} %
 						</div>
 					</Fragment>
 				)}
@@ -202,13 +211,13 @@ const CinemaAlt = () =>
 									<tr>
 										<td>1.</td>
 										<td>{movieName}</td>
-										<td>{Math.round(movieSize / 1000000)} MB</td>
 										<td className="pl-1">{status.current > 3 ?
 											<i className="far fa-check-square color-success"></i> :
 											<i className="far fa-square color-black50"></i>}</td>
 									</tr>
 							</tbody>
 						</table>
+						<div className="center m-2">{timeLeft}</div>
 						<hr className="my-2"></hr>
 					</Fragment>
 				)}
@@ -249,7 +258,6 @@ const CinemaAlt = () =>
 						/>
 					</div>
 					<div className="center color-black60 bg-black100 p-4">
-						<div>Attempting to start video: {timeLeft}</div>
 						<div>{statusPlayer}</div>
 						<div>played: {Math.round(secondsPlayed)} seconds</div>
 						<div>loaded: {Math.round(secondsLoaded)} / {Math.round(totalSeconds)} seconds</div>
