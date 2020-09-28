@@ -130,7 +130,7 @@ const ProfileMy = () =>
 	const handleFirstName = (event) =>
 	{
 		let tmp = clone(userData);
-		tmp.firstName = event.target.value.replace(/[^A-Za-z]/g, '');
+		tmp.firstName = event.target.value.replace(/[^a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\-]/g, '');
 
 		if (tmp.firstName.length < 20)
 			setUserData(tmp);
@@ -139,7 +139,7 @@ const ProfileMy = () =>
 	const handleLastName = (event) =>
 	{
 		let tmp = clone(userData);
-		tmp.lastName = event.target.value.replace(/[^A-Za-z]/g, '');
+		tmp.lastName = event.target.value.replace(/[^a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\-]/g, '');
 
 		if (tmp.lastName.length < 20)
 			setUserData(tmp);
