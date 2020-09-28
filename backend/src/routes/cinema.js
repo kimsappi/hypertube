@@ -200,15 +200,14 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 
 		setTimeout(() =>
 		{
+			let largestFile = null;
 			// start downloading movie
-			engine.files.forEach(file =>
+			engine.files.forEach(currentFile =>
 				{
-					if (file.name.includes(".mp4"))
-					{
-						// file.select();
-						res.write(`data: { "kind": "movie", "name": "${file.name}", "size": ${file.length} }\n\n`);
-					}
-				});	
+					if (!largestFile || currentFile.length > largestFile.length)
+          	largestFile = currentFile;
+				});
+			res.write(`data: { "kind": "movie", "name": "${largestFile.name}", "size": ${largestFile.length} }\n\n`);
 		}, 5000);
 
 		setTimeout(() => {
