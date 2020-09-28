@@ -1,5 +1,7 @@
 const express = require('express');
 const torrentStream = require('torrent-stream');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
 
 const fs = require('fs');
 var https = require('https');
@@ -16,6 +18,8 @@ const OpenSubtitles = new OS({
 	password: 'asdASD123',
 	ssl: true
 });
+
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 const glob = require('glob');
 
@@ -434,22 +438,32 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
 
       const pos = range ? range.replace(/bytes=/, '').split('-') : null;
       const start = pos ? parseInt(pos[0], 10) : 0;
-      const end = (pos && pos[1]) ? parseInt(pos[1], 10) : file.length - 1;
+			const end = (pos && pos[1]) ? parseInt(pos[1], 10) : file.length - 1;
+			
+			const isMp4 = file.name.toLowerCase().endsWith('mp4');
 
       res.writeHead(206, {
         'Accept-Ranges': 'bytes',
         'Content-Range': `bytes ${start}-${end}/${file.length}`,
         'Content-Length': end - start + 1,
-        'Content-Type': 'video/mp4'
+        'Content-Type': `video/${isMp4 ? 'mp4' : 'webm'}`
       });
-      
-      file.createReadStream({
+			
+			// Create Stream object from the selected part of the video file
+      const originalFileStream = file.createReadStream({
         start: start,
         end: end
-      })
-        .pipe(res);
-        
-        
+			});
+
+			if (isMp4)
+				originalFileStream.pipe(res)
+			else {
+				// Convert stream to mp4 format and stream to client
+				ffmpeg(originalFileStream)
+					.format('webm')
+					.on('error', err => console.log('ffmpeg error:' +err.message))
+					.pipe(res, {end: true});
+			}
     })
 
     // emitted when the metadata has been fetched.
