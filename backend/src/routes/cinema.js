@@ -229,7 +229,7 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 						const url = "https://yifysubtitles.org" + tbody.childNodes[0].childNodes[5].childNodes[1].attrs[0].value.replace("subtitles/", "subtitle/") + ".zip";
 						
 						https.get(url, (response) => {
-							if (response.statusCode !== 404)
+							if (response.statusCode === 200)
 							{
 								res.write(`data: { "kind": "available", "name": "yifysubtitles.org", "size": 50 }\n\n`);
 
@@ -297,7 +297,7 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 		files.forEach(file =>
 		{
 			// create vtt-file if prefered languege does not already exist
-			if (file.name.includes(".srt") && !subtitleAlreadyExists(file.name))
+			if (file.name.includes(".srt") && !subtitleAlreadyExists(file.name) && file.length > 10000)
 			{
 				const path = __dirname + "/../../public/" + id + "/" + file.path;
 				const newName = "subs." + subtitleLanguage(file.name) + ".vtt";
