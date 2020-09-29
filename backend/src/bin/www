@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+const Movie = require('../models/Movie');
+const fs = require('fs');
+
 /**
  * Module dependencies.
  */
@@ -88,3 +91,18 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+// Delete movies after 30 days of non-watching
+const movieDeleter = async () => {
+  const monthAgo = new Date();
+  monthAgo.setMonth(monthAgo.getMonth() - 1);
+  const moviesToBeDeleted = await Movie.find({lastViewed: {$lt: monthAgo}});
+  moviesToBeDeleted.forEach(async movie => {
+    fs.rmdir(`${__dirname}/../../public/${movie.dirName}`, {recursive: true}, err => {
+      if (err) {}
+    });
+    await Movie.findByIdAndDelete(movie._id);
+  });
+};
+
+setInterval(() => movieDeleter(), 3600000);

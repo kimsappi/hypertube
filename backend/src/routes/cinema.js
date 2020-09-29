@@ -387,15 +387,11 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
 
     // Saving movie into database or editing its lastViewed
     try {
-      const dbMovie = new Movie({magnet});
+      const dbMovie = new Movie({dirName: imdb, lastViewed: new Date()});
       await dbMovie.save();
     } catch(err) {
-      // Movie is already in database
-      const oldMovie = Movie.findOne({magnet});
-      if (oldMovie.fullyDownloaded)
-        console.log('Movie is already fully downloaded');
-        // The above is not actually implemented yet
-      await Movie.findOneAndUpdate({magnet}, {lastViewed: new Date()});
+      // Movie is already in database, update lastViewed
+      await Movie.findOneAndUpdate({dirName: imdb}, {lastViewed: new Date()});
     }
 
     // start engine
