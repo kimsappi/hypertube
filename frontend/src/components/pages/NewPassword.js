@@ -42,7 +42,7 @@ const NewPassword = () =>
 	};
 
 	return (
-		<div className="center">
+		<div className="center" style={{padding: '10px'}}>
 			<h1 className="my-4">New Password</h1>
 			{error && <div className="small alert alert-error">{error}</div>}
 			{success && <div className="small alert alert-success">{success}</div>}

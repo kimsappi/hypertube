@@ -45,6 +45,7 @@ const ForgotPassword = () =>
 					value={email}
 					onChange={changeEmail}
 					required={true}
+					style={{maxWidth: '300px', margin: 'auto'}}
 				/>
 				<button type="submit"><i className="fas color-black100"></i>Reset Password</button>
 			</form>

@@ -130,8 +130,12 @@ const HiveLog = () => {
         console.log(passTwo);
     }
 
+    const inputStyle = {
+        maxWidth: '300px'
+    };
+
     return (
-        <>
+        <div style={{padding: '10px'}}>
             
             {response && action == 'register' ? 
             <>
@@ -140,8 +144,8 @@ const HiveLog = () => {
                 <h3>Your username is: {response.data.login}</h3>
                 <h4>Set your password:</h4>
                 <form onSubmit={registerSubmit}>
-                    <input type="password" id="pass1" onChange={setPassOneF}/>
-                    <input type="password" id="pass2" onChange={setPassTwoF}/>
+                    <input type="password" id="pass1" onChange={setPassOneF} style={inputStyle}/>
+                    <input type="password" id="pass2" onChange={setPassTwoF} style={inputStyle}/>
                     <button type="submit">Set password!</button>
                 </form>
             </>
@@ -152,7 +156,7 @@ const HiveLog = () => {
             <h1>Loading....</h1> }
 
           
-        </>
+        </div>
     )
 }
 

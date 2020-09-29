@@ -133,8 +133,12 @@ const GithubLog = () => {
             console.log("Passwords dont match");
     }
 
+    const inputStyle = {
+        maxWidth: '300px'
+    };
+
     return(
-        <>
+        <div style={{padding: '10px'}}>
             {response && action == 'register' ? 
             <>
                 <h1>Hello {response.data.firstName}!</h1>
@@ -142,8 +146,8 @@ const GithubLog = () => {
                 <h3>Your username is: {response.data.username}</h3>
                 <h4>Set your password:</h4>
                 <form onSubmit={registerSubmit}>
-                    <input type="password" id="pass1" onChange={setPassOneF}/>
-                    <input type="password" id="pass2" onChange={setPassTwoF}/>
+                    <input type="password" id="pass1" onChange={setPassOneF} style={inputStyle}/>
+                    <input type="password" id="pass2" onChange={setPassTwoF} style={inputStyle}/>
                     <button type="submit">Set password!</button>
                 </form>
             </>
@@ -152,7 +156,7 @@ const GithubLog = () => {
             </>
             : 
             <h1>Loading....</h1> }
-        </>
+        </div>
     )
 }
 
