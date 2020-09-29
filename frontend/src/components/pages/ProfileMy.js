@@ -233,17 +233,17 @@ const ProfileMy = () =>
 					</div>
 					<div>
 						<form onSubmit={handleSubmit}>
-							<lable>Email</lable>
+							<label>Email</label>
 							<input type="email" value={userData.email || ''} onChange={handleEmail} required={true}/>
-							<lable>First Name</lable>
+							<label>First Name</label>
 							<input type="text" value={userData.firstName} onChange={handleFirstName} required={true}/>
-							<lable>Last Name</lable>
+							<label>Last Name</label>
 							<input type="text" value={userData.lastName} onChange={handleLastName} required={true}/>
-							<lable>Language</lable>
+							<label>Language</label>
 							<select name="language" id="language" value={userData.language} onChange={handleLanguage}>
 										{config.languages.map(lang => <LanguageOption lang={lang} key={lang.shorthand} />)}
 									</select>
-							<lable>New Password</lable>
+							<label>New Password</label>
 							<input
 								type="password"
 								value={userData.newPassword1 || ''}
@@ -252,7 +252,7 @@ const ProfileMy = () =>
 								onChange={handleNewPassword1}
 							/>
 							{errorNewPassword1 && <div className="small alert alert-error">{errorNewPassword1}</div>}
-							<lable>Confirm New Password</lable>
+							<label>Confirm New Password</label>
 							<input
 								type="password"
 								value={userData.newPassword2 || ''}
@@ -260,7 +260,7 @@ const ProfileMy = () =>
 								autoComplete="new-password"
 								onChange={handleNewPassword2}
 							/>
-							<lable>Current Password</lable>
+							<label>Current Password</label>
 							<input
 								type="password"
 								value={userData.currentPassword || ''}
