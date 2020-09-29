@@ -199,8 +199,10 @@ hr {
 }
 
 .movie-item:hover {
+	transition-delay: 0.5s;
 	transform: scale(1.25);
 	border: 3px solid #ffc107;
+	z-index: 100;
 	/* box-shadow: 0 0 10px #aaa; */
 	/* position: sticky; */
 }
@@ -326,4 +328,16 @@ hr {
 
 .loading-bar-inner {
 	background-color: #28a745;
+}
+
+input[type="file"] {
+	display: none;
+}
+
+.custom-file-upload {
+	border: 1px solid #666;
+	padding: 3px 6px;
+	cursor: pointer;
+	border-radius: 5px;
+	margin: 1rem;
 }

@@ -32,13 +32,16 @@ const MovieItem = ({ movie }) =>
 	const [mouseHover, setMouseHover] = useState(false);
 	const [movieData, setMovieData] = useState(null);
 	const isInitialMount = useRef(true);
+	const timer = useRef(0);
 
 	const percentage = globalState.watched[movie.id] || 0;
 
 	useEffect(() =>
 	{
 		if (isInitialMount.current)
+		{
 			isInitialMount.current = false;
+		}
 		else
 		{
 			const CancelToken = axios.CancelToken;
@@ -54,7 +57,7 @@ const MovieItem = ({ movie }) =>
 						const response = await axios.get(
 							"http://www.omdbapi.com/?i=" + movie.imdb_code + "&apikey=cc729f53"
 						);
-						
+
 						setMovieData(response.data);
 					}
 					catch (err)
@@ -65,16 +68,26 @@ const MovieItem = ({ movie }) =>
 					}
 				}
 			})();
-			return () =>
-			{
-				source.cancel();
-			}
 		}
 	}, [mouseHover]);
 
+	const handleMouseEnter = () =>
+	{
+		timer.current = setTimeout(() =>
+		{
+			setMouseHover(true);
+		}, 500);
+	}
+
+	const handleMouseLeave = () =>
+	{
+		clearTimeout(timer.current);
+		setMouseHover(false);
+	}
+
 	return (
 		<Link to={"/movie/" + movie.id} style={{ textDecoration: 'none' }}>
-		<div className="movie-item" style={{backgroundImage: `url(${movie.medium_cover_image})`, position: 'relative'}} onMouseEnter={() => setMouseHover(true)} onMouseLeave={() => setMouseHover(false)}>
+		<div className="movie-item" style={{backgroundImage: `url(${movie.medium_cover_image})`, position: 'relative'}} onMouseEnter={() => handleMouseEnter()} onMouseLeave={() => handleMouseLeave()}>
 			{mouseHover && (
 				<Fragment>
 					<div className="test">

@@ -225,104 +225,61 @@ const ProfileMy = () =>
 					<div>
 						<ProfilePicture url={globalState.profilePicture} className='profile-image-large'/>
 					</div>
-					<input type='file' onChange={handlePicUpload}
-					/>
-				</div>
-
-				{error && <div className='alert alert-error'>{error}</div>}
-				{success && <div className='alert alert-success'>{success}</div>}
-				<form onSubmit={handleSubmit}>
-					<table className="profile-table m-a mb-4">
-						<tbody>
-							<tr>
-								<td className="right bold nowrap">
-									Email:
-								</td>
-								<td>
-									<input type="email" value={userData.email || ''} onChange={handleEmail} required={true}/>
-								</td>															
-							</tr>
-							<tr>
-								<td className="right bold nowrap">
-									First Name:
-								</td>
-								<td>
-									<input type="text" value={userData.firstName} onChange={handleFirstName} required={true}/>
-								</td>															
-							</tr>
-							<tr>
-								<td className="right bold nowrap">
-									Last Name:
-								</td>
-								<td>
-									<input type="text" value={userData.lastName} onChange={handleLastName} required={true}/>
-								</td>															
-							</tr>
-							<tr>
-								<td className="right bold nowrap">
-									Language:
-								</td>
-								<td>
-									<select name="language" id="language" value={userData.language} onChange={handleLanguage}>
+					<div>
+						<label htmlFor="file-upload" className="custom-file-upload"> 
+							<i className="fa fa-cloud-upload"></i> Change Profile Picture
+						</label>
+						<input id="file-upload" type='file' onChange={handlePicUpload}/>
+					</div>
+					<div>
+						<form onSubmit={handleSubmit}>
+							<lable>Email</lable>
+							<input type="email" value={userData.email || ''} onChange={handleEmail} required={true}/>
+							<lable>First Name</lable>
+							<input type="text" value={userData.firstName} onChange={handleFirstName} required={true}/>
+							<lable>Last Name</lable>
+							<input type="text" value={userData.lastName} onChange={handleLastName} required={true}/>
+							<lable>Language</lable>
+							<select name="language" id="language" value={userData.language} onChange={handleLanguage}>
 										{config.languages.map(lang => <LanguageOption lang={lang} key={lang.shorthand} />)}
 									</select>
-								</td>
-							</tr>
-							<tr>
-								<td className="right bold nowrap">  
-									New Password:
-								</td>
-								<td>
-									<input
-										type="password"
-										value={userData.newPassword1 || ''}
-										placeholder="Enter new password"
-										autoComplete="new-password"
-										onChange={handleNewPassword1}
-									/>
-									{errorNewPassword1 && <div className="small alert alert-error">{errorNewPassword1}</div>}
-								</td>
-							</tr>
-							<tr>
-								<td className="right bold nowrap">
-									Confirm New Password:
-								</td>
-								<td>
-									<input
-										type="password"
-										value={userData.newPassword2 || ''}
-										placeholder="Confirm new password"
-										autoComplete="new-password"
-										onChange={handleNewPassword2}
-									/>
-								</td>															
-							</tr>
-							<tr>
-								<td className="right bold nowrap">
-									Current Password:
-								</td>
-								<td>
-									<input
-										type="password"
-										value={userData.currentPassword || ''}
-										placeholder="Enter current password"
-										autoComplete="current-password"
-										onChange={handleCurrentPassword}
-									/>
-									{errorCurrentPassword && <div className="small alert alert-error">{errorCurrentPassword}</div>} 
-								</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td className="center">
-									<button className="m-1">Update User Data</button>
-								</td>															
-							</tr>
-						</tbody>
-					</table>
-				</form>
-				<input type="checkbox" onChange={handleMute}/>
-				
+							<lable>New Password</lable>
+							<input
+								type="password"
+								value={userData.newPassword1 || ''}
+								placeholder="Enter new password"
+								autoComplete="new-password"
+								onChange={handleNewPassword1}
+							/>
+							{errorNewPassword1 && <div className="small alert alert-error">{errorNewPassword1}</div>}
+							<lable>Confirm New Password</lable>
+							<input
+								type="password"
+								value={userData.newPassword2 || ''}
+								placeholder="Confirm new password"
+								autoComplete="new-password"
+								onChange={handleNewPassword2}
+							/>
+							<lable>Current Password</lable>
+							<input
+								type="password"
+								value={userData.currentPassword || ''}
+								placeholder="Enter current password"
+								autoComplete="current-password"
+								onChange={handleCurrentPassword}
+							/>
+							{errorCurrentPassword && <div className="small alert alert-error">{errorCurrentPassword}</div>}
+							{error && <div className='alert alert-error'>{error}</div>}
+							{success && <div className='alert alert-success'>{success}</div>}
+							<div className="center m-4">
+							<button>Update User Data</button>
+							</div>
+						</form>
+						{globalState.mute ?
+							<input type="checkbox" onChange={handleMute} checked/>:
+							<input type="checkbox" onChange={handleMute}/>}
+					</div>
+				</div>
 			</Fragment>
 			)}
 		</Fragment>

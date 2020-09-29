@@ -57,9 +57,11 @@ const CinemaAlt = () =>
 					}
 					else if (data.kind === "subtitles") // vtt-file on server
 					{
-						let tmp = Array.from(new Set(subtitlesReady));
+						let tmp = subtitlesReady;
 						tmp.push(data);
 						setSubtitlesReady(tmp);
+
+						console.log("subtitlesReady", tmp);
 					}
 					else if (data.kind === "available") // single srt-file name and size
 					{
