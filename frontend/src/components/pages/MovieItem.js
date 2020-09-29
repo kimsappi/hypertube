@@ -76,7 +76,7 @@ const MovieItem = ({ movie }) =>
 		timer.current = setTimeout(() =>
 		{
 			setMouseHover(true);
-		}, 500);
+		}, 400);
 	}
 
 	const handleMouseLeave = () =>

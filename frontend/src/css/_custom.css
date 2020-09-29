@@ -199,7 +199,7 @@ hr {
 }
 
 .movie-item:hover {
-	transition-delay: 0.5s;
+	transition-delay: 0.4s;
 	transform: scale(1.25);
 	border: 3px solid #ffc107;
 	z-index: 100;
@@ -255,8 +255,6 @@ hr {
 }
 
 .movie-title-huge {
-	position: absolute;
-	top: 60px;
 	color: #fff;
 	font-size: 4vmax;
 	text-shadow: 5px 5px 10px #333;
@@ -340,4 +338,36 @@ input[type="file"] {
 	cursor: pointer;
 	border-radius: 5px;
 	margin: 1rem;
+}
+
+.hoverbox {
+	position: absolute;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+	top: 70px;
+	left: 0px;
+	/* border: 1px solid #ccc;
+	background-color: rgba(255, 255, 255, .5); */
+	padding: 2rem;
+	color: #333;
+}
+
+.left-box {
+	width: 50%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.right-box {
+	max-width: 350px;
+	background-color: rgba(33, 33, 33, .7);
+	border: 1px solid  #111;
+	padding: 2rem;
+	border-radius: 1rem;
+	color: #ddd;
+	font-size: 1.25rem;
+	font-style: italic;
 }
