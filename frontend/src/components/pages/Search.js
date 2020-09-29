@@ -157,7 +157,7 @@ const Search = () =>
 					<select
 						name="minimumRating"
 						value={minimumRating}
-						defaultValue="5"
+						
 						onChange={(event) => setMinimumRating(event.target.value)}
 					>
 						<option value="9">9+</option>

@@ -33,7 +33,6 @@ const CommentItem = ({ sender, message, created, commentId, index, render, setRe
 		}
 			
 	}
-	console.log(commentId);
 	return (
 			<div className="comment-item">
 				<div>

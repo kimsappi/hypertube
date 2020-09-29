@@ -111,8 +111,8 @@ const Home = () =>
 									)
 								)}
 						</div>
-						{moviesByGenre && moviesByGenre.map (movieByGenre => (
-							<Fragment>
+						{moviesByGenre && moviesByGenre.map ((movieByGenre, index) => (
+							<Fragment key={index}>
 								<h2 className="center bg-black100 py-2">New in {movieByGenre.genre}</h2>
 								<div className="movie-items-container">
 									{movieByGenre && movieByGenre.map (movie => (

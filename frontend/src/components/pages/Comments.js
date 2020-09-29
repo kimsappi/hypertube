@@ -100,7 +100,7 @@ const Comments = ({ movieId }) =>
 					message={comment.comment}
 					created={timeSinceCreated(comment.time)}
 					commentId={comment._id}
-					index={index}
+					key={index}
 					render={render}
 					setRenderTrick={setRender}
 				/>
