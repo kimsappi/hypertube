@@ -39,6 +39,7 @@ const App = () =>
 		username: localStorage.getItem("HiveflixUsername"),
 		profilePicture: localStorage.getItem("HiveflixProfilePicture"),
 		mute: localStorage.getItem("HiveflixMute") === "true" ? true : false,
+		language: localStorage.getItem("HiveflixLanguage"),
 		watched: JSON.parse(localStorage.getItem("HiveflixWatched")),
 		myList: JSON.parse(localStorage.getItem("HiveflixMyList")),
 		config: {
@@ -59,6 +60,7 @@ const App = () =>
 				draft.username = localStorage.getItem("HiveflixUsername");
 				draft.profilePicture = localStorage.getItem("HiveflixProfilePicture");
 				draft.mute = localStorage.getItem("HiveflixMute") === "true" ? true : false;
+				draft.language = localStorage.getItem("HiveflixLanguage");
 				draft.watched = JSON.parse(localStorage.getItem("HiveflixWatched"));
 				draft.myList = JSON.parse(localStorage.getItem("HiveflixMyList"));
 				draft.config = {
@@ -76,10 +78,15 @@ const App = () =>
 				localStorage.removeItem("HiveflixProfilePicture");
 				localStorage.removeItem("HiveflixWatched");
 				localStorage.removeItem("HiveflixMyList");
+				localStorage.removeItem("HiveflixLanguage");
 				return;
 			case "changeProfilePicture":
 				draft.profilePicture = action.value;
 				localStorage.setItem("HiveflixProfilePicture", action.value);
+				return;
+			case "changeLanguage":
+				draft.language = action.value;
+				localStorage.setItem("HiveflixLanguage", action.value);
 				return;
 			case "toggleMute":
 				draft.mute = action.value;

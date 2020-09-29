@@ -33,7 +33,7 @@ const ProfileMy = () =>
 
 		setUserData(response.data);
 		setOriginalUserData(response.data);
-		localStorage.setItem("HiveflixLanguage", response.data.language);
+		globalDispatch({ type: "changeLanguage", value: response.data.language });
 	};
 
 	useEffect(() =>

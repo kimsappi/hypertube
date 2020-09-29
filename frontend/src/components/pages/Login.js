@@ -49,6 +49,8 @@ const Login = () =>
 
 				if (response.data.message === "login success")
 				{
+					console.log("res", response.data.language);
+
 					console.log(response.data.watched, response.data.myList)
 					localStorage.setItem("HiveflixToken", response.data.token);
 					localStorage.setItem("HiveflixUsername", response.data.username);

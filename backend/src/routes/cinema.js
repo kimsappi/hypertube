@@ -30,19 +30,18 @@ const Logger = require('../utils/logger');
 
 const Movie = require('../models/Movie');
 
+const languages = require('../../config/config');
+
 const router = express.Router();
 
 // SSE START ************************************************************
 
-router.get("/subtitles/:magnet/:id/:imdb", (req,res) =>
+router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 {
-	const { magnet, id, imdb } = req.params;
+	const { magnet, id, imdb, language } = req.params;
 
-	// temporarily hardcoded, should be taken from config (context)
-	const language = "eng";
-
-	// 30 second server timeout (closes current connection and tries to create a new one)
-	res.connection.setTimeout(600000);
+	// 1 minute server timeout (closes current connection and tries to create a new one)
+	res.connection.setTimeout(60000);
 
 	// create SSE connection
 	const headers = {
@@ -197,10 +196,21 @@ router.get("/subtitles/:magnet/:id/:imdb", (req,res) =>
 					// take tbody section from html
 					const tbody = document.childNodes[1].childNodes[2].childNodes[9].childNodes[9].childNodes[6].childNodes[1].childNodes[3];
 
+					let languageLong = "";
+
+					for (let i = 0; languages[i]; i++)
+					{
+						console.log(languages[i]);
+						if (languages[i].shorthand === language)
+							languageLong = languages[i].display;
+					}
+
+					console.log("languageLong", languageLong);
+
 					// remove all rows where language is not "English"
 					for (let i = 1; tbody.childNodes[i]; i += 2)
 					{
-						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== "English") // hardcoded !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== languageLong) // hardcoded !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 						{
 							tbody.childNodes.splice(i - 1, 2);
 							i -= 2;

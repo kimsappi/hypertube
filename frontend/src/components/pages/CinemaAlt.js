@@ -43,7 +43,8 @@ const CinemaAlt = () =>
 			try
 			{
 				// create new sse connection
-				connection.current = new EventSource(`${config.SERVER_URL}/api/cinema/subtitles/${magnet}/${id}/${imdb}`, globalState.config);
+				console.log(globalState.language);
+				connection.current = new EventSource(`${config.SERVER_URL}/api/cinema/subtitles/${magnet}/${id}/${imdb}/${globalState.language}`, globalState.config);
 	
 				// activated every time backend sends a message
 				connection.current.onmessage = (event) =>
