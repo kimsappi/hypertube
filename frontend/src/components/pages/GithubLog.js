@@ -14,6 +14,7 @@ const GithubLog = () => {
     const [response, setResponse] = useState();
     const [passOne, setPassOne] = useState('');
     const [passTwo, setPassTwo] = useState('');
+    const [errorPassword, setError] = useState('');
 
     console.log(code);
     console.log("githublog")
@@ -105,32 +106,37 @@ const GithubLog = () => {
         event.preventDefault();
         console.log("SUBMIT");
 
-        if (passOne === passTwo)
+        if (passOne.length > 7 && /\d/.test(passOne) && /^[A-Z]+/.test(passOne))
         {
-            const responseFinal = await Axios.post(
-                config.SERVER_URL+'/github/setPass',
-                {username: response.data.username,
-                    password: passOne}
-            )
-        
-        if (responseFinal.status === 200)
-        {
-            localStorage.setItem("HiveflixToken", responseFinal.data.token);
-            localStorage.setItem("HiveflixUsername", responseFinal.data.username);
-            localStorage.setItem("HiveflixProfilePicture", responseFinal.data.profilePicture);
-            localStorage.setItem("HiveflixId", responseFinal.data.id);
-            localStorage.setItem("HiveflixMyList", JSON.stringify([]));
-            localStorage.setItem("HiveflixWatched", JSON.stringify({}));
-            localStorage.setItem("HiveflixLanguage", 'eng');
-            window.location.replace("http://localhost:3000/home");
-        }
-        else
-            window.location.replace("http://localhost:3000/home");
+            if (passOne === passTwo)
+            {
+                const responseFinal = await Axios.post(
+                    config.SERVER_URL+'/github/setPass',
+                    {username: response.data.username,
+                        password: passOne}
+                )
+            
+            if (responseFinal.status === 200)
+            {
+                localStorage.setItem("HiveflixToken", responseFinal.data.token);
+                localStorage.setItem("HiveflixUsername", responseFinal.data.username);
+                localStorage.setItem("HiveflixProfilePicture", responseFinal.data.profilePicture);
+                localStorage.setItem("HiveflixId", responseFinal.data.id);
+                localStorage.setItem("HiveflixMyList", JSON.stringify([]));
+                localStorage.setItem("HiveflixWatched", JSON.stringify({}));
+                localStorage.setItem("HiveflixLanguage", 'eng');
+                window.location.replace("http://localhost:3000/home");
+            }
+            else
+                window.location.replace("http://localhost:3000/home");
 
-        console.log(responseFinal);
+            console.log(responseFinal);
+            }
+            else
+                setError("Passwords dont match");
         }
         else
-            console.log("Passwords dont match");
+            setError("Check the password requirements");
     }
 
     const inputStyle = {
@@ -150,6 +156,12 @@ const GithubLog = () => {
                     <input type="password" id="pass2" onChange={setPassTwoF} style={inputStyle}/>
                     <button type="submit">Set password!</button>
                 </form>
+                {errorPassword && <div className="small alert alert-error">{errorPassword}</div>}
+                <div className="small center">
+                    Password must be at least 8 characters in length,
+                    contain a minimum of one upper case letter [A-Z]
+                    and contain a minimum of one number [0-9]
+                </div>
             </>
             : response && action == 'login' ? 
             <>

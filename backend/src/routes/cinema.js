@@ -8,7 +8,7 @@ var https = require('https');
 const parse5 = require('parse5');
 const unzipper = require('unzipper');
 
-// const srt2vtt = require('srt2vtt');
+const srt2vtt = require('srt2vtt');
 const srttovtt = require('srt-to-vtt')
 
 const OS = require('opensubtitles-api');

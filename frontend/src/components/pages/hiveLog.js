@@ -13,13 +13,14 @@ const HiveLog = () => {
     const [response, setResponse] = useState('');
     const [passOne, setPassOne] = useState('');
     const [passTwo, setPassTwo] = useState('');
+    const [errorPassword, setError] = useState('');
     
     let history = useHistory();
 
     useEffect(() => {
-        console.log('axios updated');
+        console.log('axios or error updated');
 
-    }, [response]);
+    }, [response, errorPassword]);
 
     useEffect(() => {
 
@@ -91,33 +92,35 @@ const HiveLog = () => {
     
     const registerSubmit = async (event) => {
         event.preventDefault();
-        console.log("pw submitted");
 
-        if (passOne === passTwo)
+        if (passOne.length > 7 && /\d/.test(passOne) && /^[A-Z]+/.test(passOne))
         {
-            let passResponse = await Axios.post(
-                config.SERVER_URL+'/42/submitPass',
-                {user: response.data.login,
-                password: passOne}
-            )
-            console.log(passResponse);
-            if (passResponse.status === 200)
+            if (passOne === passTwo )
             {
-                localStorage.setItem("HiveflixToken", passResponse.data.token);
-                localStorage.setItem("HiveflixUsername", passResponse.data.username);
-                localStorage.setItem("HiveflixProfilePicture", passResponse.data.profilePicture);
-                localStorage.setItem("HiveflixId", passResponse.data.id);
-                localStorage.setItem("HiveflixMyList", JSON.stringify([]));
-                localStorage.setItem("HiveflixWatched", JSON.stringify({}));
-                localStorage.setItem("HiveflixLanguage", passResponse.data.language);
-                localStorage.setItem("HiveflixMute", passResponse.data.mute);
-                window.location.replace("http://localhost:3000/home");
+                let passResponse = await Axios.post(
+                    config.SERVER_URL+'/42/submitPass',
+                    {user: response.data.login,
+                    password: passOne}
+                )
+                console.log(passResponse);
+                if (passResponse.status === 200)
+                {
+                    localStorage.setItem("HiveflixToken", passResponse.data.token);
+                    localStorage.setItem("HiveflixUsername", passResponse.data.username);
+                    localStorage.setItem("HiveflixProfilePicture", passResponse.data.profilePicture);
+                    localStorage.setItem("HiveflixId", passResponse.data.id);
+                    localStorage.setItem("HiveflixMyList", JSON.stringify([]));
+                    localStorage.setItem("HiveflixWatched", JSON.stringify({}));
+                    localStorage.setItem("HiveflixLanguage", passResponse.data.language);
+                    localStorage.setItem("HiveflixMute", passResponse.data.mute);
+                    window.location.replace("http://localhost:3000/home");
+                }
             }
+            else
+                setError("Passwords don't match");
         }
         else
-        {
-            console.log("Passwords dont match")
-        }
+            setError("Check the password requirements");
     }
 
     const setPassOneF = (event) => {
@@ -148,6 +151,12 @@ const HiveLog = () => {
                     <input type="password" id="pass2" onChange={setPassTwoF} style={inputStyle}/>
                     <button type="submit">Set password!</button>
                 </form>
+                {errorPassword && <div className="small alert alert-error">{errorPassword}</div>}
+                <div className="small center">
+                    Password must be at least 8 characters in length,
+                    contain a minimum of one upper case letter [A-Z]
+                    and contain a minimum of one number [0-9]
+                </div>
             </>
             : response && action == 'login' ? 
             <>
