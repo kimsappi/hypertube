@@ -200,17 +200,14 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 
 					for (let i = 0; languages[i]; i++)
 					{
-						console.log(languages[i]);
 						if (languages[i].shorthand === language)
 							languageLong = languages[i].display;
 					}
 
-					console.log("languageLong", languageLong);
-
 					// remove all rows where language is not "English"
 					for (let i = 1; tbody.childNodes[i]; i += 2)
 					{
-						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== languageLong) // hardcoded !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== languageLong)
 						{
 							tbody.childNodes.splice(i - 1, 2);
 							i -= 2;
@@ -321,6 +318,9 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 		else
 		{
 			const tmp = fileName.split(".");
+
+			if (tmp[tmp.length - 2] === "English")
+				return("eng");
 			return (tmp[tmp.length - 2]);
 		}
 	}
