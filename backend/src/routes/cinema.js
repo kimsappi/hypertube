@@ -166,10 +166,12 @@ router.get("/subtitles/:magnet/:id/:imdb", (req,res) =>
 		if (await hasCorrectSubtitles(engine.files))
 		{
 			console.log("has correct subtitles");
-	
-			convertSubtitles(engine.files);
-			console.log("4. subtitles converted ----------------------------------------------------------------")
-	
+		
+			setTimeout(() => {
+				convertSubtitles(engine.files);
+				console.log("4. subtitles converted ----------------------------------------------------------------")
+			}, 5000);
+
 			setTimeout(() => {
 				sendSubtitlesReady(engine.files);
 				console.log("2. ready subtitles sent ---------------------------------------------------------------")
