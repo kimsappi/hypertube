@@ -22,6 +22,7 @@ const OpenSubtitles = new OS({
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 const glob = require('glob');
+const path = require("path");
 
 const { verifyToken } = require('../utils/auth');
 const movieListService = require('../services/movieLists');
@@ -33,9 +34,15 @@ const router = express.Router();
 
 // SSE START ************************************************************
 
-router.get("/secret/:magnet/:id/:imdb", (req,res) =>
+router.get("/subtitles/:magnet/:id/:imdb", (req,res) =>
 {
 	const { magnet, id, imdb } = req.params;
+
+	// temporarily hardcoded, should be taken from config (context)
+	const language = "eng";
+
+	// 30 second server timeout (closes current connection and tries to create a new one)
+	res.connection.setTimeout(600000);
 
 	// create SSE connection
 	const headers = {
@@ -64,74 +71,123 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 		],
 	});
 
+	// ***********************************************************************************************************
 	// emitted when the metadata has been fetched.
-	engine.on('torrent', () => res.write(`data: { "kind": "metadata" }\n\n`));
+	engine.on('torrent', () =>
+	{
+		res.write(`data: { "kind": "metadata" }\n\n`);
+		console.log("\033[35mmetadata has been fetched 2\033[0m");
+	})
 
+	// ***********************************************************************************************************
 	// emitted when the engine is ready to be used.
 	engine.on('ready', () =>
 	{
-		// iterate all files and send srt-file data to client
-		engine.files.forEach(file =>
+		console.log("ready activated");
+
+		try
+		{
+			console.log("1. start async ------------------------------------------------------------------------")
+
+			const path = __dirname + "/../../public/" + id + "/subs." + language + ".vtt";
+
+			if (fs.existsSync(path))
+			{
+				const response = sendSubtitlesReady(engine.files);
+				console.log("2. ready subtitles sent ---------------------------------------------------------------")
+			}
+			else
+			{
+				const response2 = sendSubtitlesAvailable(engine.files);
+				console.log("3. available subtitles sent -----------------------------------------------------------")
+			}
+		}
+		catch (err)
+		{
+			console.log(err);
+		}
+
+	});
+	// ***********************************************************************************************************
+
+	// send to client the names of all vtt-file names currently on server 
+	const sendSubtitlesReady = (files) =>
+	{
+		glob('../public/' + id + '/*.vtt', {}, (err, files) =>
+		{
+			files.forEach(file =>
+			{
+				const name = path.basename(file);
+				const parts = name.split(".");
+				const lang = parts[1];
+				res.write(`data: { "kind": "subtitles", "src": "http://localhost:5000/${id}/subs.${lang}.vtt", "srcLang": "${lang}", "name": "subs.${lang}.vtt", "default": ${lang === language ? "true" : "false"} }\n\n`);
+			});
+		})
+
+		setTimeout(() => {
+			files.forEach(file =>
+			{
+				if (file.name.includes(".mp4") || file.name.includes(".mkv"))
+				{
+					res.write(`data: { "kind": "movie", "name": "${file.name}", "size": ${file.length} }\n\n`);
+				}
+			});	
+		}, 1000);
+	}
+
+	// iterate all files and send srt-file data to client
+	const sendSubtitlesAvailable = (files) =>
+	{
+		files.forEach(file =>
 		{
 			if (file.name.includes(".srt"))
 			{
-				res.write(`data: { "kind": "subtitles", "name": "${file.name}", "size": ${file.length} }\n\n`);	
-				// file.select();
-				file.createReadStream();
+				file.select();
+				res.write(`data: { "kind": "available", "name": "${file.name}", "size": ${file.length} }\n\n`);
 			}
 		})
-	});
+	}
 
+	// ***********************************************************************************************************
 	// emitted everytime a piece has been downloaded and verified.
 	engine.on('download', index =>
 	{
-		res.write(`data: { "kind": "downloaded": ${engine.swarm.downloaded} }\n\n`);
-		console.log("\033[36mpart " + index +	" downloaded and verified\033[0m")
+		res.write(`data: { "kind": "downloaded", "size": ${engine.swarm.downloaded} }\n\n`);
+		console.log("\033[36mpart " + index +	" downloaded and verified 2\033[0m")
 	})
+	// ***********************************************************************************************************
 
+	// ***********************************************************************************************************
 	// emitted when all selected files have been completely downloaded.
 	engine.on('idle', async () =>
 	{
 		console.log("idle activated");
 
-		engine.files.forEach(async file =>
+		if (await hasCorrectSubtitles(engine.files))
 		{
-			// create subtitle vtt-file if it does not already exist
-			if (file.name.includes(".srt") && !subtitleAlreadyExists(file))
-			{
-				const path = __dirname + "/../../public/" + id + "/" + file.path;
-				const newName = await renameSubtitle(file);
-				const pathNew = "../public/" + id + "/" + newName;
-				
-				if (fs.existsSync(path) && !fs.existsSync(pathNew))
-				{
-					fs.createReadStream(path)
-						.pipe(srttovtt())
-						.pipe(fs.createWriteStream(pathNew));
-				}
-
-				const tmp = newName.split(".");
-				const language = tmp[1];
-				res.write(`data: { "kind": "converted", "language": "${language}", "name": "${newName}", "default": ${language === "eng" ? 1 : 0} }\n\n`);
-			}
-		});
-
-		// if there are no english subtitles, attempt to download them
-		if (!fs.existsSync(__dirname + "/../../public/" + id + "/subs.eng.vtt"))
+			console.log("has correct subtitles");
+	
+			convertSubtitles(engine.files);
+			console.log("4. subtitles converted ----------------------------------------------------------------")
+	
+			setTimeout(() => {
+				sendSubtitlesReady(engine.files);
+				console.log("2. ready subtitles sent ---------------------------------------------------------------")
+			}, 10000);
+		}
+		else
 		{
-			res.write(`data: { "kind": "subtitles", "name": "yifysubtitles.org", "size": 0 }\n\n`);
+			console.log("does NOT have correct subtitles");
 
-			// download yifysubtitles html file and save it on server
-			const url = "https://yifysubtitles.org/movie-imdb/" + imdb;
-			const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/tmp.html");
-			https.get(url, (response) => {
-				response.pipe(file)
-			})
-
-			setTimeout(() =>
+			try
 			{
-				try
-				{
+				// download yifysubtitles html file and save it on server
+				const url = "https://yifysubtitles.org/movie-imdb/" + imdb;
+				const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/tmp.html");
+				https.get(url, (response) => {
+					response.pipe(file)
+				})
+				setTimeout(() => {
 					// read data from html file
 					var data = fs.readFileSync(__dirname + "/../../public/" + id + "/tmp.html", 'utf8');
 					const document = parse5.parse(data);
@@ -142,7 +198,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 					// remove all rows where language is not "English"
 					for (let i = 1; tbody.childNodes[i]; i += 2)
 					{
-						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== "English")
+						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== "English") // hardcoded !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 						{
 							tbody.childNodes.splice(i - 1, 2);
 							i -= 2;
@@ -162,10 +218,11 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 					if (tbody.childNodes.length > 0)
 					{
 						const url = "https://yifysubtitles.org" + tbody.childNodes[0].childNodes[5].childNodes[1].attrs[0].value.replace("subtitles/", "subtitle/") + ".zip";
+						
 						https.get(url, (response) => {
 							if (response.statusCode !== 404)
 							{
-								res.write(`data: { "kind": "converted", "language": "eng", "name": "subs.eng.vtt", "default": 1 }\n\n`);
+								res.write(`data: { "kind": "available", "name": "yifysubtitles.org", "size": 50 }\n\n`);
 
 								// pipe html document to zip file
 								const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/subs.zip");
@@ -175,70 +232,109 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 								setTimeout(() => {
 									fs.createReadStream(__dirname + "/../../public/" + id + "/subs.zip")
 										.pipe(unzipper.ParseOne())
-										.pipe(fs.createWriteStream(__dirname + "/../../public/" + id + "/subs.eng.srt"));
-								}, 1000);
+										.pipe(fs.createWriteStream(__dirname + "/../../public/" + id + "/subs." + language + ".srt"));
+								}, 2000);
 			
 								// convert srt-file to vtt subtitle file
+								// todo check if file is srt
 								setTimeout(() => {
-									const path = __dirname + "/../../public/" + id + "/subs.eng.srt";
-									const pathNew = __dirname + "/../../public/" + id + "/subs.eng.vtt";
-									
+									const path = __dirname + "/../../public/" + id + "/subs." + language + ".srt";
+									const pathNew = __dirname + "/../../public/" + id + "/subs." + language + ".vtt";
+
 									fs.createReadStream(path)
 										.pipe(srttovtt())
 										.pipe(fs.createWriteStream(pathNew));
-								}, 2000);
+								}, 4000);
 							}
 						})
 					}
-				}
-				catch(err)
-				{
-					console.log(err);
-				}
-			}, 1000);
+					
+				}, 3000);
+
+				setTimeout(() => {
+					convertSubtitles(engine.files);
+					console.log("4. subtitles converted ----------------------------------------------------------------")	
+				}, 8000);
+		
+				setTimeout(() => {
+					sendSubtitlesReady(engine.files);
+					console.log("2. ready subtitles sent ---------------------------------------------------------------")	
+				}, 10000);
+			}
+			catch(err)
+			{
+				console.log(err);
+			}
 		}
 
-		setTimeout(() =>
-		{
-			let largestFile = null;
-			// start downloading movie
-			engine.files.forEach(currentFile =>
-				{
-					if (!largestFile || currentFile.length > largestFile.length)
-          	largestFile = currentFile;
-				});
-			res.write(`data: { "kind": "movie", "name": "${largestFile.name}", "size": ${largestFile.length} }\n\n`);
-		}, 5000);
-
-		setTimeout(() => {
-			engine.destroy(() => console.log("engine destroyed!"));
-			// engine.remove(() => console.log("engine removed!"));
-		}, 6000);
 	})
+	// ***********************************************************************************************************
 
-
-	// convert subtitle file name to correct format "subs.[language].vtt"
-	const renameSubtitle = async (file) =>
+	const hasCorrectSubtitles = async (files) =>
 	{
-		if (file.name.includes("YTS") || file.name.includes("YIFY"))
-			return ("subs.eng.vtt");
+		let found = false;
+
+		files.forEach(file =>
+		{
+			if (file.name.includes(".srt") && subtitleLanguage(file.name) === language)
+				found = true;
+		});
+		return (found);
+	}
+	
+	
+	const convertSubtitles = async (files) =>
+	{
+		files.forEach(file =>
+		{
+			// create vtt-file if prefered languege does not already exist
+			if (file.name.includes(".srt") && !subtitleAlreadyExists(file.name))
+			{
+				const path = __dirname + "/../../public/" + id + "/" + file.path;
+				const newName = "subs." + subtitleLanguage(file.name) + ".vtt";
+				const newPath = "../public/" + id + "/" + newName;
+				
+				convertSrtToVtt(path, newPath);
+
+				console.log("converted", newPath)
+			}
+		});
+	}
+
+	// return subtitle language parsed from file name
+	const subtitleLanguage = (fileName) =>
+	{
+		if (fileName.includes("YTS") || fileName.includes("YIFY"))
+			return ("eng");
 		else
 		{
-			const tmp = file.name.split(".");
-			return ("subs." + tmp[tmp.length - 2] + ".vtt");
+			const tmp = fileName.split(".");
+			return (tmp[tmp.length - 2]);
 		}
 	}
 
 	// return true if file already exists on server, otherwise return false
-	const subtitleAlreadyExists = async (file) =>
+	const subtitleAlreadyExists = (fileName) =>
 	{
-		const renamed = renameSubtitle(file);
+		const name = "subs." + subtitleLanguage(fileName) + ".vtt";
 		
-		if (fs.existsSync(__dirname + "/../../public/" + id + "/" + renamed))
+		if (fs.existsSync(__dirname + "/../../public/" + id + "/" + name))
 			return true;
 		return false;
 	}
 
+	// convert srt-file to vtt-file
+	const convertSrtToVtt = async (path, newPath) =>
+	{	
+		if (fs.existsSync(path) && !fs.existsSync(newPath))
+		{
+			fs.createReadStream(path)
+				.pipe(srttovtt())
+				.pipe(fs.createWriteStream(newPath));
+		}
+	}
+
+	// ***********************************************************************************************************
 	// when client or server timeout closes connection
 	req.on('close', () =>
 	{
@@ -247,7 +343,7 @@ router.get("/secret/:magnet/:id/:imdb", (req,res) =>
 		// res.end();
 	});
 })
-
+// ***********************************************************************************************************
 // SSE END ****************************************************************
 
 router.get('/start/:magnet/:token/:imdb', async (req, res) => {
@@ -459,7 +555,7 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
 					.on('error', err => console.log('ffmpeg error:' +err.message))
 					.pipe(res, {end: true});
 			}
-    })
+	})
 
     // emitted when the metadata has been fetched.
     engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));

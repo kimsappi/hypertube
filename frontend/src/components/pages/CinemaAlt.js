@@ -1,27 +1,27 @@
 import React, { useState, useContext, useEffect, useRef, Fragment } from "react";
 import { useParams } from 'react-router-dom';
-import clone from "clone";
 
 import ReactPlayer from "react-player";
 
 import StateContext from "../../context/StateContext";
-import DispatchContext from "../../context/DispatchContext";
+// import DispatchContext from "../../context/DispatchContext";
 
 import config from '../../config/config';
 
 const CinemaAlt = () =>
 {
 	const globalState = useContext(StateContext);
-	const globalDispatch = useContext(DispatchContext);
+	// const globalDispatch = useContext(DispatchContext);
 
 	const { magnet, id, imdb } = useParams();
 	const connection = useRef();
 	const status = useRef(0);
 
-	const [subtitleData, setSubtitleData] = useState([]);
-	const [subtitleSize, setSubtitleSize] = useState(0);
-	const [subtitleDownloaded, setSubtitleDownloaded] = useState(0);
-	const [subtitleDataConverted, setSubtitleDataConverted] = useState([]);
+	const [subtitlesReady, setSubtitlesReady] = useState([]);
+
+	const [subtitlesAvailable, setSubtitlesAvailable] = useState([]);
+	const [subtitlesSize, setSubtitlesSize] = useState(0);
+	const [subtitlesDownloaded, setSubtitlesDownloaded] = useState(0);
 
 	const [movieName, setMovieName] = useState("");
 	const [movieSize, setMovieSize] = useState(0);
@@ -33,9 +33,6 @@ const CinemaAlt = () =>
 
 	const [timeLeft, setTimeLeft] = useState(30);
 	
-	// const language = "eng";
-	// const subtitleUrl = `${config.SERVER_URL}/${id}/subs.${language}.vtt`;
-
 	const token = localStorage.getItem("HiveflixToken");
 	const videoUrl = `${config.SERVER_URL}/api/cinema/${magnet}/${token}/${id}`;
 
@@ -46,7 +43,7 @@ const CinemaAlt = () =>
 			try
 			{
 				// create new sse connection
-				connection.current = new EventSource(`${config.SERVER_URL}/api/cinema/secret/${magnet}/${id}/${imdb}`);
+				connection.current = new EventSource(`${config.SERVER_URL}/api/cinema/subtitles/${magnet}/${id}/${imdb}`, globalState.config);
 	
 				// activated every time backend sends a message
 				connection.current.onmessage = (event) =>
@@ -58,39 +55,32 @@ const CinemaAlt = () =>
 					{
 						status.current = 1;
 					}
-					else if (data.kind === "subtitles") // single srt-file name and size
+					else if (data.kind === "subtitles") // vtt-file on server
 					{
-						let tmp = subtitleData;
+						let tmp = subtitlesReady
 						tmp.push(data);
-						setSubtitleData(tmp);
-						setSubtitleSize(subtitleSize + data.size);
+						setSubtitlesReady(tmp);
+					}
+					else if (data.kind === "available") // single srt-file name and size
+					{
+						status.current = 2;
+						let tmp = subtitlesAvailable;
+						tmp.push(data);
+						setSubtitlesAvailable(tmp);
+						setSubtitlesSize(subtitlesSize + data.size);
 					}
 					else if (data.kind === "downloaded") // piece of subtitles downloaded (size in bytes)
 					{
-						setSubtitleDownloaded(data.downloaded);
+						setSubtitlesDownloaded(data.size / 60);
 					}
-					else if (data.kind === "converted") // single srt-file has been converted to vtt
+					else if (data.kind === "movie") // get movie data, start rendering player, close sse connection
 					{
-						status.current = 2;
-						let tmp = subtitleDataConverted;
-						tmp.push({
-							kind: "subtitles",
-							name: data.name,
-							src: config.SERVER_URL + "/" + id + "/" + data.name,
-							srcLang: data.language,
-							default: Boolean(data.default)
-						})
-						setSubtitleDataConverted(tmp);
-					}
-					else if (data.kind === "movie")
-					{
-						let tmp = subtitleDataConverted;
-						console.log("all subtitles", tmp);
-
 						status.current = 3;
 						setMovieName(data.name);
-						setMovieSize(data.size);		
+						setMovieSize(data.size);
 						connection.current.close();
+
+						console.log("subtitlesReady", subtitlesReady);
 					}
 				};
 			}
@@ -99,7 +89,7 @@ const CinemaAlt = () =>
 				console.error(err.message);
 			}
 		})()
-	}, []);
+	}, [globalState.config]);
 
 	const onProgress = ({ playedSeconds, loadedSeconds }) =>
 	{
@@ -135,17 +125,35 @@ const CinemaAlt = () =>
 	let subtitleCount = 1;
 	let subtitleCount2 = 1;
 
+	// console.log("subtitlesDownloaded", subtitlesDownloaded)
+	// console.log("subtitlesSize", subtitlesSize)
+
 	return (
 		<div className="cinema-container">
 			<div className="cinema-info">
 				<h3 className="center m-4"><i className="fas fa-download"></i> File Downloader</h3>
-				<div className="center m-2">
-						{status.current === 0 && "downloading metadata"}
-						{status.current === 1 && "downloading subtitles"}
-						{status.current === 2 && "converting subtitles"}
-						{status.current === 3 && "preparing movie"}
-						{status.current === 4 && "playing movie"}
+				<div className="center m-2">Status:
+						{status.current === 0 && " downloading metadata"}
+						{status.current === 1 && " preparing subtitles"}
+						{status.current === 2 && " downloading subtitles"}
+						{status.current === 3 && " preparing movie"}
+						{status.current === 4 && " playing movie"}
 				</div>
+
+				{/* <hr className="my-2"></hr>
+				<table className="cinema-info-table">
+					<tbody>
+						<tr>
+							<td>Torrent details</td>
+						</tr>
+						<tr>
+							<td>Type: {movie.data.torrents.type}</td>
+							<td>Quality: {movie.data.torrents.quality}</td>
+							<td>Peers: {movie.data.torrents.peers}</td>
+							<td>Seeds: {movie.data.torrents.seeds}</td>
+						</tr>
+					</tbody>
+				</table> */}
 
 				<hr className="my-2"></hr>
 				<table className="cinema-info-table">
@@ -161,37 +169,38 @@ const CinemaAlt = () =>
 				{status.current > 0 && (
 					<Fragment>
 						<hr className="my-2"></hr>
-						<h5 className="m-2">Downloading Subtitles</h5>
+						<div className="m-2">Subtitles ready to be used</div>
 						<table className="cinema-info-table">
 							<tbody>
-								{subtitleData && subtitleData.map(file =>
-									<tr key={subtitleCount}>
-										<td>{subtitleCount++}.</td>
-										<td>{file.name}</td>
-										<td>{Math.round(file.size / 1000)} KB</td>
-										<td className="pl-1">{status.current > 1 ?
-											<i className="far fa-check-square color-success"></i> :
-											<i className="far fa-square color-black50"></i>}</td>
+								{subtitlesReady.length ? subtitlesReady.map(subtitle =>
+										<tr key={subtitleCount}>
+											<td>{subtitleCount++}.</td>
+											<td>{subtitle.name}</td>
+											<td className="pl-1">{status.current > 2 ?
+												<i className="far fa-check-square color-success"></i> :
+												<i className="far fa-square color-black50"></i>}</td>
+										</tr>
+									) :
+									<tr>
+										<td className="small color-black50">None</td>
 									</tr>
-								)}
+								}
 							</tbody>
 						</table>
-						<div className={status.current > 1 ? "center mb-2 color-success" : "center mb-2"}>
-							Downloaded: {status.current > 1 ? 100 : Math.round((subtitleDownloaded / subtitleSize) * 100)} %
-						</div>
 					</Fragment>
 				)}
 
 				{status.current > 1 && (
 					<Fragment>
 						<hr className="my-2"></hr>
-						<h5 className="m-2">Converting Subtitles</h5>
+						<div className="m-2">Subtitles available for download</div>
 						<table className="cinema-info-table">
 							<tbody>
-								{subtitleDataConverted && subtitleDataConverted.map(file =>
+								{subtitlesAvailable && subtitlesAvailable.map(file =>
 									<tr key={subtitleCount2}>
 										<td>{subtitleCount2++}.</td>
 										<td>{file.name}</td>
+										<td>{Math.round(file.size / 1000)} KB</td>
 										<td className="pl-1">{status.current > 2 ?
 											<i className="far fa-check-square color-success"></i> :
 											<i className="far fa-square color-black50"></i>}</td>
@@ -199,22 +208,29 @@ const CinemaAlt = () =>
 								)}
 							</tbody>
 						</table>
+						{subtitlesAvailable.length ?
+							<div className={status.current > 2 ? "center mb-2 color-success" : "center mb-2"}>
+								Downloaded: {status.current > 2 ? 100 : Math.round((subtitlesDownloaded / subtitlesSize) * 100)} %
+							</div> :
+							<div className="small color-black50">None</div>
+						}
 					</Fragment>
 				)}
 
 				{status.current > 2 &&  (
 					<Fragment>
 						<hr className="my-2"></hr>
-						<h5 className="m-2">Preparing Movie</h5>
+						<div className="m-2">Preparing Movie</div>
 						<table className="cinema-info-table">
 							<tbody>
-									<tr>
-										<td>1.</td>
-										<td>{movieName}</td>
-										<td className="pl-1">{status.current > 3 ?
-											<i className="far fa-check-square color-success"></i> :
-											<i className="far fa-square color-black50"></i>}</td>
-									</tr>
+								<tr>
+									<td>1.</td>
+									<td>{movieName}</td>
+									<td>{Math.round(movieSize / 1000000)} MB</td>
+									<td className="pl-1">{status.current > 3 ?
+										<i className="far fa-check-square color-success"></i> :
+										<i className="far fa-square color-black50"></i>}</td>
+								</tr>
 							</tbody>
 						</table>
 						<div className="center m-2">{timeLeft}</div>
@@ -248,10 +264,7 @@ const CinemaAlt = () =>
 									attributes: {
 										crossOrigin: 'true'
 									},
-									tracks: subtitleDataConverted
-									// tracks: [
-									// 	{ kind: 'subtitles', src: subtitleUrl, srcLang: "eng", default: true } 
-									// ]
+									tracks: subtitlesReady
 									}
 								}
 							}
