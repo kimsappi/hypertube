@@ -38,6 +38,16 @@ const ProfileOther = () =>
 		})();
 	}, []);
 
+	const getLanguageDisplay = shorthand => {
+		let display = 'N/A';
+		config.languages.forEach(lang => {
+			if (lang.shorthand === shorthand) {
+				display = lang.display;
+			}
+		});
+		return display;
+	};
+
 	return (
 		<Fragment>
 			{loading && <div className="loading"></div>}
@@ -45,9 +55,11 @@ const ProfileOther = () =>
 			<Fragment>
 				<div className="profile-container">
 					<ProfilePicture url={userData.profilePicture} className='profile-image-large'/>
-				</div>
-				<div className="center">
-					{userData.firstName} {userData.lastName}
+					<div>
+						<h4 style={{padding: '5px'}}>{userData.username}</h4>
+						<h5 style={{padding: '5px'}}>{userData.firstName} {userData.lastName}</h5>
+						<p style={{padding: '5px'}}>Language: {getLanguageDisplay(userData.language)}</p>
+					</div>
 				</div>
 			</Fragment>
 			)}
