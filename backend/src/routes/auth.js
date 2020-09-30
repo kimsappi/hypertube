@@ -31,7 +31,6 @@ router.post('/register', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
   try {
     const data = await authService.login(req.body);
-    console.log("DATA::", data);
     const token = generateJWT(data);
     return res.status(200).json({
       message: 'login success',

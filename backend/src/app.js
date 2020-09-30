@@ -70,10 +70,6 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
 
-  console.log(err.message);
-  console.log(err.statusCode);
-  console.log(err);
-
   return res.status(err.status).json({
     message: err.message
   });

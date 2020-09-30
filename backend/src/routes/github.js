@@ -11,8 +11,6 @@ const { default: Axios } = require('axios');
 const { NotExtended } = require('http-errors');
 
 router.post('/register', async (req, res, next) => {
-    
-    console.log("perilla");
 
     const code = req.body.code;
     try{
@@ -32,9 +30,6 @@ router.post('/register', async (req, res, next) => {
             'https://api.github.com/user',
             {headers: {Authorization: 'token '+result.data.access_token}}
         )
-        //console.log(resultTwo);
-        console.log("ei erroreita")
-            console.log("JOO1")
         if (resultTwo.status === 200)
         {
             

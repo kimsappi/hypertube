@@ -78,7 +78,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 	engine.on('torrent', () =>
 	{
 		res.write(`data: { "kind": "metadata" }\n\n`);
-		console.log("\033[35mmetadata has been fetched 2\033[0m");
 	});
 
 	// ***********************************************************************************************************
@@ -97,7 +96,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 		}
 		catch (err)
 		{
-			console.log(err);
 		}
 
 	});
@@ -108,7 +106,7 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 	engine.on('download', index =>
 	{
 		res.write(`data: { "kind": "downloaded", "size": ${engine.swarm.downloaded} }\n\n`);
-		console.log("\033[36mpart " + index +	" downloaded and verified 2\033[0m")
+		//c.log("\033[36mpart " + index +	" downloaded and verified 2\033[0m")
 	})
 
 	// ***********************************************************************************************************
@@ -218,7 +216,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 			}
 			catch(err)
 			{
-				console.log(err);
 			}
 		}
 	})
@@ -228,8 +225,7 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 	// ***********************************************************************************************************
 	req.on('close', () =>
 	{
-		engine.destroy(() => console.log("engine destroyed!"));
-		// engine.remove(() => console.log("engine removed!"));
+		engine.destroy(() => {});//c.log("engine destroyed!"));
 		// res.end();
 	});
 	// ***********************************************************************************************************
@@ -347,8 +343,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 router.get('/start/:magnet/:token/:imdb', async (req, res) => {
   const { magnet, token, imdb } = req.params;
   let retSubs = [];
-  console.log(imdb);
-  console.log('start');
   const engine = torrentStream("magnet:?" + magnet, {
     tmp: "../public",
     path: "../public/" + imdb,
@@ -366,23 +360,20 @@ router.get('/start/:magnet/:token/:imdb', async (req, res) => {
 let tries = 0;
   engine.on('ready', () =>
     {
-      console.log("READY");
       engine.files.forEach(file =>
         {
           if (file.name.includes('.srt'))
           {
             file.select();
-            console.log("SELECTED FILE:", file.name);
           }
         })
 
     })
-    engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
+    engine.on('torrent', () => {});//c.log("\033[35mmetadata has been fetched\033[0m"));
 
-    engine.on('download', () => console.log("\033[35mmetadata has been downloaded\033[0m"));
+    engine.on('download', () => {});//c.log("\033[35mmetadata has been downloaded\033[0m"));
     
     engine.on('idle', () => {
-      console.log("\033[36mAll subs downloaded\033[0m"); 
       // TAHAN VALIIN TEKSTITYSTEN TARKASTUS JA HAKU JA ALLA RES ANTAA URLIN TEKSTEIHIN.
 
       //search for srt files. If found, fun cb.
@@ -390,8 +381,6 @@ let tries = 0;
       setTimeout(() => {
 
         glob('../public/' + imdb + '/**/*.srt', {}, (err, files) => {
-          console.log("LOYTYI: ");
-          console.log(files);
 
           if (files.length)
           {
@@ -401,16 +390,13 @@ let tries = 0;
               const filePath = file.split('/');
               const fileName = filePath[filePath.length - 1].split('.');
               const langIdentifier = fileName.length === 3 && fileName[1].length === 3 ? fileName[fileName.length - 2] : fileName.length === 2 && fileName[0].length <= 3 ? fileName[fileName.length - 2] : 'eng';
-              fs.rename(file, '../public/' + imdb + '/sub.' + langIdentifier + '.srt', (err) => { if(err) console.log(err); });
+              fs.rename(file, '../public/' + imdb + '/sub.' + langIdentifier + '.srt', (err) => {});
             })
-            //fs.rename(files[0], '../public/' + imdb + '/sub.srt', (err) => { if(err) console.log(err); });
 
             setTimeout(() => {
               
             glob('../public/' + imdb + '/*.srt', {}, (err, files) => {
-              console.log("FILEESS: ", files);
               if (err)
-                console.log("ERROR", err);
               files.forEach((file) => {
                 let lang = file.split('/');
                 lang = lang[lang.length - 1].split('.');
@@ -421,8 +407,6 @@ let tries = 0;
                   retSubs.push(imdb + '/sub.' + lang[lang.length - 2] + '.vtt');
                 })
               })
-              console.log("RETURNATAAN: ", retSubs);
-              console.log("jsut ennen sendia: ", retSubs);
 
               engine.destroy();
               if (res.headersSent)
@@ -440,10 +424,9 @@ let tries = 0;
             //   var srtData = fs.readFileSync('../public/' + imdb + '/sub.srt');
             
             //   srt2vtt(srtData, (err, vttData) => {
-            //     if (err) console.log(err);
+										// if (!err)
             //     fs.writeFileSync('../public/' + imdb + '/sub.vtt', vttData);
             //   })
-            //   console.log("LOYTYYYY");
 
               
             // }, 1000);
@@ -470,9 +453,6 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
   try {
     const { magnet, token, imdb } = req.params;
 	// const token = req.query.token;
-	
-	console.log("magnet", magnet);
-	console.log("token", token);
 
     const user = await verifyToken(token);
     if (!user)
@@ -523,8 +503,6 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
 
       const range = req.headers.range;
 
-      console.log(range);
-
       const pos = range ? range.replace(/bytes=/, '').split('-') : null;
       const start = pos ? parseInt(pos[0], 10) : 0;
 			const end = (pos && pos[1]) ? parseInt(pos[1], 10) : file.length - 1;
@@ -550,20 +528,20 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
 				// Convert stream to mp4 format and stream to client
 				ffmpeg(originalFileStream)
 					.format('webm')
-					.on('error', err => console.log('ffmpeg error:' +err.message))
+					.on('error', err => {})
 					.pipe(res, {end: true});
 			}
 	})
 
     // emitted when the metadata has been fetched.
-    engine.on('torrent', () => console.log("\033[35mmetadata has been fetched\033[0m"));
+    engine.on('torrent', () => {}); //c.log("\033[35mmetadata has been fetched\033[0m"));
 
     // // emitted everytime a piece has been downloaded and verified.
-	  engine.on('download', index => {console.log("\033[36mpart " + index +  " downloaded and verified\033[0m");});
+	  engine.on('download', index => {}); //c.log("\033[36mpart " + index +  " downloaded and verified\033[0m");});
 
     // emitted when all selected files have been completely downloaded.
     engine.on('idle', () => {
-      console.log("\033[0;32mall selected files have been completely downloaded\033[0m");
+      // c.log("\033[0;32mall selected files have been completely downloaded\033[0m");
       // This will prevent the streaming of the very last couple of seconds in Top Gun
       //engine.destroy();
     });
@@ -571,7 +549,7 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
     // kill the stream somehow?
 
   } catch (err) {
-    console.error(err.message);
+    //c.error(err.message);
   }
 });
 

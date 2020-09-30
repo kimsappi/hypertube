@@ -38,7 +38,6 @@ const deleteFromList = async (id, user, listType) => {
 };
 
 const getMyList = async id => {
-  console.log(id)
   const res = await User.findById(id, 'myList');
 
   if (res)

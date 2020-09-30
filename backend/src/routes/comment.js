@@ -23,8 +23,6 @@ router.post('/new', authenticationMiddleware, async (req, res) => {
 });
 
 router.post('/remove', authenticationMiddleware, async (req, res, next) => {
-    console.log("COMMENT ID: ", req.body.commentId);
-
     try
     {
         const comment = await Comment.findById(req.body.commentId, 'user');
@@ -42,7 +40,6 @@ router.post('/remove', authenticationMiddleware, async (req, res, next) => {
     }
     catch(err)
     {
-        console.log(err)
     }
 
 })
@@ -63,7 +60,6 @@ router.get('/getComments/:id', async (req, res) => {
     }
     catch(err)
     {
-        console.log(err);
     }
 })
 
