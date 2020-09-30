@@ -33,9 +33,6 @@ const Hoverbox = ({ movie }) =>
 
 	return (
 		<div className="hoverbox">
-			{/* {!loading && (
-				movieData.Awards === "N/A" ? movieData.Rated : movieData.Awards
-			)} */}
 			{!loading && (
 				<Fragment>
 					<div className="left-box">
@@ -46,11 +43,22 @@ const Hoverbox = ({ movie }) =>
 								<button className="basic-button m-2"><i className="fas fa-info"></i> More Info</button>
 							</div>
 						</div>
-					
 					</div>
 					<div className="right-box">
-						<div>{movieData.Plot}</div>
-						<div className="color-black50 center">{movieData.Country} | {movieData.Year} | {movieData.Runtime}</div>
+						<div className="italic">{movieData.Plot}</div>
+						<div className="flex small">
+							<div className="color-black50 m-2">
+								<i className="fas fa-globe-americas"></i> {movieData.Country}
+							</div>
+							<div className="color-black50 m-2">
+								<i className="far fa-clock"></i> {movieData.Runtime}
+							</div>
+							{movieData.Awards !== "N/A" && (
+								<div className="color-black50 m-2">
+									<i class="fas fa-trophy"></i> {movieData.Awards}
+								</div>
+							)}
+						</div>
 					</div>
 				</Fragment>
 			)}
