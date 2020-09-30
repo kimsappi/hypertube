@@ -111,15 +111,16 @@ const CinemaAlt = () =>
 			const runtime = document.querySelector('video').duration;
 
 			const percent = (played / runtime) * 100;
+			const finalPercent = percent > 90 ? 100 : percent;
 			console.log(id)
 			axios.post(config.SERVER_URL + '/api/users/watched',
 			{
 				imdb: id,
-				percent
-			}, globalState.config)
+				percent: finalPercent
+			}, globalState.config);
 			//alert('secs: ' + secondsPlayed + 'total: ' + totalSeconds + 'percent: ' + percent + 'test: ' + test);
 			const oldWatched = globalState.watched;
-			const newWatched = {...oldWatched, [id]: percent};
+			const newWatched = {...oldWatched, [id]: finalPercent};
 			globalDispatch({type: 'updateWatched', value: newWatched});
 		}
 	}, []);
