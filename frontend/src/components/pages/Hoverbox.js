@@ -25,6 +25,7 @@ const Hoverbox = ({ movie }) =>
 			{
 				if (axios.isCancel(err))
 					source.cancel();
+				console.error(err.message);
 			}
 		})();
 	}, []);
@@ -38,7 +39,7 @@ const Hoverbox = ({ movie }) =>
 							<div className="movie-title-huge">{movie.title_english}</div>
 							<div>
 								<button className="basic-button m-2"><i className="fas fa-play"></i> Play Movie</button>
-								<button className="basic-button m-2"><i className="fas fa-info"></i> More Info</button>
+								{/* <Link key={torrent.url} className="center" to={"/cinemaAlt/xt=urn:btih:" + torrent.hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id + "/" + movie.imdb_code}>{torrent.quality} {torrent.type}</Link> */}
 							</div>
 						</div>
 					</div>
@@ -56,6 +57,9 @@ const Hoverbox = ({ movie }) =>
 									<i className="fas fa-trophy"></i> {movieData.Awards}
 								</div>
 							)}
+						</div>
+						<div className="center">
+							<button className="basic-button m-2"><i className="fas fa-info"></i> More Info</button>
 						</div>
 					</div>
 				</Fragment>

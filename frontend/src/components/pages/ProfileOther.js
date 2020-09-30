@@ -5,14 +5,12 @@ import { useParams } from 'react-router-dom';
 import config from '../../config/config';
 
 import StateContext from "../../context/StateContext";
-import DispatchContext from '../../context/DispatchContext';
 
 import ProfilePicture from "../ProfilePicture";
 
 const ProfileOther = () =>
 {
 	const globalState = useContext(StateContext);
-	const globalDispatch = useContext(DispatchContext);
 
 	const { id } = useParams();
 

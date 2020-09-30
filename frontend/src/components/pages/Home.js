@@ -49,8 +49,6 @@ const Home = () =>
 					"https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=5&limit=10",
 					{ cancelToken: source.token }
 				);
-				console.log("10 latest movies", response.data.data);
-
 				setMovies(response.data.data);
 
 				// pick a random video out of the 10 for trailer

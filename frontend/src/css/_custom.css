@@ -294,13 +294,6 @@ hr {
 	align-items: center;
 }
 
-/* .button-delete {
-	background-color: transparent;
-	padding: 0;
-	border: none;
-	color: var(--error);
-} */
-
 .cinema-container {
 	display: flex;
 }
@@ -317,16 +310,6 @@ hr {
 .cinema-info-table {
 	font-size: 0.75rem;
 	line-height: 1;
-}
-
-.loading-bar-outer {
-	width: 100%;
-	border: 1px solid #fff;
-	height: 10px;
-}
-
-.loading-bar-inner {
-	background-color: #28a745;
 }
 
 input[type="file"] {
@@ -365,7 +348,7 @@ input[type="file"] {
 
 .right-box {
 	max-width: 350px;
-	background-color: rgba(33, 33, 33, .4);
+	background-color: rgba(33, 33, 33, .5);
 	padding: 2rem;
 	border-radius: 1rem;
 	color: #ddd;

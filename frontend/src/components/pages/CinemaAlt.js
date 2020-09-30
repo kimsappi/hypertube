@@ -45,12 +45,19 @@ const CinemaAlt = () =>
 
 	useEffect(() =>
 	{
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
+
 		(async () =>
 		{
 			try
 			{
 				// create new sse connection
-				connection.current = new EventSource(`${config.SERVER_URL}/api/cinema/subtitles/${magnet}/${id}/${imdb}/${globalState.language}`, globalState.config);
+				connection.current = new EventSource(
+					`${config.SERVER_URL}/api/cinema/subtitles/${magnet}/${id}/${imdb}/${globalState.language}`,
+					globalState.config,
+					{ cancelToken: source.token }
+				);
 	
 				// activated every time backend sends a message
 				connection.current.onmessage = (event) =>
@@ -67,8 +74,6 @@ const CinemaAlt = () =>
 						let tmp = subtitlesReady;
 						tmp.push(data);
 						setSubtitlesReady(tmp);
-
-						console.log("subtitlesReady", tmp);
 					}
 					else if (data.kind === "available") // single srt-file name and size
 					{
@@ -95,10 +100,13 @@ const CinemaAlt = () =>
 			}
 			catch (err)
 			{
+				if (axios.isCancel(err))
+					source.cancel();
 				console.error(err.message);
 			}
+			return () => source.cancel();
 		})()
-	}, [globalState.config]);
+	}, [magnet, id, imdb, globalState.language, globalState.config]);
 
 	// Sending watched state to server
 	useEffect(() => {
@@ -112,7 +120,6 @@ const CinemaAlt = () =>
 
 			const percent = (played / runtime) * 100;
 			const finalPercent = percent > 90 ? 100 : percent;
-			console.log(id)
 			axios.post(config.SERVER_URL + '/api/users/watched',
 			{
 				imdb: id,
@@ -123,7 +130,7 @@ const CinemaAlt = () =>
 			const newWatched = {...oldWatched, [id]: finalPercent};
 			globalDispatch({type: 'updateWatched', value: newWatched});
 		}
-	}, []);
+	}, [id, globalState.watched, globalState.config]);
 
 	const onProgress = ({ playedSeconds, loadedSeconds }) =>
 	{
@@ -133,7 +140,6 @@ const CinemaAlt = () =>
 
 	const onReady = () => status.current = 4;
 	const onDuration = (duration) => {
-		console.log(duration)
 		setTotalSeconds(duration);
 		if (duration < 99999) {
 			playerRef.current.seekTo(previouslyWatchedPercentage * duration / 100);
@@ -164,9 +170,6 @@ const CinemaAlt = () =>
 
 	let subtitleCount = 1;
 	let subtitleCount2 = 1;
-
-	// console.log("subtitlesDownloaded", subtitlesDownloaded)
-	// console.log("subtitlesSize", subtitlesSize)
 
 	return (
 		<div className="cinema-container">
