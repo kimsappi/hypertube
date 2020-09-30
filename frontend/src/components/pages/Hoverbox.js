@@ -42,15 +42,15 @@ const Hoverbox = ({ movie }) =>
 						<div className="flex-column">
 							<div className="movie-title-huge">{movie.title_english}</div>
 							<div>
-								<button className="m-2">Play Movie</button>
-								<button className="m-2">More Info</button>
+								<button className="basic-button m-2"><i className="fas fa-play"></i> Play Movie</button>
+								<button className="basic-button m-2"><i className="fas fa-info"></i> More Info</button>
 							</div>
 						</div>
 					
 					</div>
 					<div className="right-box">
-					
-						{movieData.Plot}
+						<div>{movieData.Plot}</div>
+						<div className="color-black50 center">{movieData.Country} | {movieData.Year} | {movieData.Runtime}</div>
 					</div>
 				</Fragment>
 			)}
