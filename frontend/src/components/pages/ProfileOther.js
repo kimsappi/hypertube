@@ -34,7 +34,7 @@ const ProfileOther = () =>
 				console.log(err.message)
 			}
 		})();
-	}, []);
+	}, [id, globalState.config]);
 
 	const getLanguageDisplay = shorthand => {
 		let display = 'N/A';

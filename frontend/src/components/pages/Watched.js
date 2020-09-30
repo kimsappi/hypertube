@@ -12,7 +12,6 @@ const Watched = () =>
 
 	const [myList, setMyList] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [render, setRender] = useState(false);
 
 	useEffect(() =>
 	{
@@ -51,7 +50,7 @@ const Watched = () =>
 			}
 		})()
 		return () => source.cancel()
-	}, [render]);
+	}, []);
 
 	return (
 		<>

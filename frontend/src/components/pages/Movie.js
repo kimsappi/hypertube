@@ -11,10 +11,7 @@ import AddToMyList from './AddToMyList';
 import image from "../../images/profile.jpg";
 
 const Movie = () =>
-{
-	const CancelToken = axios.CancelToken;
-	const source = CancelToken.source();
-	
+{	
 	const globalState = useContext(StateContext);
 	const [movie, setMovie] = useState("");
 	const [loading, setLoading] = useState(true);
@@ -22,6 +19,9 @@ const Movie = () =>
 
 	useEffect(() =>
 	{
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
+	
 		setLoading(true);
 
 		(async () =>
@@ -76,8 +76,15 @@ const Movie = () =>
 									}
 								}}
 							/>}
-							<AddToMyList id={id} />
-							<div className="p-5">
+							<div className="flex-center mt-4">
+								<div className="small color-black50 mr-2">CHOOSE QUALITY:</div>
+								{!loading && movie.torrents.map((torrent) =>
+								<div className="movie-button" key={torrent.url}>
+									<Link className="center" to={"/cinema/xt=urn:btih:" + torrent.hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id + "/" + movie.imdb_code}>{torrent.quality} {torrent.type}</Link>
+								</div>
+								)}
+							</div>
+							<div className="px-5 pt-4">
 								<h1 className="color-white">{movie.title_long}</h1>
 								<div className="small color-black70 my-2">{movie.genres.map(genre => genre.toUpperCase(genre) + " ")}</div>
 								<p>{movie.description_intro}</p>
@@ -101,11 +108,9 @@ const Movie = () =>
 									</Fragment>
 								)}
 							</div>
-							<Link className="center" to={"/cinema/xt=urn:btih:" + movie.torrents[0].hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id}>PLAY MOVIE</Link>
-							
-							{!loading && movie.torrents.map((torrent) =>
-								<Link key={torrent.url} className="center" to={"/cinemaAlt/xt=urn:btih:" + torrent.hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id + "/" + movie.imdb_code}>{torrent.quality} {torrent.type}</Link>
-								)}
+							<div className="m-a mb-5">
+								<AddToMyList id={id} />
+							</div>
 						</div>
 						<div className="movie-right-column">
 							<Comments movieId={id}/>

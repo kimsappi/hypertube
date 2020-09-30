@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
 import axios from 'axios';
 
-import config from '../../config/config';
-
 import MovieItem from "./MovieItem";
 
 import StateContext from "../../context/StateContext";
@@ -14,7 +12,6 @@ const MyList = () =>
 
 	const [myList, setMyList] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [render, setRender] = useState(false);
 
 	useEffect(() =>
 	{
@@ -38,22 +35,7 @@ const MyList = () =>
 
 			}
 		})()
-	}, [render]);
-
-	const removeFromList = async (id) =>
-	{
-		try
-		{
-			//Remove a movie from My List
-			await axios.delete(config.SERVER_URL + '/api/mylist/' + id, globalState.config);
-			
-			setRender(!render);
-		}
-		catch (err)
-		{
-			console.error(err.message);
-		}
-	}
+	}, [globalState.myList]);
 
 	return (
 		<Fragment>

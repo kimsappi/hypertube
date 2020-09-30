@@ -25,7 +25,7 @@ const AddToMyList = ({id}) =>
 				}
 			}
 		})()
-	}, []);
+	}, [id, globalState.myList]);
 
 	const addItemToMyList = async () =>
 	{

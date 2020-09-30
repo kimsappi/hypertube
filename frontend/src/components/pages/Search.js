@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import clone from 'clone';
@@ -18,8 +18,6 @@ const Search = () =>
 	const [genre, setGenre] = useState("all");
 	const [sortBy, setSortBy] = useState("download_count");
 	const [minimumRating, setMinimumRating] = useState("5");
-
-	const isInitialMount = useRef(true);
 
 	// timer is activated each time the user types something in the search bar
 	// if the user does not type anything for 0.7 seconds, search is performed

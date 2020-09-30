@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import ReactPlayer from "react-player";
 import axios from "axios";
-import StateContext from "../../context/StateContext";
 
 import Hoverbox from "./Hoverbox"
 

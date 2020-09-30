@@ -77,7 +77,7 @@ const Home = () =>
 			}
 		})()
 		return () => source.cancel();
-	}, []);
+	}, [globalState.watched]);
 
 	const handleLoadMore = async () =>
 	{

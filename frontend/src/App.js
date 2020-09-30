@@ -18,7 +18,6 @@ import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Movie from './components/pages/Movie';
 import Cinema from './components/pages/Cinema';
-import CinemaAlt from './components/pages/CinemaAlt';
 import Profile from './components/pages/Profile';
 import ActivationSent from './components/pages/ActivationSent';
 import NewPassword from './components/pages/NewPassword';
@@ -124,8 +123,7 @@ const App = () =>
 						<Route exact path='/search' component={initialState.loggedIn ? Search : Login} />
 						<Route exact path='/mylist' component={initialState.loggedIn ? MyList : Login} />
 						<Route exact path='/watched' component={initialState.loggedIn ? Watched : Login} />
-						<Route exact path='/cinema/:magnet/:imdb' component={initialState.loggedIn ? Cinema : Login} />
-						<Route exact path='/cinemaAlt/:magnet/:id/:imdb' component={initialState.loggedIn ? CinemaAlt : Login} />
+						<Route exact path='/cinema/:magnet/:id/:imdb' component={initialState.loggedIn ? Cinema : Login} />
 						<Route exact path='/profile/:id' component={initialState.loggedIn ? Profile : Login} />
 						<Route exact path='/login' component={initialState.loggedIn ? Home : Login} />
 						<Route exact path='/register' component={initialState.loggedIn ? Home : Register} />
