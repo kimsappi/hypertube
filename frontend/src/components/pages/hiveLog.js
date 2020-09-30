@@ -10,6 +10,7 @@ const HiveLog = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const code = urlParams.get('code');
+    const error = urlParams.get('error');
     const [response, setResponse] = useState('');
     const [passOne, setPassOne] = useState('');
     const [passTwo, setPassTwo] = useState('');
@@ -62,6 +63,11 @@ const HiveLog = () => {
             
         const registerApi = async (code) => {
             console.log('codeREGISTER', code);
+            if (error)
+            {
+                alert("registeration not allowed");
+                window.location.replace("http://localhost:3000/home");
+            }
             try
             {
                 let axiosResponse = await Axios.post(

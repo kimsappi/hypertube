@@ -33,10 +33,10 @@ router.post('/register', async (req, res, next) => {
         if (resultTwo.status === 200)
         {
             
-            if (resultTwo.data.login === null)
+            if (!resultTwo.data.login)
             {
-                console.log("username not found");
-                //return res.status(300).json({err: "email or username not found from github"});
+                next(createError(400, "email or username not found from github"));
+                throw "email or username not found from github";
             }
             
             const findId = await User.findOne({oauth: {$eq: {provider: 'github', email: resultTwo.data.id}}}, 'username');
@@ -54,7 +54,7 @@ router.post('/register', async (req, res, next) => {
             while (usernameTaken === true)
             {
                 let usernameResult = await User.findOne({username: name}, 'username');
-                console.log(usernameResult);
+
                 if (usernameResult === null)
                     usernameTaken = false;
                 else
@@ -83,8 +83,6 @@ router.post('/register', async (req, res, next) => {
 
             const saveResult = await newUserModel.save();
 
-            console.log(saveResult);
-
             res.json({
                 username: name,
                 takenValue,
@@ -111,8 +109,6 @@ router.post('/register', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
-    console.log("logging");
-    console.log(req.body.code);
 
     try
     {
@@ -133,14 +129,13 @@ router.post('/login', async (req, res, next) => {
                 'https://api.github.com/user',
                 {headers: {Authorization: 'token '+loginResult.data.access_token}}
             )
-            console.log(loginResultTwo);
 
             if (loginResultTwo.status === 200)
             {
                 var confirm = await User.findOne({
                     "oauth.provider": "github", "oauth.email": loginResultTwo.data.id
                 })
-                console.log(confirm);
+
                 if (confirm !== null)
                 {
                     token = generateJWT({username: confirm.username, profilePicture: confirm.profilePicture || null, id: confirm._id});
@@ -179,14 +174,13 @@ router.post('/login', async (req, res, next) => {
 })
 
 router.post('/setPass', async (req, res) => {
-    console.log(req.body.username);
 
     let response = await User.findOne({username: req.body.username}, 'password');
-    console.log(req.body.password);
+
     if (response.password === 'tempPass')
     {
-        let savePass = await User.updateOne({ username: req.body.username }, { $set: { password: await hashPassword(req.body.password) } });
-        console.log(savePass);
+        await User.updateOne({ username: req.body.username }, { $set: { password: await hashPassword(req.body.password) } });
+
     }
     else
         return res.status(400).send("not allowed");
@@ -200,8 +194,6 @@ router.post('/setPass', async (req, res) => {
         profilePicture: null,
         id: response._id
     })
-
-    console.log(response);
 
 
 })

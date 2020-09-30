@@ -9,7 +9,16 @@ import imdbLogo from "../../images/imdb_logo.png"
 // import metacriticLogo from "../../images/metacritic_logo.svg"
 
 const PercentageBar = ({ percentage }) => {
-	const style = {
+	const background = {
+		position: 'absolute',
+		bottom: '0',
+		left: '0',
+		height: '7px',
+		backgroundColor: 'rgba(128, 128, 128, .5)',
+		width: `100%`
+	};
+
+	const bar = {
 		position: 'absolute',
 		bottom: '0',
 		left: '0',
@@ -22,7 +31,9 @@ const PercentageBar = ({ percentage }) => {
 		return '';
 	
 	return (
-		<div style={style}></div>
+		<div style={background}>
+			<div style={bar}></div>
+		</div>
 	);
 };
 
