@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, { useState, useEffect, useContext, useRef, Fragment } from "react";
 import axios from "axios";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import clone from 'clone';
+
+import genresInRandomOrder from '../../utils/genresInRandomOrder';
 
 import StateContext from "../../context/StateContext";
 
 // components
 import HomeTrailer from "./HomeTrailer";
 import MovieItem from "./MovieItem";
-// to-do
-// remove duplicates from search results
 
 const Home = () =>
 {
@@ -22,10 +22,10 @@ const Home = () =>
 	const [currentPage, setCurrentPage] = useState(0);
 	const [hasMore, setHasMore] = useState(true);
 	const [loading, setLoading] = useState(true);
+	const genres = useRef(genresInRandomOrder());
 
 	useEffect(() =>
 	{
-		console.log("useEffect 1");
 		const CancelToken = axios.CancelToken;
 		const source = CancelToken.source();
 
@@ -81,25 +81,15 @@ const Home = () =>
 
 	const handleLoadMore = async () =>
 	{
-		console.log("currentPage", currentPage);
-
-		let genres = ["Action", "Animation", "Adventure", "Biography", "Comedy",
-		"Crime", "Documentary", "Drama", "Family", "Fantasy",
-		"History", "Horror", "Music", "Musical", "Mystery", "Romance",
-		"Sci-Fi", "Sport", "Thriller",
-		"War", "Western"];
-
 		const response = await axios.get(
-			"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres[currentPage]
+			"https://yts.mx/api/v2/list_movies.json?&sort_by=year&minimum_rating=5&limit=10&genre=" + genres.current[currentPage]
 		);
 		let tmp = clone(moviesByGenre);
 		tmp[currentPage] = response.data.data.movies;
-		tmp[currentPage].genre = genres[currentPage];
-		console.log("tmp", tmp, "Get movies page: ", currentPage);
+		tmp[currentPage].genre = genres.current[currentPage];
 		setCurrentPage(currentPage + 1);
 		setMoviesByGenre(tmp);
 
-		// check if has more items
 		if (currentPage < 20)
 			setHasMore(true);
 		else
