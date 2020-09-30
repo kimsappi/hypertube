@@ -11,9 +11,6 @@ const { NotExtended } = require('http-errors');
 
 router.post('/login', async (req, res, next)  => {
 
-    console.log(req.body.code);
-    console.log(codes.CLIENTID);
-
     try
     {
         const response = await axios.post(
@@ -29,18 +26,18 @@ router.post('/login', async (req, res, next)  => {
         
 
         const token42 = response.data.access_token;
-        console.log(token42);
+
 
         const responseTwo = await axios.get(
             'https://api.intra.42.fr/v2/me',
             {headers: {Authorization: 'Bearer '+token42}}
         )
-        console.log(responseTwo);
+
 
         var confirm = await User.findOne({
             "oauth.provider": "42", "oauth.email": responseTwo.data.email
         })
-        console.log(confirm);
+
         if (confirm !== null)
         {
             token = generateJWT({username: confirm.username, profilePicture: confirm.profilePicture || null, id: confirm._id});
@@ -72,7 +69,7 @@ router.post('/login', async (req, res, next)  => {
 })
 
 router.post('/register', async (req, res, next) => {
-    console.log("OUJEE REGISTER");
+
     try
     {
     const response = await axios.post(
@@ -88,13 +85,12 @@ router.post('/register', async (req, res, next) => {
     
 
     const token = response.data.access_token;
-    console.log(token);
+
 
     const responseTwo = await axios.get(
         'https://api.intra.42.fr/v2/me',
         {headers: {Authorization: 'Bearer '+token}}
     )
-    //console.log(responseTwo);
 
     if (responseTwo.status == 200)
     {
@@ -144,13 +140,9 @@ router.post('/register', async (req, res, next) => {
             }
 
         });
-        console.log('test22');
+
         const result = await newUser.save();
-        //console.log(result);
-        
-        // console.log(responseTwo.data.email);
-        // console.log(responseTwo.data.first_name);
-        // console.log(name);
+
 
         res.json({
             email: responseTwo.data.email,
@@ -161,7 +153,10 @@ router.post('/register', async (req, res, next) => {
         })
     }
     else
-        console.log("STATUS NOT 200");
+    {
+        next(createError(301, "User not found"));
+        throw "user not found";
+    }
 
     }
     catch(err)
@@ -173,18 +168,18 @@ router.post('/register', async (req, res, next) => {
 })
 
 router.post('/submitPass', async (req, res) => {
-    console.log(req.body);
+
 
     let response = await User.findOne({
         username: req.body.user
     },
     'password'
     );
-    console.log(response);
+
     if (response.password === 'tempPass')
     {
         let answer = await User.updateOne({ username: req.body.user}, { $set: { password: await hashPassword(req.body.password) } });
-        console.log(answer);
+
 
         token = generateJWT({username: req.body.user, profilePicture: null, id: response._id});
 
