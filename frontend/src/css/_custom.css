@@ -368,6 +368,9 @@ input[type="file"] {
 	padding: 2rem;
 	border-radius: 1rem;
 	color: #ddd;
-	font-size: 1.25rem;
-	font-style: italic;
+	font-size: 1.1rem;
+}
+
+.basic-button {
+	width: 160px;;
 }

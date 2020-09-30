@@ -30,8 +30,7 @@ const CommentItem = ({ sender, message, created, commentId, index, render, setRe
 		catch (err)
 		{
 			console.error(err.message);
-		}
-			
+		}	
 	}
 	return (
 			<div className="comment-item">
@@ -48,10 +47,9 @@ const CommentItem = ({ sender, message, created, commentId, index, render, setRe
 									<div className="comment-username mr-2">{sender.username}</div>
 								</Link>
 								<div className="comment-created">{created}</div>
-								{localStorage.getItem('HiveflixId') === sender._id ?
+								{globalState.id === sender._id ?
 								<div>
-									<a onClick={removeComment} style={{color: 'red', paddingLeft: '5px'}}>Remove</a>
-									
+									<a href="#" onClick={removeComment} title="Remove comment"><i className="fas fa-times color-error ml-2"></i></a>
 								</div>
 								: ''}
 							</td>
