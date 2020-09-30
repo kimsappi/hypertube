@@ -12,6 +12,9 @@ import image from "../../images/profile.jpg";
 
 const Movie = () =>
 {
+	const CancelToken = axios.CancelToken;
+	const source = CancelToken.source();
+	
 	const globalState = useContext(StateContext);
 	const [movie, setMovie] = useState("");
 	const [loading, setLoading] = useState(true);
@@ -26,7 +29,9 @@ const Movie = () =>
 			try
 			{
 				// fetch all movies
-				const response = await axios.get("https://yts.mx/api/v2/movie_details.json?with_cast=true&movie_id=" + id);
+				const response = await axios.get(
+					"https://yts.mx/api/v2/movie_details.json?with_cast=true&movie_id=" + id,
+					{ cancelToken: source.token });
 
 				console.log("movie.data", response.data.data.movie);
 				
@@ -36,9 +41,12 @@ const Movie = () =>
 			}
 			catch (err)
 			{
+				if (axios.isCancel(err))
+					source.cancel();
 				console.error(err.message);
 			}
 		})()
+		return () => source.cancel();
 	}, [id]);
 
 	
@@ -61,6 +69,11 @@ const Movie = () =>
 								muted={globalState.mute}
 								controls={true}
 								url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=10"}
+								config={{
+									youtube: {
+										playerVars: { 'origin': window.location.origin }
+									}
+								}}
 							/>}
 							<AddToMyList id={id} />
 							<div className="p-5">

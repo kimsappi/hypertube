@@ -12,12 +12,18 @@ const HomeTrailer = ({ id }) =>
 
 	useEffect(() =>
 	{
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
+	
 		(async () =>
 		{
 			try
 			{
 				// fetch movie data
-				const response = await axios.get("https://yts.mx/api/v2/movie_details.json?with_images=true&movie_id=" + id);
+				const response = await axios.get(
+					"https://yts.mx/api/v2/movie_details.json?with_images=true&movie_id=" + id,
+					{ cancelToken: source.token }
+				);
 
 				console.log("trailer movie.data", response.data.data.movie);
 				
@@ -28,7 +34,8 @@ const HomeTrailer = ({ id }) =>
 			{
 				console.error(err.message);
 			}
-		})();
+		})()
+		return () => source.cancel();
 	}, [id]);
 
 	return (
@@ -46,6 +53,11 @@ const HomeTrailer = ({ id }) =>
 								muted={true}
 								controls={false}
 								url={"https://www.youtube.com/watch?v=" + movie.yt_trailer_code + "&t=7"}
+								// config={{
+								// 	youtube: {
+								// 		playerVars: { origin: "localhost:3000" }
+								// 	}
+								// }}
 							/> :
 						<p className="center color-black70">Oh snap, no trailer found.</p>}
 					</div>

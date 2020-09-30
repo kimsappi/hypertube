@@ -30,6 +30,7 @@ const CinemaAlt = () =>
 	const [movieName, setMovieName] = useState("");
 	const [movieSize, setMovieSize] = useState(0);
 
+	const count = useRef(30);
 	const [statusPlayer, setStatusPlayer] = useState("");
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
@@ -104,8 +105,13 @@ const CinemaAlt = () =>
 					source.cancel();
 				console.error(err.message);
 			}
-			return () => source.cancel();
 		})()
+		return () =>
+		{
+			console.log("return");
+			source.cancel();
+			connection.current.close();
+		}
 	}, [magnet, id, imdb, globalState.language, globalState.config]);
 
 	// Sending watched state to server
@@ -152,21 +158,26 @@ const CinemaAlt = () =>
 	const onError = () => setStatusPlayer("ERROR");
 	const onEnded = () => setStatusPlayer("VIDEO END");
 
-	let count = setTimeout(() =>
+	useEffect(() =>
 	{
-		if (status.current === 4)
+		let count = setTimeout(() =>
 		{
-			clearTimeout(count);
-			setTimeLeft("Success!");
-		}
-		else if (timeLeft > 1)
-			setTimeLeft(timeLeft - 1);
-		else
-		{
-			clearTimeout(count);
-			setTimeLeft("Oh snap, this is taking way too long")
-		}
-	}, 1000);
+			if (status.current === 4)
+			{
+				setTimeLeft("Success!");
+				clearTimeout(count);
+			}
+			else if (timeLeft > 1)
+				setTimeLeft(timeLeft - 1);
+			else
+			{
+				setTimeLeft("Oh snap, this is taking way too long")
+				clearTimeout(count);
+			}
+		}, 1000);
+		// Clear timeout if the component is unmounted
+		return () => clearTimeout(count);
+	}, [timeLeft]);
 
 	let subtitleCount = 1;
 	let subtitleCount2 = 1;

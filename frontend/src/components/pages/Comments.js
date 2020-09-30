@@ -17,13 +17,18 @@ const Comments = ({ movieId }) =>
 
 	useEffect(() =>
 	{
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
+
 		(async () =>
 		{
 			try
 			{
 				// fetch all comments of a movie
 				var response = await axios.get(
-					config.SERVER_URL + `/api/comments/getComments/${movieId}`);
+					config.SERVER_URL + `/api/comments/getComments/${movieId}`,
+					{ cancelToken: source.token }
+				);
 
 				setComments(response);
 			}
@@ -32,6 +37,7 @@ const Comments = ({ movieId }) =>
 				console.error(err.message);
 			}
 		})()
+		return () => source.cancel();
 	}, [movieId, render]);
 
 	const changeCommentInput = (event) =>

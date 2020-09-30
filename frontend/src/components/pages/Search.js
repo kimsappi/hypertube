@@ -26,9 +26,10 @@ const Search = () =>
 	// this prevents performing a new search each time the users inputs one characters
 	useEffect(() =>
 	{
-		setLoading(true);
 		const CancelToken = axios.CancelToken;
 		const source = CancelToken.source();
+		
+		setLoading(true);
 
 		let timer = setTimeout(() =>
 		{
@@ -64,6 +65,7 @@ const Search = () =>
 		}, 500);
 		return () =>
 		{
+			source.cancel();
 			clearTimeout(timer);
 		}
 	}, [searchInput, genre, minimumRating, sortBy]);

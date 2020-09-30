@@ -66,7 +66,8 @@ const MovieItem = ({ movie }) =>
 					{
 						// fetch all movies
 						const response = await axios.get(
-							"http://www.omdbapi.com/?i=" + movie.imdb_code + "&apikey=cc729f53"
+							"http://www.omdbapi.com/?i=" + movie.imdb_code + "&apikey=cc729f53",
+							{ cancelToken: source.token }
 						);
 
 						setMovieData(response.data);
@@ -75,12 +76,19 @@ const MovieItem = ({ movie }) =>
 					{
 						if (axios.isCancel(err))
 							source.cancel();
-						console.error(err.message);
+						console.log(err.message);
 					}
 				}
 			})();
+			return (() => source.cancel())
 		}
-	}, [mouseHover]);
+	}, [mouseHover]); 
+	
+	// clear timers on exit
+	useEffect(() =>
+	{
+		return () => clearTimeout(timer.current)
+	}, []);
 
 	const handleMouseEnter = () =>
 	{
