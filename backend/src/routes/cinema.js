@@ -134,12 +134,13 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 				https.get(url, (response) => {
 					response.pipe(file)
 
+					setTimeout(() => {
 						// read data from html file
 						var data = fs.readFileSync(__dirname + "/../../public/" + id + "/tmp.html", 'utf8');
 						const document = parse5.parse(data);
 	
 						// error check
-						if (response.statusCode === 200 && typeof document.childNodes[1] !== "undefined")
+						if (typeof document.childNodes[1] !== "undefined")
 						{
 							// take tbody section from html
 							const tbody = document.childNodes[1].childNodes[2].childNodes[9].childNodes[9].childNodes[6].childNodes[1].childNodes[3];
@@ -205,10 +206,10 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 									}
 								})
 							}
-							
-						}
-
 	
+						}
+						
+					}, 1000);
 				})
 
 				setTimeout(() => {
