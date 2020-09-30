@@ -55,6 +55,7 @@ const NewPassword = () =>
 					value={password}
 					onChange={event => changeInput(event, setPassword)}
 					required={true}
+					style={{maxWidth: '300px'}}
 				/>
 				<label htmlFor="email">Confirm password</label>
 				<input
@@ -64,6 +65,7 @@ const NewPassword = () =>
 					value={confirmPassword}
 					onChange={event => changeInput(event, setConfirmPassword)}
 					required={true}
+					style={{maxWidth: '300px'}}
 				/>
 				<button type="submit"><i className="fas color-black100"></i>Reset Password</button>
 			</form>
