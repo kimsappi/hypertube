@@ -1,16 +1,20 @@
 import React, { useState, useContext, useEffect, useRef, Fragment } from "react";
 import { useParams } from 'react-router-dom';
-
+import axios from 'axios';
 import ReactPlayer from "react-player";
 
 import StateContext from "../../context/StateContext";
+import DispatchContext from "../../context/DispatchContext";
 // import DispatchContext from "../../context/DispatchContext";
 
 import config from '../../config/config';
 
 const CinemaAlt = () =>
 {
+	const playerRef = useRef(null);
+
 	const globalState = useContext(StateContext);
+	const globalDispatch = useContext(DispatchContext);
 	// const globalDispatch = useContext(DispatchContext);
 
 	const { magnet, id, imdb } = useParams();
@@ -32,6 +36,9 @@ const CinemaAlt = () =>
 	const [totalSeconds, setTotalSeconds] = useState(0);
 
 	const [timeLeft, setTimeLeft] = useState(30);
+
+	const previouslyWatchedPercentage = globalState.watched[id] && globalState.watched[id] < 95 ?
+		globalState.watched[id] : 0;
 	
 	const token = localStorage.getItem("HiveflixToken");
 	const videoUrl = `${config.SERVER_URL}/api/cinema/${magnet}/${token}/${id}`;
@@ -93,6 +100,30 @@ const CinemaAlt = () =>
 		})()
 	}, [globalState.config]);
 
+	// Sending watched state to server
+	useEffect(() => {
+		return () => {
+			// Player didn't load yet
+			if (!document.querySelector('video'))
+				return;
+
+			const played = document.querySelector('video').currentTime;
+			const runtime = document.querySelector('video').duration;
+
+			const percent = (played / runtime) * 100;
+			console.log(id)
+			axios.post(config.SERVER_URL + '/api/users/watched',
+			{
+				imdb: id,
+				percent
+			}, globalState.config)
+			//alert('secs: ' + secondsPlayed + 'total: ' + totalSeconds + 'percent: ' + percent + 'test: ' + test);
+			const oldWatched = globalState.watched;
+			const newWatched = {...oldWatched, [id]: percent};
+			globalDispatch({type: 'updateWatched', value: newWatched});
+		}
+	}, []);
+
 	const onProgress = ({ playedSeconds, loadedSeconds }) =>
 	{
 		setSecondsPlayed(playedSeconds);
@@ -100,7 +131,13 @@ const CinemaAlt = () =>
 	}
 
 	const onReady = () => status.current = 4;
-	const onDuration = (duration) => setTotalSeconds(duration);
+	const onDuration = (duration) => {
+		console.log(duration)
+		setTotalSeconds(duration);
+		if (duration < 99999) {
+			playerRef.current.seekTo(previouslyWatchedPercentage * duration / 100);
+		}
+	};
 	const onStart = () => setStatusPlayer("START");
 	const onPlay = () => setStatusPlayer("PLAY");
 	const onPause = () => setStatusPlayer("PAUSE");
@@ -245,6 +282,7 @@ const CinemaAlt = () =>
 				<Fragment>
 					<div className="flex-center p-4 bg-black100">
 						<ReactPlayer
+							ref={playerRef}
 							width="100%"
 							height="500px"
 							playing={true}
