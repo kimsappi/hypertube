@@ -67,7 +67,7 @@ const MyList = () =>
 						</Fragment>
 						)
 					) :
-					<div className="mt-4">Your list is empty</div>}
+					<div className="mt-4">Your list is empty.</div>}
 				</div>
 			)}
 		</Fragment>

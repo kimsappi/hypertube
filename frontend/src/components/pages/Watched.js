@@ -16,21 +16,27 @@ const Watched = () =>
 
 	useEffect(() =>
 	{
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
+
 		(async () =>
 		{
 			try
 			{
-        let list = [];
-        const idList = Object.entries(globalState.watched);
-        console.log(idList)
+				let list = [];
+				const idList = Object.entries(globalState.watched);
+				const idListFiltered = idList.filter(movie => movie[1] < 100);
 
-				for (let i = 0; i < idList.length; i++)
+				for (let i = 0; i < idListFiltered.length; i++)
 				{
-          console.log(idList[i])
-					const res = await axios.get("https://yts.mx/api/v2/movie_details.json?movie_id=" + idList[i][0]);
+					const res = await axios.get(
+						"https://yts.mx/api/v2/movie_details.json?movie_id=" + idListFiltered[i][0],
+						{ cancelToken: source.token }
+					);
+
 					list.push({
-            movie: res.data.data.movie
-          });
+						movie: res.data.data.movie
+					});
 				}
 
 				setMyList(list);
@@ -38,14 +44,18 @@ const Watched = () =>
 			}
 			catch(err)
 			{
-
+				if (axios.isCancel(err))
+					source.cancel();
+				else
+					console.error(err.message);
 			}
 		})()
+		return () => source.cancel()
 	}, [render]);
 
 	return (
 		<>
-			<h1 className="center m-4"><i className="fas fa-images color-white"></i> My List</h1>
+			<h1 className="center m-4"><i className="far fa-eye color-white"></i> Watched</h1>
 			{loading && <div className="loading"></div>}
 			{!loading && (
 				<div className="movie-items-container">

@@ -35,11 +35,12 @@ const Home = () =>
 			{
 				// fetch "Watched" movies 
 				let list = [];
-				const movieIDs = Object.keys(globalState.watched);
+				const movieIds = Object.entries(globalState.watched);
+				const movieIdsFiltered = movieIds.filter(movie => movie[1] < 100);
 
-				for (let i = 0; i < movieIDs[i] && i < 10; i++)
+				for (let i = 0; i < movieIdsFiltered.length; i++)
 				{
-					const res = await axios.get("https://yts.mx/api/v2/movie_details.json?movie_id=" + movieIDs[i]);
+					const res = await axios.get("https://yts.mx/api/v2/movie_details.json?movie_id=" + movieIdsFiltered[i][0]);
 					list.push(res.data.data.movie);
 				}
 				setMoviesWatched(list);
@@ -74,8 +75,8 @@ const Home = () =>
 				else
 					console.error(err.message);
 			}
-			return () => source.cancel();
-		})();
+		})()
+		return () => source.cancel();
 	}, []);
 
 	const handleLoadMore = async () =>
@@ -106,7 +107,7 @@ const Home = () =>
 						hasMore={hasMore}
 						loader={<div className="loading"></div>}
 					>
-						{moviesWatched && (
+						{moviesWatched.length > 0 && (
 							<Fragment>
 								<h2 className="center bg-black100 py-2 mt-2">Continue Watching</h2>
 								<div className="movie-items-container">

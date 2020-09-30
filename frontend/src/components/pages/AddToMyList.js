@@ -35,7 +35,6 @@ const AddToMyList = ({id}) =>
 			
 			globalDispatch({ type: "addToMyList", value: id });
 			setAlreadyOnList(true);
-			console.log('added to My List');
 
 		}
 		catch(err)

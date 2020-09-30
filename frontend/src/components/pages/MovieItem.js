@@ -82,11 +82,7 @@ const MovieItem = ({ movie }) =>
 				}
 			})();
 		}
-		return (() =>
-		{
-			console.log("useEffect return");
-			source.cancel();
-		})
+		return () => source.cancel()
 	}, [mouseHover]);
 	
 	// clear timers on exit

@@ -93,8 +93,6 @@ const CinemaAlt = () =>
 						setMovieName(data.name);
 						setMovieSize(data.size);
 						connection.current.close();
-
-						console.log("subtitlesReady", subtitlesReady);
 					}
 				};
 			}

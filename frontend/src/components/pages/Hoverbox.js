@@ -28,7 +28,8 @@ const Hoverbox = ({ movie }) =>
 				else
 					console.error(err.message);
 			}
-		})();
+		})()
+		return () => source.cancel();
 	}, []);
 
 	return (
