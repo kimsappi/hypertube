@@ -216,6 +216,12 @@ const ProfileMy = () =>
 		globalDispatch({ type: "toggleMute", value: !globalState.mute });
 	}
 
+	const checkboxStyle = {
+		marginLeft: '10px',
+		width: '15px',
+		height: '15px'
+	};
+
 	return (
 		<Fragment>
 			{loading && <div className="loading"></div>}
@@ -275,9 +281,10 @@ const ProfileMy = () =>
 							<button>Update User Data</button>
 							</div>
 						</form>
-						{globalState.mute ?
-							<input type="checkbox" onChange={handleMute} checked/>:
-							<input type="checkbox" onChange={handleMute}/>}
+						<div style={{display: 'flex', flexFlow: 'row nowrap'}}>
+							<div>Mute trailer audio</div>
+							<input type="checkbox" onChange={handleMute} checked={globalState.mute} style={checkboxStyle}/>
+						</div>
 					</div>
 				</div>
 			</Fragment>
