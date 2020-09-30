@@ -30,7 +30,6 @@ const CinemaAlt = () =>
 	const [movieName, setMovieName] = useState("");
 	const [movieSize, setMovieSize] = useState(0);
 
-	const count = useRef(30);
 	const [statusPlayer, setStatusPlayer] = useState("");
 	const [secondsPlayed, setSecondsPlayed] = useState(0);
 	const [secondsLoaded, setSecondsLoaded] = useState(0);
@@ -108,7 +107,6 @@ const CinemaAlt = () =>
 		})()
 		return () =>
 		{
-			console.log("return");
 			source.cancel();
 			connection.current.close();
 		}

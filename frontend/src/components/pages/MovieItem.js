@@ -49,15 +49,15 @@ const MovieItem = ({ movie }) =>
 
 	useEffect(() =>
 	{
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
+
 		if (isInitialMount.current)
 		{
 			isInitialMount.current = false;
 		}
 		else
 		{
-			const CancelToken = axios.CancelToken;
-			const source = CancelToken.source();
-
 			(async () =>
 			{
 				if (mouseHover && movieData === null)
@@ -76,13 +76,17 @@ const MovieItem = ({ movie }) =>
 					{
 						if (axios.isCancel(err))
 							source.cancel();
-						console.log(err.message);
+						console.error(err.message);
 					}
 				}
 			})();
-			return (() => source.cancel())
 		}
-	}, [mouseHover]); 
+		return (() =>
+		{
+			console.log("useEffect return");
+			source.cancel();
+		})
+	}, [mouseHover]);
 	
 	// clear timers on exit
 	useEffect(() =>
