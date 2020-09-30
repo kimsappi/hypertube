@@ -106,7 +106,7 @@ const GithubLog = () => {
         event.preventDefault();
         console.log("SUBMIT");
 
-        if (passOne.length > 7 && /\d/.test(passOne) && /^[A-Z]+/.test(passOne))
+        if (passOne.length > 7 && /\d/.test(passOne) && /[A-Z]+/.test(passOne))
         {
             if (passOne === passTwo)
             {

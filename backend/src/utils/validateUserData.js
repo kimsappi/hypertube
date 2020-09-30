@@ -27,7 +27,7 @@ const validateEmail = email =>
 const validateRegistrationData = data => {
   if (data.username && data.password && data.firstName && data.lastName && data.email)
     return validateUsername(data.username) &&
-      //validatePassword(data.password) &&
+      validatePassword(data.password) &&
       validateName(data.firstName) &&
       validateName(data.lastName) &&
       validateEmail(data.email);

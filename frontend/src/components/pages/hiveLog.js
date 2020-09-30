@@ -93,7 +93,7 @@ const HiveLog = () => {
     const registerSubmit = async (event) => {
         event.preventDefault();
 
-        if (passOne.length > 7 && /\d/.test(passOne) && /^[A-Z]+/.test(passOne))
+        if (passOne.length > 7 && /\d/.test(passOne) && /[A-Z]+/.test(passOne))
         {
             if (passOne === passTwo )
             {
