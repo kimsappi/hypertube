@@ -257,7 +257,8 @@ hr {
 .movie-title-huge {
 	color: #fff;
 	font-size: 4vmax;
-	text-shadow: 5px 5px 10px #333;
+	text-shadow: 2px 2px 4px black;
+	line-height: 1.2;
 }
 
 #overlay {
@@ -353,6 +354,7 @@ input[type="file"] {
 	background-color: rgba(255, 255, 255, .5); */
 	padding: 2rem;
 	color: #333;
+	text-shadow: 1px 1px 2px black;
 }
 
 .left-box {
@@ -363,8 +365,7 @@ input[type="file"] {
 
 .right-box {
 	max-width: 350px;
-	background-color: rgba(33, 33, 33, .7);
-	border: 1px solid  #111;
+	background-color: rgba(33, 33, 33, .4);
 	padding: 2rem;
 	border-radius: 1rem;
 	color: #ddd;
