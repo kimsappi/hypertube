@@ -33,10 +33,12 @@ router.post('/register', async (req, res, next) => {
         if (resultTwo.status === 200)
         {
             
-            if (resultTwo.data.login === null)
+            if (!resultTwo.data.login)
             {
                 console.log("username not found");
                 //return res.status(300).json({err: "email or username not found from github"});
+                next(createError(400, "The email given is already taken by someone"));
+                throw "email taken";
             }
             
             const findId = await User.findOne({oauth: {$eq: {provider: 'github', email: resultTwo.data.id}}}, 'username');
