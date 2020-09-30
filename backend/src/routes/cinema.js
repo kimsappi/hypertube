@@ -133,78 +133,83 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 				const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/tmp.html");
 				https.get(url, (response) => {
 					response.pipe(file)
-				})
-				setTimeout(() => {
-					// read data from html file
-					var data = fs.readFileSync(__dirname + "/../../public/" + id + "/tmp.html", 'utf8');
-					const document = parse5.parse(data);
 
-					// take tbody section from html
-					const tbody = document.childNodes[1].childNodes[2].childNodes[9].childNodes[9].childNodes[6].childNodes[1].childNodes[3];
-
-					let languageLong = "";
-
-					for (let i = 0; languages[i]; i++)
-					{
-						if (languages[i].shorthand === language)
-							languageLong = languages[i].display;
-					}
-
-					// remove all rows where language is not "English"
-					for (let i = 1; tbody.childNodes[i]; i += 2)
-					{
-						if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== languageLong)
+						// read data from html file
+						var data = fs.readFileSync(__dirname + "/../../public/" + id + "/tmp.html", 'utf8');
+						const document = parse5.parse(data);
+	
+						// error check
+						if (response.statusCode === 200 && typeof document.childNodes[1] !== "undefined")
 						{
-							tbody.childNodes.splice(i - 1, 2);
-							i -= 2;
-						}
-					}
-
-					// remove unused "text" rows from object
-					for (let i = 0; tbody.childNodes[i]; i++)
-						tbody.childNodes.splice(i, 1);
-
-					// sort rows (most likes at the top)
-					tbody.childNodes.sort((a, b) => {
-						b.childNodes[1].childNodes[0].childNodes[0].value - a.childNodes[1].childNodes[0].childNodes[0].value;
-					});
-
-					// download subtitle zip-file and save it on server (currently uses hardcoded english subtitle)
-					if (tbody.childNodes.length > 0)
-					{
-						const url = "https://yifysubtitles.org" + tbody.childNodes[0].childNodes[5].childNodes[1].attrs[0].value.replace("subtitles/", "subtitle/") + ".zip";
-						
-						https.get(url, (response) => {
-							if (response.statusCode === 200)
+							// take tbody section from html
+							const tbody = document.childNodes[1].childNodes[2].childNodes[9].childNodes[9].childNodes[6].childNodes[1].childNodes[3];
+		
+							let languageLong = "";
+		
+							for (let i = 0; languages[i]; i++)
 							{
-								res.write(`data: { "kind": "available", "name": "yifysubtitles.org", "size": 50 }\n\n`);
-
-								// pipe html document to zip file
-								const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/subs.zip");
-								response.pipe(file)
-
-								// unzip the first file (there's always only one) inside the zip-file
-								setTimeout(() => {
-									fs.createReadStream(__dirname + "/../../public/" + id + "/subs.zip")
-										.pipe(unzipper.ParseOne())
-										.pipe(fs.createWriteStream(__dirname + "/../../public/" + id + "/subs." + language + ".srt"));
-								}, 2000);
-			
-								// convert srt-file to vtt subtitle file
-								// todo first check if the file is srt
-								setTimeout(() => {
-									const path = __dirname + "/../../public/" + id + "/subs." + language + ".srt";
-									const pathNew = __dirname + "/../../public/" + id + "/subs." + language + ".vtt";
-
-									fs.createReadStream(path)
-										.pipe(srttovtt())
-										.pipe(fs.createWriteStream(pathNew));
-								}, 4000);
+								if (languages[i].shorthand === language)
+									languageLong = languages[i].display;
 							}
-						})
-					}
+		
+							// remove all rows where language is not "English"
+							for (let i = 1; tbody.childNodes[i]; i += 2)
+							{
+								if (tbody.childNodes[i].childNodes[3].childNodes[1].childNodes[0].value !== languageLong)
+								{
+									tbody.childNodes.splice(i - 1, 2);
+									i -= 2;
+								}
+							}
+		
+							// remove unused "text" rows from object
+							for (let i = 0; tbody.childNodes[i]; i++)
+								tbody.childNodes.splice(i, 1);
+		
+							// sort rows (most likes at the top)
+							tbody.childNodes.sort((a, b) => {
+								b.childNodes[1].childNodes[0].childNodes[0].value - a.childNodes[1].childNodes[0].childNodes[0].value;
+							});
+		
+							// download subtitle zip-file and save it on server (currently uses hardcoded english subtitle)
+							if (tbody.childNodes.length > 0)
+							{
+								const url = "https://yifysubtitles.org" + tbody.childNodes[0].childNodes[5].childNodes[1].attrs[0].value.replace("subtitles/", "subtitle/") + ".zip";
+								
+								https.get(url, (response) => {
+									if (response.statusCode === 200)
+									{
+										res.write(`data: { "kind": "available", "name": "yifysubtitles.org", "size": 50 }\n\n`);
+		
+										// pipe html document to zip file
+										const file = fs.createWriteStream(__dirname + "/../../public/" + id + "/subs.zip");
+										response.pipe(file)
+		
+										// unzip the first file (there's always only one) inside the zip-file
+										setTimeout(() => {
+											fs.createReadStream(__dirname + "/../../public/" + id + "/subs.zip")
+												.pipe(unzipper.ParseOne())
+												.pipe(fs.createWriteStream(__dirname + "/../../public/" + id + "/subs." + language + ".srt"));
+										}, 2000);
 					
-				}, 3000);
+										// convert srt-file to vtt subtitle file
+										// todo first check if the file is srt
+										setTimeout(() => {
+											const path = __dirname + "/../../public/" + id + "/subs." + language + ".srt";
+											const pathNew = __dirname + "/../../public/" + id + "/subs." + language + ".vtt";
+		
+											fs.createReadStream(path)
+												.pipe(srttovtt())
+												.pipe(fs.createWriteStream(pathNew));
+										}, 4000);
+									}
+								})
+							}
+							
+						}
+
+	
+				})
 
 				setTimeout(() => {
 					convertSubtitles(engine.files);
