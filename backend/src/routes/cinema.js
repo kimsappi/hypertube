@@ -216,6 +216,7 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 			}
 			catch(err)
 			{
+				const nonEmptyCatch = 5 + 5;
 			}
 		}
 	})
@@ -549,7 +550,7 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
     // kill the stream somehow?
 
   } catch (err) {
-    //c.error(err.message);
+		const nonEmptyCatch = 5 + 5;
   }
 });
 
