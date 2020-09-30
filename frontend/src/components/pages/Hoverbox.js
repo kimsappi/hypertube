@@ -20,13 +20,11 @@ const Hoverbox = ({ movie }) =>
 				);
 				setMovieData(response.data);
 				setLoading(false);
-				console.log(response.data);
 			}
 			catch (err)
 			{
 				if (axios.isCancel(err))
 					source.cancel();
-				console.error(err.message);
 			}
 		})();
 	}, []);
@@ -55,7 +53,7 @@ const Hoverbox = ({ movie }) =>
 							</div>
 							{movieData.Awards !== "N/A" && (
 								<div className="color-black50 m-2">
-									<i class="fas fa-trophy"></i> {movieData.Awards}
+									<i className="fas fa-trophy"></i> {movieData.Awards}
 								</div>
 							)}
 						</div>
