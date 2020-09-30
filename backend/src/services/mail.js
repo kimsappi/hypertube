@@ -38,7 +38,7 @@ const registration = async (data, req) => {
 const forgotPassword = async (data, req) => {
   const subject = 'Reset your Hiveflix password';
   const baseUrl = getServerUrl(req);
-  const fullUrl = `${baseUrl}/newpassword/${data._doc._id}?code=${data.emailVerification}`;
+  const fullUrl = `http://localhost:3000/newpassword/${data._doc._id}?code=${data.emailVerification}`;
   const content = `
 <h2>Hiveflix password reset requested</h2>
 <p>To reset your password, click <a href='${fullUrl}'>here</a>.
