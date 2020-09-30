@@ -25,7 +25,8 @@ const Hoverbox = ({ movie }) =>
 			{
 				if (axios.isCancel(err))
 					source.cancel();
-				console.error(err.message);
+				else
+					console.error(err.message);
 			}
 		})();
 	}, []);
