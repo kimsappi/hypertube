@@ -6,7 +6,6 @@ const { validatePassword,
   validateEmail } = require('../utils/validateUserData');
 
 const updateUserData = async data => {
-  console.log(data)
   try {
     const result = await User.findByIdAndUpdate(data.id, data, {
       new: true,
@@ -32,13 +31,11 @@ const updateProfile = async data => {
     throw 'incorrect formatting';
   
   const oldData = await User.findById(data._id, 'password');
-  console.log('passwordcomp:', await bcrypt.compare(oldData.password, data.currentPassword))
   if (!await bcrypt.compare(data.currentPassword, oldData.password))
     throw 'password';
 
   // User is trying to change their password
   if (data.newPassword1 && validatePassword(data.newPassword1)) {
-    console.log(`password result ${passwordCorrect}`);
     if (data.newPassword1 !== data.newPassword2)
       throw 'password mismatch';
     else
