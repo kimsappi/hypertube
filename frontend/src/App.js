@@ -130,7 +130,6 @@ const App = () =>
 						<Route exact path='/activationsent' component={ActivationSent} />
 						<Route exact path='/newpassword/:id' component={NewPassword}/>
 						<Route exact path='/forgotpassword' component={ForgotPassword}/>
-						<Route exact path='/confirmemail/:key' component={ConfirmEmail}/>
 						<Route exact path='/home' component={initialState.loggedIn ? Home : Login} />
 						<Redirect to='/home' />
 					</Switch>
