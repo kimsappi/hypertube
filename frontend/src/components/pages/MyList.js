@@ -15,6 +15,9 @@ const MyList = () =>
 
 	useEffect(() =>
 	{
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
+
 		(async () =>
 		{
 			try
@@ -23,7 +26,10 @@ const MyList = () =>
 
 				for (let i = 0; i < globalState.myList.length; i++)
 				{
-					const res = await axios.get("https://yts.mx/api/v2/movie_details.json?movie_id=" + globalState.myList[i]);
+					const res = await axios.get(
+						"https://yts.mx/api/v2/movie_details.json?movie_id=" + globalState.myList[i],
+						{ cancelToken: source.token }
+					);
 					list.push(res.data.data.movie);
 				}
 
@@ -32,9 +38,13 @@ const MyList = () =>
 			}
 			catch(err)
 			{
-
+				if (axios.isCancel(err))
+					source.cancel();
+				else
+					console.error(err.message);
 			}
 		})()
+		return () => source.cancel()
 	}, [globalState.myList]);
 
 	return (
