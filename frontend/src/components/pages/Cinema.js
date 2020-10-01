@@ -7,7 +7,6 @@ import ReactPlayer from "react-player";
 
 import StateContext from "../../context/StateContext";
 import DispatchContext from "../../context/DispatchContext";
-// import DispatchContext from "../../context/DispatchContext";
 
 import config from '../../config/config';
 
@@ -17,7 +16,6 @@ const Cinema = () =>
 
 	const globalState = useContext(StateContext);
 	const globalDispatch = useContext(DispatchContext);
-	// const globalDispatch = useContext(DispatchContext);
 
 	const { magnet, id, imdb } = useParams();
 	const connection = useRef();

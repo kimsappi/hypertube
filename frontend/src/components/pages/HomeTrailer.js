@@ -23,9 +23,7 @@ const HomeTrailer = ({ id }) =>
 					"https://yts.mx/api/v2/movie_details.json?with_images=true&movie_id=" + id,
 					{ cancelToken: source.token }
 				);
-
-				console.log("trailer movie.data", response.data.data.movie);
-				
+	
 				setMovie(response.data.data.movie);
 				setIsLoading(false);
 			}

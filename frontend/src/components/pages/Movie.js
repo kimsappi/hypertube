@@ -33,10 +33,7 @@ const Movie = () =>
 					"https://yts.mx/api/v2/movie_details.json?with_cast=true&movie_id=" + id,
 					{ cancelToken: source.token });
 
-				console.log("movie.data", response.data.data.movie);
-				
 				setMovie(response.data.data.movie);
-
 				setLoading(false);
 			}
 			catch (err)

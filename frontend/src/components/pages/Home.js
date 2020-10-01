@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from "react";
 import axios from "axios";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import ScrollMenu from 'react-horizontal-scrolling-menu';
 import clone from 'clone';
 
 import genresInRandomOrder from '../../utils/genresInRandomOrder';

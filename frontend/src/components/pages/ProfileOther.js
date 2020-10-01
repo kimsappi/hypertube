@@ -26,7 +26,6 @@ const ProfileOther = () =>
 				const response = await axios.get(config.SERVER_URL + "/api/users/" + id, globalState.config);
 
 				setUserData(response.data);
-				console.log(response.data);
 				setLoading(false);
 			}
 			catch (err)

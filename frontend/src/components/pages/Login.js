@@ -45,13 +45,9 @@ const Login = () =>
 					config.SERVER_URL + '/api/auth/login/',
 					{username: username, password: password}
 				);
-					console.log(response);
 
 				if (response.data.message === "login success")
 				{
-					console.log("res", response.data.language);
-
-					console.log(response.data.watched, response.data.myList)
 					localStorage.setItem("HiveflixToken", response.data.token);
 					localStorage.setItem("HiveflixUsername", response.data.username);
 					localStorage.setItem("HiveflixProfilePicture", response.data.profilePicture);
