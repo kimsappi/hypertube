@@ -54,7 +54,6 @@ const AddToMyList = ({id}) =>
 				{
 					globalDispatch({ type: "removeFromMyList", value: i });
 					setAlreadyOnList(false);
-					console.log('removed from My List');
 				}
 		}
 		catch(err)
@@ -65,8 +64,8 @@ const AddToMyList = ({id}) =>
 
 	return (
 		<div className="flex m-2">
-				{alreadyOnList ? <button onClick={removeFromMyList}>Remove From My List</button> :
-				<button onClick={addItemToMyList}>Add to My List</button>}
+				{alreadyOnList ? <button onClick={removeFromMyList}><i className="fas fa-minus"></i> Remove From My List</button> :
+				<button onClick={addItemToMyList}><i className="fas fa-plus"></i> Add to My List</button>}
 		</div>
 		);
 };

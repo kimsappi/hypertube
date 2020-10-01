@@ -1,4 +1,4 @@
-/* eslint-disable */
+// /* eslint-disable */
 
 import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios';
@@ -52,7 +52,7 @@ const Watched = () =>
 			}
 		})()
 		return () => source.cancel()
-	}, []);
+	}, [globalState.watched]);
 
 	return (
 		<>

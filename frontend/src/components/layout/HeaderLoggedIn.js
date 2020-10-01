@@ -22,17 +22,26 @@ const HeaderLoggedIn = () =>
 					</li>
 					<li>
 						<NavLink to='/search' alt='Search' title='Search'>
-							<i className="fas fa-search color-primary"></i> Search
+							<div className="flex">
+								<div className="navlink-icon"><i className="fas fa-search color-primary"></i></div>
+								<div className="navlink-text">Search</div>
+							</div>
 						</NavLink>
 					</li>
 					<li>
 						<NavLink to='/mylist' alt='My List' title='My List'>
-							<i className="fas fa-images color-primary"></i> My List
+							<div className="flex">
+								<div className="navlink-icon"><i className="fas fa-images color-primary"></i></div>
+								<div className="navlink-text">My List</div>
+							</div>
 						</NavLink>
 					</li>
 					<li>
 						<NavLink to='/watched' alt='My List' title='Watched'>
-							<i className="far fa-eye color-primary"></i> Watched
+							<div className="flex">
+								<div className="navlink-icon"><i className="far fa-eye color-primary"></i></div>
+								<div className="navlink-text">Watched</div>
+							</div>
 						</NavLink>
 					</li>
 				</ul>
@@ -44,7 +53,10 @@ const HeaderLoggedIn = () =>
 					</li>
 					<li>
 						<Link to='#' alt='Logout' title='Logout' onClick={() => globalDispatch({ type: "logout" })}>
-							<i className="fas fa-share-square color-primary"></i> Log Out
+							<div className="flex">
+								<div className="navlink-icon"><i className="fas fa-share-square color-primary"></i></div>
+								<div className="navlink-text">Log Out</div>
+							</div>
 						</Link>
 					</li>
 				</ul>

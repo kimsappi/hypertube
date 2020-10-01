@@ -1,4 +1,4 @@
-/* eslint-disable */
+// /* eslint-disable */
 
 import React, { useEffect, useState, useRef, useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
@@ -85,7 +85,7 @@ const MovieItem = ({ movie }) =>
 			})();
 		}
 		return () => source.cancel()
-	}, [mouseHover]);
+	}, [mouseHover, movie.imdb_code]);
 	
 	// clear timers on exit
 	useEffect(() =>

@@ -32,6 +32,7 @@ hr {
 	object-fit: cover;
 	border: 2px solid #fff;
 	border-radius: 100%;
+	margin: 0.5rem 0 0.5rem 0.5rem;
 }
 
 .profile-image-large {
@@ -354,6 +355,15 @@ input[type="file"] {
 	padding: 1.5rem;
 	border-radius: 1rem;
 	color: #ddd;
+}
+
+/* SMALLER RESOLUTION */
+
+@media screen and (max-width: 700px) {
+
+	.right-box {
+		display: none;
+	}
 }
 
 .basic-button {
