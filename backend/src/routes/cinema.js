@@ -107,8 +107,7 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 
 			if (fs.existsSync(path))
 				sendSubtitlesReady(engine.files);
-			else
-				sendSubtitlesAvailable(engine.files);
+			sendSubtitlesAvailable(engine.files);
 		}
 		catch (err)
 		{
@@ -122,7 +121,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 	engine.on('download', index =>
 	{
 		res.write(`data: { "kind": "downloaded", "size": ${engine.swarm.downloaded} }\n\n`);
-		//c.log("\033[36mpart " + index +	" downloaded and verified 2\033[0m")
 	})
 
 	// ***********************************************************************************************************
@@ -210,7 +208,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 										}, 2000);
 					
 										// convert srt-file to vtt subtitle file
-										// todo first check if the file is srt
 										setTimeout(() => {
 											const path = __dirname + "/../../public/" + id + "/subs." + language + ".srt";
 											const pathNew = __dirname + "/../../public/" + id + "/subs." + language + ".vtt";
@@ -222,7 +219,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 									}
 								})
 							}
-	
 						}
 						
 					}, 1000);

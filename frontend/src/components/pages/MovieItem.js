@@ -53,7 +53,7 @@ const MovieItem = ({ movie }) =>
 	{
 		const CancelToken = axios.CancelToken;
 		const source = CancelToken.source();
-
+	
 		if (isInitialMount.current)
 		{
 			isInitialMount.current = false;
