@@ -8,16 +8,7 @@ var https = require('https');
 const parse5 = require('parse5');
 const unzipper = require('unzipper');
 
-const srt2vtt = require('srt2vtt');
 const srttovtt = require('srt-to-vtt')
-
-const OS = require('opensubtitles-api');
-const OpenSubtitles = new OS({
-	useragent:'TemporaryUserAgent',
-	username: 'asdhypertube',
-	password: 'asdASD123',
-	ssl: true
-});
 
 ffmpeg.setFfmpegPath(ffmpegPath);
 
@@ -347,115 +338,6 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 // SSE END ***************************************************************************************************
 // ***********************************************************************************************************
 
-router.get('/start/:magnet/:token/:imdb', async (req, res) => {
-  const { magnet, token, imdb } = req.params;
-  let retSubs = [];
-  const engine = torrentStream("magnet:?" + magnet, {
-    tmp: "../public",
-    path: "../public/" + imdb,
-    trackers: [
-      "udp://glotorrents.pw:6969/announce",
-      "udp://tracker.opentrackr.org:1337/announce",
-      "udp://torrent.gresille.org:80/announce",
-      "udp://tracker.openbittorrent.com:80",
-      "udp://tracker.coppersurfer.tk:6969",
-      "udp://tracker.leechers-paradise.org:6969",
-      "udp://p4p.arenabg.ch:1337",
-      "udp://tracker.internetwarriors.net:1337"
-    ],
-  });
-let tries = 0;
-  engine.on('ready', () =>
-    {
-      engine.files.forEach(file =>
-        {
-          if (file.name.includes('.srt'))
-          {
-            file.select();
-          }
-        })
-
-    })
-    engine.on('torrent', () => {});//c.log("\033[35mmetadata has been fetched\033[0m"));
-
-    engine.on('download', () => {});//c.log("\033[35mmetadata has been downloaded\033[0m"));
-    
-    engine.on('idle', () => {
-      // TAHAN VALIIN TEKSTITYSTEN TARKASTUS JA HAKU JA ALLA RES ANTAA URLIN TEKSTEIHIN.
-
-      //search for srt files. If found, fun cb.
-
-      setTimeout(() => {
-
-        glob('../public/' + imdb + '/**/*.srt', {}, (err, files) => {
-
-          if (files.length)
-          {
-
-            //moving the subtitle file to imdb-folder.
-            files.forEach((file) => {
-              const filePath = file.split('/');
-              const fileName = filePath[filePath.length - 1].split('.');
-              const langIdentifier = fileName.length === 3 && fileName[1].length === 3 ? fileName[fileName.length - 2] : fileName.length === 2 && fileName[0].length <= 3 ? fileName[fileName.length - 2] : 'eng';
-              fs.rename(file, '../public/' + imdb + '/sub.' + langIdentifier + '.srt', (err) => {});
-            })
-
-            setTimeout(() => {
-              
-            glob('../public/' + imdb + '/*.srt', {}, (err, files) => {
-              if (err)
-              files.forEach((file) => {
-                let lang = file.split('/');
-                lang = lang[lang.length - 1].split('.');
-                var srtData = fs.readFileSync(file);
-                srt2vtt(srtData, (err, vttData) => {
-                  fs.writeFileSync('../public/' + imdb + '/sub.' + lang[lang.length - 2] + '.vtt', vttData);
-
-                  retSubs.push(imdb + '/sub.' + lang[lang.length - 2] + '.vtt');
-                })
-              })
-
-              engine.destroy();
-              if (res.headersSent)
-                return;
-              return res.status(200).json({sub: retSubs, message: 'found'});
-              
-            })
-
-            
-            
-
-          }, 500)
-            //convert srt2vtt. Timeout, that fs.rename has time to run..
-            // setTimeout(() => {
-            //   var srtData = fs.readFileSync('../public/' + imdb + '/sub.srt');
-            
-            //   srt2vtt(srtData, (err, vttData) => {
-										// if (!err)
-            //     fs.writeFileSync('../public/' + imdb + '/sub.vtt', vttData);
-            //   })
-
-              
-            // }, 1000);
-
-              
-          }
-          else {
-            engine.destroy()
-
-            return res.status(200).send("subtitles not found");
-          }
-        })
-      }, 500);
-      
-      
-      //res.status(200).send("JEES");
-      
-  });
-    
-
-})
-
 router.get('/:magnet/:token/:imdb', async (req, res, next) => {
   try {
     const { magnet, token, imdb } = req.params;
@@ -523,7 +405,7 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
         'Content-Type': `video/${isMp4 ? 'mp4' : 'webm'}`
       });
 			
-			// Create Stream object from the selected part of the video file
+	// Create Stream object from the selected part of the video file
       const originalFileStream = file.createReadStream({
         start: start,
         end: end
@@ -552,8 +434,6 @@ router.get('/:magnet/:token/:imdb', async (req, res, next) => {
       // This will prevent the streaming of the very last couple of seconds in Top Gun
       //engine.destroy();
     });
-
-    // kill the stream somehow?
 
   } catch (err) {
 		const nonEmptyCatch = 5 + 5;
