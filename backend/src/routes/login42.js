@@ -64,7 +64,8 @@ router.post('/login', async (req, res, next)  => {
     }
     catch(err)
     {
-        console.log(err);
+        const nonEmptyCatch = 5 + 5;
+        //c.log(err);
     }
 })
 
@@ -117,7 +118,7 @@ router.post('/register', async (req, res, next) => {
             },
             'username'
             );
-            //console.log(res);
+            //c.log(res);
             if (res === null)
                 usernameTaken = false;
             else
@@ -161,7 +162,8 @@ router.post('/register', async (req, res, next) => {
     }
     catch(err)
     {
-        console.log(err);
+        const nonEmptyCatch = 5 + 5;
+        //c.log(err);
     }
     
 
