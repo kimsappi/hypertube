@@ -299,6 +299,7 @@ hr {
 
 .cinema-container {
 	display: flex;
+	justify-content: center;
 }
 
 .cinema-info {
@@ -310,6 +311,19 @@ hr {
 	padding: 2rem;
 	white-space: nowrap;
 }
+
+@media screen and (max-width: 900px) {
+
+	.cinema-container {
+		flex-wrap: wrap;
+	}
+
+	.cinema-info {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+}
+
 .cinema-info-table {
 	font-size: 0.75rem;
 	line-height: 1;

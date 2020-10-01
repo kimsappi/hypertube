@@ -96,6 +96,14 @@ is reached, columns are stacked vertically if needed */
 	grid-template-columns: repeat(auto-fit, minmax(450px, 3fr));
 }
 
+/* SMALLER RESOLUTION */
+
+@media screen and (max-width: 700px) {
+	.ram {
+		display: initial;
+	}
+}
+
 /* FLEX
 --------------------------------------------------------------------- */
 .flex {
