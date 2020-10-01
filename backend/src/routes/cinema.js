@@ -21,9 +21,34 @@ const Logger = require('../utils/logger');
 
 const Movie = require('../models/Movie');
 
-const languages = require('../../config/config');
-
 const router = express.Router();
+
+const languages = [
+	{
+		shorthand: 'eng',
+		display: 'English'
+	},
+	{
+		shorthand: 'fin',
+		display: 'Finnish'
+	},
+	{
+		shorthand: 'fre',
+		display: 'French'
+	},
+	{
+		shorthand: 'spa',
+		display: 'Spanish'
+	},
+	{
+		shorthand: 'ita',
+		display: 'Italian'
+	},
+	{
+		shorthand: 'ger',
+		display: 'German'
+	},
+]
 
 // ***********************************************************************************************************
 // * SSE START

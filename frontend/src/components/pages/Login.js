@@ -131,11 +131,10 @@ const Login = () =>
 						<div className="center mt-4">
 							<button type="submit"><i className="fas fa-key color-black100"></i> Log In</button>
 						</div>
-						<div className="center mt-4">Don't have an account? <Link to='/register'>Register</Link></div>
 					</form>
-					<h4>Log in via an API</h4>
-					<div><a href="https://api.intra.42.fr/oauth/authorize?client_id=2d02a773dfbb227ded338c162245907ac4e2fa874a5e24a5e421aca1177cacab&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flogin&response_type=code">Log in via 42</a></div>
-					<div><a href="https://github.com/login/oauth/authorize?client_id=06dd042c7ba940906e5d&redirect_uri=http://localhost:3000/github/login">Log in via Github</a></div>
+					<div className="center mt-2"><a href="https://api.intra.42.fr/oauth/authorize?client_id=2d02a773dfbb227ded338c162245907ac4e2fa874a5e24a5e421aca1177cacab&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flogin&response_type=code">Log in via 42</a></div>
+					<div className="center"><a href="https://github.com/login/oauth/authorize?client_id=06dd042c7ba940906e5d&redirect_uri=http://localhost:3000/github/login">Log in via Github</a></div>
+					<div className="center mt-4">Don't have an account? <Link to='/register'>Register</Link></div>
 				</div>
 			</div>
 		</main>
