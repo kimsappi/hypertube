@@ -58,7 +58,7 @@ const Movie = () =>
 			{!loading && (
 				<div className="ram-container">
 					<div className="ram">
-						<div className="movie-left-container">
+						<div className="movie-left-column">
 							<img className="movie-image-large" src={movie.large_cover_image} alt='Profile'/>
 						</div>
 						<div className="movie-center-column">

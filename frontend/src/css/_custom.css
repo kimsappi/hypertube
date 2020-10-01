@@ -69,6 +69,8 @@ hr {
 
 .movie-left-column {
 	line-height: 0;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .8);
 }
 
 .movie-center-column {
@@ -108,7 +110,6 @@ hr {
 }
 
 .movie-image-large {
-	border: 5px solid #000;
 }
 
 .comment-image {

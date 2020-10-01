@@ -54,3 +54,12 @@
 	height: 24px;
 	vertical-align: middle;
 }
+
+/* SMALLER RESOLUTION */
+
+@media screen and (max-width: 900px) {
+	.topnav a {
+		float: none;
+		width: 100%;
+	}
+  }
