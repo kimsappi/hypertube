@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useContext, useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import clone from "clone";
