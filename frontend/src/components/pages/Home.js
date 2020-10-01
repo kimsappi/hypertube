@@ -1,4 +1,4 @@
-// /* eslint-disable */
+/* eslint-disable */
 
 import React, { useState, useEffect, useContext, useRef, Fragment } from "react";
 import axios from "axios";

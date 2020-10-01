@@ -1,4 +1,4 @@
-// /* eslint-disable */
+/* eslint-disable */
 
 import React, { useEffect, useState, useRef, useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
