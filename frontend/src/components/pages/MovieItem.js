@@ -121,9 +121,6 @@ const MovieItem = ({ movie }) =>
 										<img className="imdb-logo" src={imdbLogo} alt="IMDb Logo" /> 
 										<div className="big ml-2">{movieData.imdbRating}</div>
 									</div>
-									{/* <div>
-										{metacriticLogo} {movieData.metacriticRating}
-									</div> */}
 								</div>
 								<ReactPlayer
 									width="100%"
