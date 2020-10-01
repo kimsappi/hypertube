@@ -99,7 +99,7 @@ const Comments = ({ movieId }) =>
 			</form>
 			<hr className="my-2"></hr>
 			<h4 className="mb-2">Comments</h4>
-			<div style={{maxHeight: '400px', overflowY: 'auto'}}>
+			<div>
 			{typeof comments.data !== "undefined" && comments.data.comments.map ((comment, index) => (
 				<CommentItem
 					sender={comment.user}

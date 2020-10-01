@@ -161,7 +161,7 @@ const Cinema = () =>
 		{
 			if (status.current === 4)
 			{
-				setTimeLeft("Success!");
+				setTimeLeft("Enjoy!");
 				clearTimeout(count);
 			}
 			else if (timeLeft > 1)
@@ -183,28 +183,6 @@ const Cinema = () =>
 		<div className="cinema-container">
 			<div className="cinema-info">
 				<h3 className="center m-4"><i className="fas fa-download"></i> File Downloader</h3>
-				<div className="center m-2">Status:
-						{status.current === 0 && " downloading metadata"}
-						{status.current === 1 && " preparing subtitles"}
-						{status.current === 2 && " downloading subtitles"}
-						{status.current === 3 && " preparing movie"}
-						{status.current === 4 && " playing movie"}
-				</div>
-
-				{/* <hr className="my-2"></hr>
-				<table className="cinema-info-table">
-					<tbody>
-						<tr>
-							<td>Torrent details</td>
-						</tr>
-						<tr>
-							<td>Type: {movie.data.torrents.type}</td>
-							<td>Quality: {movie.data.torrents.quality}</td>
-							<td>Peers: {movie.data.torrents.peers}</td>
-							<td>Seeds: {movie.data.torrents.seeds}</td>
-						</tr>
-					</tbody>
-				</table> */}
 
 				<hr className="my-2"></hr>
 				<table className="cinema-info-table">
@@ -284,10 +262,17 @@ const Cinema = () =>
 								</tr>
 							</tbody>
 						</table>
-						<div className="center m-2">{timeLeft}</div>
-						<hr className="my-2"></hr>
 					</Fragment>
 				)}
+				<hr className="my-2"></hr>
+				<div className="center mt-4">Status:
+						{status.current === 0 && " downloading metadata"}
+						{status.current === 1 && " preparing subtitles"}
+						{status.current === 2 && " downloading subtitles"}
+						{status.current === 3 && " preparing movie"}
+						{status.current === 4 && " playing movie"}
+				</div>
+				<div className="center m-2">{timeLeft}</div>
 			</div>
 		<div>
 			{status.current > 2 && (
