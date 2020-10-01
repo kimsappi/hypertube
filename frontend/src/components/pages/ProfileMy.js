@@ -230,63 +230,84 @@ const ProfileMy = () =>
 			{!loading && (
 			<Fragment>
 				<div className="profile-container">
-					<div>
+					<div className="center">
 						<ProfilePicture url={globalState.profilePicture} className='profile-image-large'/>
 					</div>
-					<div>
+					<div className="m-a">
 						<label htmlFor="file-upload" className="custom-file-upload"> 
 							<i className="fa fa-cloud-upload"></i> Change Profile Picture
 						</label>
 						<input id="file-upload" type='file' onChange={handlePicUpload}/>
 					</div>
+					<div className="flex-center mb-2">
+						<div>Mute trailer audio</div>
+						<input type="checkbox" onChange={handleMute} checked={globalState.mute} style={checkboxStyle}/>
+					</div>
 					<div>
 						<form onSubmit={handleSubmit}>
-							<label>Email</label>
-							<input type="email" value={userData.email || ''} onChange={handleEmail} required={true}/>
-							<label>First Name</label>
-							<input type="text" value={userData.firstName} onChange={handleFirstName} required={true}/>
-							<label>Last Name</label>
-							<input type="text" value={userData.lastName} onChange={handleLastName} required={true}/>
-							<label>Language</label>
-							<select name="language" id="language" value={userData.language} onChange={handleLanguage}>
+							<div className="mb-4">
+									<label className="mb-1 ml-2">Email</label>
+									<input type="email" value={userData.email || ''} onChange={handleEmail} required={true}/>
+							</div>
+
+							<div className="mb-4">
+								<label className="mb-1 ml-2">First Name</label>
+								<input type="text" value={userData.firstName} onChange={handleFirstName} required={true}/>
+							</div>
+
+							<div className="mb-4">
+								<label className="mb-1 ml-2">Last Name</label>
+								<input type="text" value={userData.lastName} onChange={handleLastName} required={true}/>
+							</div>
+
+							<div className="mb-4">
+								<label className="mb-1 ml-2">Language</label>
+								<select name="language" id="language" value={userData.language} onChange={handleLanguage}>
 										{config.languages.map(lang => <LanguageOption lang={lang} key={lang.shorthand} />)}
-									</select>
-							<label>New Password</label>
-							<input
-								type="password"
-								value={userData.newPassword1 || ''}
-								placeholder="Enter new password"
-								autoComplete="new-password"
-								onChange={handleNewPassword1}
-							/>
-							{errorNewPassword1 && <div className="small alert alert-error">{errorNewPassword1}</div>}
-							<label>Confirm New Password</label>
-							<input
-								type="password"
-								value={userData.newPassword2 || ''}
-								placeholder="Confirm new password"
-								autoComplete="new-password"
-								onChange={handleNewPassword2}
-							/>
-							<label>Current Password</label>
-							<input
-								type="password"
-								value={userData.currentPassword || ''}
-								placeholder="Enter current password"
-								autoComplete="current-password"
-								onChange={handleCurrentPassword}
-							/>
-							{errorCurrentPassword && <div className="small alert alert-error">{errorCurrentPassword}</div>}
-							{error && <div className='alert alert-error'>{error}</div>}
-							{success && <div className='alert alert-success'>{success}</div>}
-							<div className="center m-4">
-							<button>Update User Data</button>
+								</select>
+							</div>
+
+							<div className="mb-4">
+								<label className="mb-1 ml-2">New Password</label>
+								<input
+									type="password"
+									value={userData.newPassword1 || ''}
+									placeholder="Enter new password"
+									autoComplete="new-password"
+									onChange={handleNewPassword1}
+								/>
+								{errorNewPassword1 && <div className="small alert alert-error mt-2">{errorNewPassword1}</div>}
+							</div>
+
+							<div className="mb-4">
+								<label className="mb-1 ml-2">Confirm New Password</label>
+								<input
+									type="password"
+									value={userData.newPassword2 || ''}
+									placeholder="Confirm new password"
+									autoComplete="new-password"
+									onChange={handleNewPassword2}
+								/>
+							</div>
+
+							<div className="mb-4">
+								<label className="mb-1 ml-2">Current Password</label>
+								<input
+									type="password"
+									value={userData.currentPassword || ''}
+									placeholder="Enter current password"
+									autoComplete="current-password"
+									onChange={handleCurrentPassword}
+								/>
+								{errorCurrentPassword && <div className="small alert alert-error">{errorCurrentPassword}</div>}
+							</div>
+							{error && <div className='small alert alert-error'>{error}</div>}
+							{success && <div className='small alert alert-success'>{success}</div>}
+
+							<div className="center m-5">
+								<button>Update User Data</button>
 							</div>
 						</form>
-						<div style={{display: 'flex', flexFlow: 'row nowrap'}}>
-							<div>Mute trailer audio</div>
-							<input type="checkbox" onChange={handleMute} checked={globalState.mute} style={checkboxStyle}/>
-						</div>
 					</div>
 				</div>
 			</Fragment>

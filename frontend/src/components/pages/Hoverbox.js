@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 
 const Hoverbox = ({ movie }) =>
@@ -39,9 +40,8 @@ const Hoverbox = ({ movie }) =>
 					<div className="left-box">
 						<div className="flex-column">
 							<div className="movie-title-huge">{movie.title_english}</div>
-							<div>
-								<button className="basic-button m-2"><i className="fas fa-play"></i> Play Movie</button>
-								{/* <Link key={torrent.url} className="center" to={"/cinema/xt=urn:btih:" + torrent.hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + id + "/" + movie.imdb_code}>{torrent.quality} {torrent.type}</Link> */}
+							<div className="play-button">
+									<Link to={"/cinema/xt=urn:btih:" + movie.torrents[0].hash + "&dn=" + movie.title.replace(/ /g, "+") + "&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337/" + movie.id + "/" + movie.imdb_code}><i className="fas fa-play"></i> PLAY MOVIE</Link>
 							</div>
 						</div>
 					</div>
@@ -61,7 +61,7 @@ const Hoverbox = ({ movie }) =>
 							)}
 						</div>
 						<div className="center">
-							<button className="basic-button m-2"><i className="fas fa-info"></i> More Info</button>
+							<Link to={"/movie/" + movie.id}><i className="fas fa-info-circle"></i> More Info</Link>
 						</div>
 					</div>
 				</Fragment>
