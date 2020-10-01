@@ -56,10 +56,9 @@ router.post('/login', async (req, res, next)  => {
         else
         {
             const err = new Error("Not registered");
-            err.status = 'You are not registered. Register first via 42.';
-            err.statusCode = 300;
+            err.statusMessage = 'You are not registered. Register first via 42.';
+            err.status = 300;
             next(err);
-            throw "not registered";
         }
     }
     catch(err)
