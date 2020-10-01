@@ -79,8 +79,8 @@ router.patch('/:id', authenticationMiddleware, async (req, res, next) => {
 			'password mismatch'];
 		if (statusReturns.includes(err)) {
 			const error = new Error('Change request unsuccessful');
-			error.statusCode = 400;
-			error.status = err;
+			error.statusMessage = err;
+			error.status = 400;
 			next(error);
 		}
 		else
