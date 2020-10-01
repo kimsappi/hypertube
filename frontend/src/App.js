@@ -22,7 +22,6 @@ import Profile from './components/pages/Profile';
 import ActivationSent from './components/pages/ActivationSent';
 import NewPassword from './components/pages/NewPassword';
 import ForgotPassword from './components/pages/ForgotPassword';
-import ConfirmEmail from './components/pages/ConfirmEmail';
 import HiveLog from './components/pages/hiveLog';
 import GithubLog from './components/pages/GithubLog';
 
