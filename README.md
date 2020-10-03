@@ -3,6 +3,13 @@ Service that allows user to browse and search for movies, initiate their downloa
 
 Made with @Gamala, @josiz & @timohive.
 
+This project will not be deployed on the web because of its 'questionable' legality, so here are some screenshots instead.
+
+![Front page](img/1.png)
+![Search](img/2.png)
+![Movie details](img/3.png)
+![Movie stream view](img/4.png)
+
 # Features/requirements
 
 ## Tech
