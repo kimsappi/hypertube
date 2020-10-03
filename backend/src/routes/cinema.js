@@ -18,6 +18,7 @@ const path = require("path");
 const { verifyToken } = require('../utils/auth');
 const movieListService = require('../services/movieLists');
 const Logger = require('../utils/logger');
+const getServerUrl = require('../utils/requestUrl');
 
 const Movie = require('../models/Movie');
 
@@ -260,7 +261,8 @@ router.get("/subtitles/:magnet/:id/:imdb/:language", (req, res) =>
 				const name = path.basename(file);
 				const parts = name.split(".");
 				const lang = parts[1];
-				res.write(`data: { "kind": "subtitles", "src": "http://localhost:5000/${id}/subs.${lang}.vtt", "srcLang": "${lang}", "name": "subs.${lang}.vtt", "default": ${lang === language ? "true" : "false"} }\n\n`);
+				const serverUrl = getServerUrl();
+				res.write(`data: { "kind": "subtitles", "src": "${serverUrl}/${id}/subs.${lang}.vtt", "srcLang": "${lang}", "name": "subs.${lang}.vtt", "default": ${lang === language ? "true" : "false"} }\n\n`);
 			});
 		})
 

@@ -3,6 +3,20 @@ Service that allows user to browse and search for movies, initiate their downloa
 
 Made with @Gamala, @josiz & @timohive.
 
+# Instructions
+```shell
+git clone https://github.com/kimsappi/hypertube
+cd hypertube
+# Edit backend/src/config.secret.sample with correct values
+# At the very least MONGODB_URI is required for any kind of functionality
+npm run install-all
+npm run dev
+```
+After that, a browser tab should open at http://localhost:3000 (with the backend at :5000). If you wish to change the ports or host this somewhere, `frontend/src/config` must be edited with the correct `SERVER_URL` and `backend/src/config.public.json` with the correct `CLIENT_URL`.
+
+NB some of the tests are knowingly broken.
+
+# So, how can I use it?
 This project will not be deployed on the web because of its 'questionable' legality, so here are some screenshots instead.
 
 ![Front page](img/1.png)

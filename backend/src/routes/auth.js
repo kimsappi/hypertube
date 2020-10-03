@@ -5,7 +5,7 @@ const Logger = require('../utils/logger');
 const authService = require('../services/auth');
 const mailService = require('../services/mail');
 const { generateJWT } = require('../utils/auth');
-const { query } = require('express');
+const config = require('../utils/config');
 
 router.post('/register', async (req, res, next) => {
   try {
@@ -81,12 +81,12 @@ router.get('/confirmEmail/:id', async (req, res, next) => {
   try {
     const data = await authService.confirmEmail(req);
     if (data)
-      return res.status(301).redirect('http://localhost:3000?emailConfirmed=1'); // TODO
+      return res.status(301).redirect(`${config.CLIENT_URL}?emailConfirmed=1`);
     else
       throw 'Email confirmation failure';
   } catch(err) {
     Logger.error(err);
-    return res.status(301).redirect('http://localhost:3000?emailConfirmationFailure=1'); // TODO
+    return res.status(301).redirect(`${config.CLIENT_URL}?emailConfirmationFailure=1`);
   }
 });
 

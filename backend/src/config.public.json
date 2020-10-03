@@ -2,5 +2,6 @@
   "TOKEN_SECRET": "123",
   "languages": [
     "eng", "fin", "fre", "spa", "ita", "ger"
-  ]
+  ],
+  "CLIENT_URL": "http://localhost:3000"
 }

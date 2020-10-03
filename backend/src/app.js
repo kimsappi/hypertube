@@ -55,8 +55,8 @@ app.use('/api/cinema', cinemaRouter);
 app.use('/api/myList', myListRouter);
 
 // API login routes
-app.use('/42', schoolLogin)
-app.use('/github', githubLogin)
+app.use('/api/42', schoolLogin)
+app.use('/api/github', githubLogin)
 
 
 
